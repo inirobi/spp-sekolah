@@ -73,7 +73,6 @@ margin: 0;
 padding: 0
 }
 .clear{clear:both}
-body {}
 @font-face {
   font-family: 'educate-icon';
   src:
@@ -397,9 +396,6 @@ body {}
 	text-transform:capitalize;
 	display:block;
 	padding:18px 10px;
-}
-.header-right-info {
-	
 }
 .header-right-info ul.header-right-menu li{
 	display:inline-block;
@@ -4397,8 +4393,8 @@ div#sparklinehome canvas {
 }
 .wizard.vertical > .steps{
     display: inline;
-    float: left;
-    width: 30%;
+    float: 'left';
+    width: '30%';
 }
 .wizard > .steps .number{
     font-size: 1.429em;

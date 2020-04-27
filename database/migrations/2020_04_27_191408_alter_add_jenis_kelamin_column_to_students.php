@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateMajorsTable extends Migration
+class AlterAddJenisKelaminColumnToStudents extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,8 @@ class CreateMajorsTable extends Migration
      */
     public function up()
     {
-        Schema::create('majors', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->string('nama');
-            $table->timestamps();
+        Schema::table('students', function (Blueprint $table) {
+            $table->enum('jenis_kelamin',['L','P'])->after('nama');
         });
     }
 
@@ -27,6 +25,8 @@ class CreateMajorsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('majors');
+        Schema::table('students', function (Blueprint $table) {
+            //
+        });
     }
 }

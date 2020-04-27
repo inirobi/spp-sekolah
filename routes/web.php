@@ -28,3 +28,7 @@ Route::get('/admin', function() {
 Route::get('/user', function() {
     return view('user');
 })->middleware('auth:user');
+//============================MASTER=================
+
+//majors
+Route::resource('/majors', 'MajorController');

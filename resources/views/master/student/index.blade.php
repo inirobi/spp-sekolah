@@ -12,7 +12,7 @@
                         <div class="container-sm">
                             <div class="row">
                                 <div class="col-md-6">
-                                    <h3>Data Jurusan</h3>
+                                    <h3>Data Siswa</h3>
                                 </div>
                                 <div class="col-md-6">
                                     <a style="float:right" data-toggle="modal" href="#modalAdd" class="btn btn-success" ><i class="fa fa-plus"></i> Tambah </a>
@@ -44,6 +44,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+<<<<<<< HEAD
                                 @foreach($majors as $data)
                                     <tr>
                                         <td></td>
@@ -52,6 +53,13 @@
                                         <td>{{$data->nama}}</td>
                                         <td>{{$data->jenis_kelamin}}</td>
                                         <td>{{$data->major->nama}}</td>
+=======
+                                @foreach($studens as $data)
+                                    <tr>
+                                        <td></td>
+                                        <td>{{$no++}}</td>
+                                        <td>{{$data->nama}}</td>
+>>>>>>> master
                                         <td>
                                             <a href="#" class="btn btn-info" onclick="editConfirm( '{{$data->id}}', '{{$data->nama}}')" title="Edit"><i class="fa fa-edit"> Edit</i></a>
                                             <a href="{{ route('majors.destroy',$data) }}" class="btn btn-danger" onclick="event.preventDefault();destroy('{{ route('majors.destroy',$data) }}');" title="Hapus"><i class="fa fa-trash"></i> Hapus</a>

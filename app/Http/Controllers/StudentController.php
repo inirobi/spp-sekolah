@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Major;
+use App\Student;
 
 class StudentController extends Controller
 {
@@ -13,7 +15,10 @@ class StudentController extends Controller
      */
     public function index()
     {
-        //
+        $student = Student::all();
+        $no=1;
+        $major = Major::count();
+        return view('master.student.index', compact('student','no','major'));
     }
 
     /**
@@ -34,7 +39,25 @@ class StudentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request,[
+            'nama' => 'required',
+        ]);
+
+        try {
+            $req = $request->all();
+            Student::create([
+                'id' => null,
+                'nama' => $req['nama'],
+              ]);
+          return redirect()
+              ->route('student.index')
+              ->with('success', 'Data siswa berhasil disimpan!');
+
+        }catch(Exception $e){
+          return redirect()
+              ->route('student.create')
+              ->with('success', 'Data siswa gagal disimpan!');
+        }
     }
 
     /**
@@ -68,7 +91,25 @@ class StudentController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request,[
+            'nama' => 'required',
+        ]);
+
+        try {
+          $req = $request->all();
+          $student = Student::findOrFail($id);
+          $student->nama = $req['nama'];
+          $student->save();
+
+          return redirect()
+              ->route('students.index')
+              ->with('success', 'Data siswa berhasil diubah!');
+
+        } catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e){
+          return redirect()
+              ->route('students.index')
+              ->with('error', 'Data siswa gagal diubah!');
+        }
     }
 
     /**
@@ -79,6 +120,17 @@ class StudentController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try {
+            $Student = Student::findOrFail($id)->delete();
+  
+            return redirect()
+                ->route('students.index')
+                ->with('success', 'Data siswa berhasil dihapus!');
+  
+          } catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e){
+            return redirect()
+                ->route('Students.index')
+                ->with('error', 'Data siswa gagal diubah!');
+          }
     }
 }

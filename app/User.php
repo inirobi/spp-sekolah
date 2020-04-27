@@ -16,7 +16,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password', 'level'
     ];
 
     /**
@@ -36,4 +36,12 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * Relasi Many to Many
+     */
+    public function payment()
+    {
+        return $this->belongsToMany('App\Payment', 'payment_details', 'user_id', 'payment_id');
+    }
 }

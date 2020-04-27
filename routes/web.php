@@ -12,5 +12,19 @@
 */
 
 Route::get('/', function () {
-    return view('dashboard.index');
+    return view('login');
 });
+
+
+// hanya untuk tamu yg belum auth
+Route::get('/login', 'LoginController@getLogin')->middleware('guest');
+Route::post('/login', 'LoginController@postLogin');
+Route::get('/logout', 'LoginController@logout');
+
+Route::get('/admin', function() {
+    return view('admin');
+})->middleware('auth:admin');
+
+Route::get('/user', function() {
+    return view('user');
+})->middleware('auth:user');

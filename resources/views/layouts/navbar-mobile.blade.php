@@ -14,7 +14,7 @@
                 </a>
                 <ul class="submenu-angle" aria-expanded="false">
                     <li><a title="Data Master Siswa" href="#"><span class="mini-sub-pro">Siswa</span></a></li>
-                    <li><a title="Data Master Jurusan" href="#"><span class="mini-sub-pro">Jurusan</span></a>
+                    <li><a title="Data Master Jurusan" href="{{ route('majors.index') }}"><span class="mini-sub-pro">Jurusan</span></a>
                     </li>
                     <li><a title="Data Master Kategori Pembiayaan" href="#"><span class="mini-sub-pro">Kategori
                                 Pembiayaan</span></a></li>

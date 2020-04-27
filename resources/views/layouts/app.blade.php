@@ -194,7 +194,7 @@
                 </div>
                 <!-- Breadcumb end -->
             </div>
-
+            @include('layouts.message')
             @yield('content')
         </div>
     </main>
@@ -253,7 +253,7 @@
     <!-- main JS
   ============================================ -->
     <script src="{{ asset('assets/js/main.js') }}"></script>
-
+    <script src="{{ asset('assets/sweetalert/sweetalert.min.js')}}"></script>
 
 </body>
 

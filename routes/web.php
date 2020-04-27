@@ -14,3 +14,8 @@
 Route::get('/', function () {
     return view('dashboard.index');
 });
+
+//============================MASTER=================
+
+//majors
+Route::resource('/majors', 'MajorController');

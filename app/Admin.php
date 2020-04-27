@@ -2,11 +2,9 @@
 
 namespace App;
 
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Model;
 
-class User extends Authenticatable
+class Admin extends Model
 {
     use Notifiable;
 
@@ -36,12 +34,4 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-
-    /**
-     * Relasi Many to Many
-     */
-    public function payment()
-    {
-        return $this->belongsToMany('App\Payment', 'payment_details', 'user_id', 'payment_id');
-    }
 }

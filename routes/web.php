@@ -32,3 +32,4 @@ Route::get('/user', function() {
 
 //majors
 Route::resource('/majors', 'MajorController');
+Route::resource('students', 'StudentController');

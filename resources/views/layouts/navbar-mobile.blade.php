@@ -13,7 +13,7 @@
                     <span class="mini-click-non ">Master</span>
                 </a>
                 <ul class="submenu-angle" aria-expanded="false">
-                    <li><a title="Data Master Siswa" href="#"><span class="mini-sub-pro">Siswa</span></a></li>
+                    <li><a title="Data Master Siswa" href="{{ route('students.index') }}"><span class="mini-sub-pro">Siswa</span></a></li>
                     <li><a title="Data Master Jurusan" href="{{ route('majors.index') }}"><span class="mini-sub-pro">Jurusan</span></a>
                     </li>
                     <li><a title="Data Master Kategori Pembiayaan" href="#"><span class="mini-sub-pro">Kategori

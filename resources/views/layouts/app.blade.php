@@ -89,7 +89,7 @@
                 <div class="row">
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div class="logo-pro">
-                            <a href="index.html"><img class="main-logo" src="img/logo/logo.png" alt="" /></a>
+                            <a href="{{url('/')}}"><img class="main-logo" src="img/logo/logo.png" alt="" /></a>
                         </div>
                     </div>
                 </div>
@@ -119,7 +119,7 @@
                                                     <li class="nav-item">
                                                         <a href="#" data-toggle="dropdown" role="button"
                                                             aria-expanded="false" class="nav-link dropdown-toggle">
-                                                            <img src="img/product/pro4.jpg" alt="" />
+                                                            <img src="{{ asset('assets/img/product/pro4.jpg') }}" alt="" />
                                                             <span class="admin-name">Prof.Anderson</span>
                                                             <i class="fa fa-angle-down edu-icon edu-down-arrow"></i>
                                                         </a>
@@ -163,7 +163,7 @@
                 <!-- Content of Web -->
 
                 <!-- Breadcumb -->
-                <div class="breadcome-area" style="margin-top:40px;">
+                <div class="breadcome-area" style="margin-top: 50px">
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">

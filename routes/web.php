@@ -12,7 +12,7 @@
 */
 
 Route::get('/', function () {
-    return view('login');
+    return view('dashboard.index');
 });
 
 
@@ -21,15 +21,21 @@ Route::get('/login', 'LoginController@getLogin')->middleware('guest');
 Route::post('/login', 'LoginController@postLogin');
 Route::get('/logout', 'LoginController@logout');
 
-Route::get('/admin', function() {
+Route::get('/adminAuth', function() {
     return view('admin');
 })->middleware('auth:admin');
 
-Route::get('/user', function() {
+Route::get('/userAuth', function() {
     return view('user');
 })->middleware('auth:user');
+
 //============================MASTER=================
 
 //majors
 Route::resource('/majors', 'MajorController');
 Route::resource('students', 'StudentController');
+
+/**
+ * Route resource untuk User
+ */
+Route::resource('user', 'UserController');

@@ -3,9 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Major;
+use Illuminate\Support\Facades\Hash;
+use App\User;
 
-class MajorController extends Controller
+class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,9 +15,9 @@ class MajorController extends Controller
      */
     public function index()
     {
-        $majors = Major::all();
+        $users = User::all();
         $no=1;
-        return view('master.major.index', compact('majors','no'));
+        return view('master.user.index', compact('users','no'));
     }
 
     /**
@@ -39,22 +40,26 @@ class MajorController extends Controller
     {
         $this->validate($request,[
             'nama' => 'required',
-        ]);
-
+            'email' => 'required',
+            'password' => 'required',
+            ]);
+            
         try {
             $req = $request->all();
-            Major::create([
+            User::create([
                 'id' => null,
-                'nama' => $req['nama'],
+                'name' => $req['nama'],
+                'email' => $req['email'],
+                'password' => Hash::make($req['password']),
               ]);
           return redirect()
-              ->route('majors.index')
-              ->with('success', 'Data jurursan berhasil disimpan!');
+              ->route('users.index')
+              ->with('success', 'User baru telah ditambahkan!');
 
         }catch(Exception $e){
           return redirect()
-              ->route('majors.create')
-              ->with('error', 'Data jurursan gagal disimpan!');
+              ->route('users.create')
+              ->with('error', 'Gagal menambah user!');
         }
     }
 
@@ -66,7 +71,25 @@ class MajorController extends Controller
      */
     public function show($id)
     {
-        //
+        $this->validate($request,[
+            'nama' => 'required',
+        ]);
+
+        try {
+            $req = $request->all();
+            User::create([
+                'id' => null,
+                'nama' => $req['nama'],
+              ]);
+          return redirect()
+              ->route('users.index')
+              ->with('success', 'Data user berhasil disimpan!');
+
+        }catch(Exception $e){
+          return redirect()
+              ->route('users.create')
+              ->with('error', 'Data user gagal disimpan!');
+        }
     }
 
     /**
@@ -95,18 +118,18 @@ class MajorController extends Controller
 
         try {
           $req = $request->all();
-          $major = Major::findOrFail($id);
+          $major = User::findOrFail($id);
           $major->nama = $req['nama'];
           $major->save();
 
           return redirect()
-              ->route('majors.index')
-              ->with('success', 'Data jurusan berhasil diubah!');
+              ->route('users.index')
+              ->with('success', 'Data user berhasil diubah!');
 
         } catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e){
           return redirect()
-              ->route('majors.index')
-              ->with('error', 'Data jurusan gagal diubah!');
+              ->route('users.index')
+              ->with('error', 'Data user gagal diubah!');
         }
     }
 
@@ -119,15 +142,15 @@ class MajorController extends Controller
     public function destroy($id)
     {
         try {
-            $major = Major::findOrFail($id)->delete();
+            $user = User::findOrFail($id)->delete();
   
             return redirect()
-                ->route('majors.index')
-                ->with('success', 'Data jurusan berhasil dihapus!');
+                ->route('users.index')
+                ->with('success', 'Data user berhasil dihapus!');
   
           } catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e){
             return redirect()
-                ->route('majors.index')
+                ->route('users.index')
                 ->with('error', 'Data jurusan gagal diubah!');
           }
     }

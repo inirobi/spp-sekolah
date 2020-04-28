@@ -46,5 +46,18 @@ Route::resource('user', 'UserController');
  */
 Route::resource('financing', 'FinancingCategoryController');
 Route::get('financing/history/{id}', 'FinancingCategoryController@history');
+
+/**
+ * Route resource untuk Pembayaran
+ */
+Route::resource('payment', 'PaymentController');
+
+/**
+ * Route resource untuk Pengeluaran
+ */
 Route::resource('expense', 'ExpenseController');
 
+/**
+ * Route resource untuk Pembayaran
+ */
+Route::resource('rekap', 'RekapController');

@@ -9,7 +9,7 @@
             <nav class="sidebar-nav left-sidebar-menu-pro">
                 <ul class="metismenu" id="menu1">
                     <li>
-                        <a title="Dashboard" class="icon-wrap" href="#" aria-expanded="false">
+                        <a title="Dashboard" class="icon-wrap" href="{{ url('/') }}" aria-expanded="false">
                             <span class="fa fa-home sub-icon-mg" aria-hidden="true"></span>
                             <span class="mini-click-non ">Dashboard</span>
                         </a>
@@ -28,7 +28,7 @@
                         </ul>
                     </li>
                     <li>
-                        <a title="Data Pembayaran" class="" href="#" aria-expanded="false">
+                        <a title="Data Pembayaran" class="" href="{{ route('payment.index') }}" aria-expanded="false">
                             <span class="fa fa-credit-card sub-icon-mg" aria-hidden="true"></span>
                             <span class="mini-click-non ">Pembayaran</span>
                         </a>
@@ -40,7 +40,7 @@
                         </a>
                     </li>
                     <li>
-                        <a title="Rekapitulasi" class="" href="#" aria-expanded="false">
+                        <a title="Rekapitulasi" class="" href="{{ route('rekap.index') }}" aria-expanded="false">
                             <span class="fa fa-files-o sub-icon-mg" aria-hidden="true"></span>
                             <span class="mini-click-non ">Rekap</span>
                         </a>

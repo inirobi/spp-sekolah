@@ -17,6 +17,7 @@ class FinancingCategoryReset extends Model
     protected $fillable = [
         "financing_category_id", 
         "besaran",
+        "jenis",
     ];
 
     public function financingCategory()

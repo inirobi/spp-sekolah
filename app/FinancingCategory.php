@@ -17,6 +17,7 @@ class FinancingCategory extends Model
     protected $fillable = [
         "nama",
         "besaran",
+        "jenis"
     ];
 
     /**

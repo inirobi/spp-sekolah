@@ -12,18 +12,14 @@
                             <div class="container-sm">
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <h3>Data Kategori Pembiayaan</h3>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <a style="float:right" data-toggle="modal" href="#modalAdd"
-                                            class="btn btn-success" title="Tambah"><i class="fa fa-plus"></i> Tambah
-                                        </a>
+                                        <h3>Kategori Pembiayaan</h3>
+                                        <small class="text-muted">Silahkan pilih kategori pembiayaan</small>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="sparkline13-graph">
+                    <div class="sparkline13-graph" style="margin-top: 20px">
                         <div class="datatable-dashv1-list custom-datatable-overright">
                             <div id="toolbar">
                                 <select class="form-control dt-tb">
@@ -43,33 +39,11 @@
                                         <th data-field="id">No</th>
                                         <th data-field="name">Deskripsi</th>
                                         <th data-field="besaran">Besaran (Rp.)</th>
-                                        <th data-field="jenis">Jenis Pembiayaan</th>
                                         <th data-field="action">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach($datas as $data)
-                                    <tr>
-                                        <td></td>
-                                        <td>{{$no++}}</td>
-                                        <td>{{$data->nama}}</td>
-                                        <td>{{$data->besaran}}</td>
-                                        <td>{{$data->jenis}}</td>
-                                        <td>
-                                            @if($data->history->count()>1)
-                                            <a href="#" class="btn btn-info"
-                                                onclick="history('{{$data->nama}}','{{ number_format($data->besaran, 0, ".", ".")}}', '{{$data->jenis}}','{{ url('financing/history',$data->id) }}')"
-                                                title="History"><i class="fa fa-history"> History</i></a>
-                                            @endif
-                                            <a href="#" class="btn btn-warning"
-                                                onclick="editConfirm( '{{$data->id}}', '{{$data->nama}}', '{{$data->besaran}}', '{{$data->jenis}}')"
-                                                title="Edit"><i class="fa fa-edit"> Edit</i></a>
-                                            <a href="{{ route('financing.destroy',$data) }}" class="btn btn-danger"
-                                                onclick="event.preventDefault();destroy('{{ route('financing.destroy',$data) }}');"
-                                                title="Hapus"><i class="fa fa-trash"></i> Hapus</a>
-                                        </td>
-                                    </tr>
-                                    @endforeach
+                                    
                                 </tbody>
                             </table>
                         </div>
@@ -104,24 +78,6 @@
                         <label class="control-label col-md-4">Besaran Nominal (Rp.)</label>
                         <input name='besaran' placeholder="Masukan nominal pembayaran" type='number' min="0"
                             class='form-control' required>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-md-4">Jenis Pembiayaan</label>
-                        <div class="row">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <div class="i-checks pull-left">
-                                    <label style=""><input type="radio" checked value="Sekali Bayar" name="jenis"> <i></i>  Sekali Bayar</label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <div class="i-checks pull-left">
-                                    <label>
-                                            <input type="radio" value="Bayar per Bulan" name="jenis"> <i></i> Bayar per Bulan </label>
-                                </div>
-                            </div>
-                        </div>
                     </div>
             </div>
             <div class="modal-footer">
@@ -158,24 +114,6 @@
                         <input name='besaran' placeholder="Masukan nominal pembayaran" type='number' min="0"
                             class='form-control' id="besaran" required>
                     </div>
-                    <div class="form-group">
-                        <label class="control-label col-md-4">Jenis Pembiayaan</label>
-                        <div class="row">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <div class="i-checks pull-left">
-                                    <label style=""><input type="radio" checked value="Sekali Bayar" name="jenis" id="jenis_sekali_edit"> <i></i>  Sekali Bayar</label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <div class="i-checks pull-left">
-                                    <label>
-                                            <input type="radio" value="Bayar per Bulan" name="jenis" id="jenis_per_bulan_edit"> <i></i> Bayar per Bulan </label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
@@ -205,17 +143,12 @@
                     :
                     <strong><span id="kategori_history_modal"></span></strong>
                 </div>
+                
                 <div class="row">
                     <div class="col-md-3 col-sm-3">
                         Besaran Pembiayaan
                     </div>
                     : <strong>Rp. <span id="besaran_history_modal"></span></strong>
-                </div>
-                <div class="row">
-                    <div class="col-md-3 col-sm-3">
-                        Jenis Pembiayaan
-                    </div>
-                    : <strong><span id="jenis_history_modal"></span></strong>
                 </div>
                 <hr>
                 <div class="row">
@@ -227,7 +160,6 @@
                                         <th>No</th>
                                         <th>Waktu Update</th>
                                         <th>Besaran</th>
-                                        <th>Jenis Pembiayaan</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -266,9 +198,10 @@
 @push('scripts')
 
 <script>
-    function editConfirm(id, nama, besaran, jenis) {
+    function editConfirm(id, nama, besaran) {
         $('#nama').attr('value', nama);
         $('#besaran').attr('value', besaran);
+        
         $('#editForm').attr('action', "{{ url('financing') }}/" + id);
         $('#modalUpdate').modal();
     }
@@ -312,17 +245,11 @@
 <script src="{{ asset('assets/js/editable/bootstrap-editable.js') }}"></script>
 <script src="{{ asset('assets/js/editable/xediable-active.js') }}"></script>
 
-<!-- icheck JS
-    ============================================ -->
-<script src="{{ asset('assets/js/icheck/icheck.min.js')}}"></script>
-<script src="{{ asset('assets/js/icheck/icheck-active.js')}}"></script>
-
 <script>
-function history(nama, besaran, jenis='', link = "/"){
+function history(nama, besaran, link = "/"){
 
 $('#kategori_history_modal').html(nama);
 $('#besaran_history_modal').html(besaran);
-$('#jenis_history_modal').html(jenis);
 $.ajax({
     type: "GET",
     dataType: "json",
@@ -332,8 +259,7 @@ $.ajax({
             var $tr = $('<tr>').append(
                 $('<td>').text(item.rowNumber),
                 $('<td>').text(item.created_at),
-                $('<td>').text('Rp. '+item.besaran),
-                $('<td>').text(item.jenis)
+                $('<td>').text('Rp. '+item.besaran)
             ).appendTo('#table_history');
         });
     },

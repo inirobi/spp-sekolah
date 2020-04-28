@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+
 use App\FinancingCategory;
-use App\FinancingCategoryReset;
+use App\Payment;
+use App\Student;
 
 use DB;
 
-class FinancingCategoryController extends Controller
+class PaymentController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -19,7 +21,7 @@ class FinancingCategoryController extends Controller
     {
         $datas = FinancingCategory::all();
         $no = 1;
-        return view('master.financingcategory.index', compact('datas', 'no'));
+        return view('pembayaran.index', compact('datas', 'no'));
     }
 
     /**
@@ -40,12 +42,9 @@ class FinancingCategoryController extends Controller
      */
     public function store(Request $request)
     {
-
-
         $this->validate($request,[
             'nama' => 'required',
             'besaran' => 'required',
-            'jenis' => 'required'
         ]);
 
         try {
@@ -54,7 +53,6 @@ class FinancingCategoryController extends Controller
                 'id' => null,
                 'nama' => $req['nama'],
                 'besaran' => $req['besaran'],
-                'jenis' => $req['jenis'],
             ]);
             $id = DB::getPdo()->lastInsertId();
             //untuk history perubahan harga
@@ -62,7 +60,6 @@ class FinancingCategoryController extends Controller
                 'id' => null,
                 'financing_category_id' => $id,
                 'besaran' => $req['besaran'],
-                'jenis' => $req['jenis'],
             ]);
 
         return redirect()
@@ -85,7 +82,7 @@ class FinancingCategoryController extends Controller
      */
     public function show($id)
     {
-        //
+        
     }
 
     /**
@@ -111,7 +108,6 @@ class FinancingCategoryController extends Controller
         $this->validate($request,[
             'nama' => 'required',
             'besaran' => 'required',
-            'jenis' => 'required'
         ]);
 
         try {
@@ -119,13 +115,11 @@ class FinancingCategoryController extends Controller
           $data = FinancingCategory::findOrFail($id);
           $data->nama = $req['nama'];
           $data->besaran = $req['besaran'];
-          $data->jenis = $req['jenis'];
           $data->save();
           FinancingCategoryReset::create([
             'id' => null,
             'financing_category_id' => $id,
             'besaran' => $req['besaran'],
-            'jenis' => $req['jenis'],
             ]);
 
           return redirect()
@@ -165,7 +159,7 @@ class FinancingCategoryController extends Controller
     public function history($id)
     {
         DB::statement(DB::raw('set @row:=0'));
-        return FinancingCategoryReset::select(DB::raw('@row:=@row+1 as rowNumber, format(besaran,0) as besaran'), 'jenis','created_at')
+        return FinancingCategoryReset::select(DB::raw('@row:=@row+1 as rowNumber, format(besaran,0) as besaran'),'created_at')
                                     ->where('financing_category_id',$id)
                                     ->get();;
     }

@@ -16,7 +16,8 @@
                                     </div>
                                     <div class="col-md-6">
                                         <a style="float:right" data-toggle="modal" href="#modalAdd"
-                                            class="btn btn-success" title="Tambah"><i class="fa fa-plus"></i> Tambah </a>
+                                            class="btn btn-success" title="Tambah"><i class="fa fa-plus"></i> Tambah
+                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -55,7 +56,8 @@
                                         <td>
                                             @if($data->history->count()>1)
                                             <a href="#" class="btn btn-info"
-                                                onclick="history('{{$data->nama}}','{{$data->besaran}}')" title="History"><i class="fa fa-history"> History</i></a>
+                                                onclick="history('{{$data->nama}}','{{ number_format($data->besaran, 0, ".", ".")}}', '{{ url('financing/history',$data->id) }}')"
+                                                title="History"><i class="fa fa-history"> History</i></a>
                                             @endif
                                             <a href="#" class="btn btn-warning"
                                                 onclick="editConfirm( '{{$data->id}}', '{{$data->nama}}', '{{$data->besaran}}')"
@@ -158,9 +160,38 @@
                 <h4 class="modal-title" id="title_modal_history">History Perubahan Data</h4>
             </div>
             <div class="modal-body">
-                head
+                <div class="row mb-3">
+                    <div class="col-md-3 col-sm-3">
+                        Kategori Pembiayaan
+                    </div>
+                    :
+                    <strong><span id="kategori_history_modal"></span></strong>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-3 col-sm-3">
+                        Besaran Pembiayaan
+                    </div>
+                    : <strong>Rp. <span id="besaran_history_modal"></span></strong>
+                </div>
                 <hr>
-                tail
+                <div class="row">
+                    <div class="col-md-12 col-sm-12">
+                        <div class="static-table-list">
+                            <table class="table" id="table_history">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Waktu Update</th>
+                                        <th>Besaran</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
@@ -194,14 +225,12 @@
     function editConfirm(id, nama, besaran) {
         $('#nama').attr('value', nama);
         $('#besaran').attr('value', besaran);
+        
         $('#editForm').attr('action', "{{ url('financing') }}/" + id);
         $('#modalUpdate').modal();
     }
 
-    function history(nama, besaran, link="/") {
-
-      $('#modalHistory').modal();
-    }
+    
 
     function destroy(action) {
         swal({
@@ -239,4 +268,29 @@
 <script src="{{ asset('assets/js/editable/bootstrap-datetimepicker.js') }}"></script>
 <script src="{{ asset('assets/js/editable/bootstrap-editable.js') }}"></script>
 <script src="{{ asset('assets/js/editable/xediable-active.js') }}"></script>
+
+<script>
+function history(nama, besaran, link = "/"){
+
+$('#kategori_history_modal').html(nama);
+$('#besaran_history_modal').html(besaran);
+$.ajax({
+    type: "GET",
+    dataType: "json",
+    url: link,
+    success: function (response) {
+        $.each(response, function(i, item) {
+            var $tr = $('<tr>').append(
+                $('<td>').text(item.rowNumber),
+                $('<td>').text(item.created_at),
+                $('<td>').text('Rp. '+item.besaran)
+            ).appendTo('#table_history');
+        });
+    },
+    error: function (error) {
+        alert(error);
+    }
+});
+$('#modalHistory').modal();
+}</script>
 @endpush

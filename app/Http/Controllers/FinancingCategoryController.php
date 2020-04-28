@@ -155,4 +155,12 @@ class FinancingCategoryController extends Controller
       }
         
     }
+
+    public function history($id)
+    {
+        DB::statement(DB::raw('set @row:=0'));
+        return FinancingCategoryReset::select(DB::raw('@row:=@row+1 as rowNumber, format(besaran,0) as besaran'),'created_at')
+                                    ->where('financing_category_id',$id)
+                                    ->get();;
+    }
 }

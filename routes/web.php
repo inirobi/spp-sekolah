@@ -45,5 +45,6 @@ Route::resource('user', 'UserController');
  * Route resource untuk Kategori Pembiayaan
  */
 Route::resource('financing', 'FinancingCategoryController');
+Route::get('financing/history/{id}', 'FinancingCategoryController@history');
 Route::resource('expense', 'ExpenseController');
 

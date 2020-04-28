@@ -1,5 +1,4 @@
 <!doctype html>
-<html class="no-js" lang="en">
 
 <head>
     <meta charset="utf-8">
@@ -41,7 +40,7 @@
     <link rel="stylesheet" href="{{ asset('assets/css/educate-custon-icon.css') }}">
     <!-- morrisjs CSS
 		============================================ -->
-    <!-- <link rel="stylesheet" href="{{ asset('assets/css/morrisjs/morris.css') }}"> -->
+    <link rel="stylesheet" href="{{ asset('assets/css/morrisjs/morris.css') }}">
     <!-- mCustomScrollbar CSS
 		============================================ -->
     <link rel="stylesheet" href="{{ asset('assets/css/scrollbar/jquery.mCustomScrollbar.min.css') }}">
@@ -238,14 +237,17 @@
     <script src="{{ asset('assets/js/owl.carousel.min.js') }}"></script>
     <!-- morrisjs JS
   ============================================ -->
-    <!-- <script src="{{ asset('assets/js/morrisjs/raphael-min.js') }}"></script>
+    <script src="{{ asset('assets/js/morrisjs/raphael-min.js') }}"></script>
     <script src="{{ asset('assets/js/morrisjs/morris.js') }}"></script>
-    <script src="{{ asset('assets/js/morrisjs/morris-active.js') }}"></script> -->
+    <script src="{{ asset('assets/js/morrisjs/morris-active.js') }}"></script>
     <!-- morrisjs JS
   ============================================ -->
-    <!-- <script src="{{ asset('assets/js/sparkline/jquery.sparkline.min.js') }}"></script>
+    <script src="{{ asset('assets/js/sparkline/jquery.sparkline.min.js') }}"></script>
     <script src="{{ asset('assets/js/sparkline/jquery.charts-sparkline.js') }}"></script>
-    <script src="{{ asset('assets/js/sparkline/sparkline-active.js') }}"></script> -->
+    <script src="{{ asset('assets/js/sparkline/sparkline-active.js') }}"></script>
+
+    @stack('scripts-asset')
+
     <!-- plugins JS
   ============================================ -->
     <script src="{{ asset('assets/js/plugins.js') }}"></script>

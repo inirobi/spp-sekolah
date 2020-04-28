@@ -36,7 +36,7 @@
                                     <tr>
                                         <th data-field="state" data-checkbox="true"></th>
                                         <th data-field="id">No</th>
-                                        <th data-field="name" data-editable="true">Nama Jurusan</th>
+                                        <th data-field="name">Nama Jurusan</th>
                                         <th data-field="action">Action</th>
                                     </tr>
                                 </thead>
@@ -68,7 +68,7 @@
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="modalAddLabel">Add New Salary</h5>
+        <h5 class="modal-title" id="modalAddLabel">Tambah Jururusan</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -96,7 +96,7 @@
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="modalUpdateLabel">Update Sale</h5>
+        <h5 class="modal-title" id="modalUpdateLabel">Ubah Jurusan</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>

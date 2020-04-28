@@ -39,3 +39,4 @@ Route::resource('students', 'StudentController');
  * Route resource untuk User
  */
 Route::resource('user', 'UserController');
+

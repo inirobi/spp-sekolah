@@ -15,10 +15,11 @@ class StudentController extends Controller
      */
     public function index()
     {
-        $student = Student::all();
+        $students = Student::all();
         $no=1;
-        $major = Major::count();
-        return view('master.student.index', compact('student','no','major'));
+        $jml = Major::count();
+        $majors = Major::all();
+        return view('master.student.index', compact('students','no','jml','majors'));
     }
 
     /**
@@ -39,23 +40,30 @@ class StudentController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request,[
-            'nama' => 'required',
-        ]);
-
         try {
             $req = $request->all();
+            if (strlen($req['phone'])>14) {
+                return redirect()
+                    ->route('students.index')
+                    ->with('error', 'Inputan tidak valid!');
+            }
             Student::create([
                 'id' => null,
+                'nis' => $req['nis'],
                 'nama' => $req['nama'],
+                'jenis_kelamin' => $req['jenis_kelamin'],
+                'major_id' => $req['major_id'],
+                'phone' => $req['phone'],
+                'email' => $req['email'],
+                'tgl_masuk' => $req['tgl_masuk'],
               ]);
           return redirect()
-              ->route('student.index')
+              ->route('students.index')
               ->with('success', 'Data siswa berhasil disimpan!');
 
         }catch(Exception $e){
           return redirect()
-              ->route('student.create')
+              ->route('students.create')
               ->with('success', 'Data siswa gagal disimpan!');
         }
     }
@@ -91,15 +99,24 @@ class StudentController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->validate($request,[
-            'nama' => 'required',
-        ]);
-
+        
         try {
-          $req = $request->all();
-          $student = Student::findOrFail($id);
-          $student->nama = $req['nama'];
-          $student->save();
+            $req = $request->all();
+            if (strlen($req['phone'])>14) {
+                return redirect()
+                    ->route('students.index')
+                    ->with('success', 'Data siswa berhasil disimpan!');
+            }
+            $student = Student::findOrFail($id);
+            $student->nama = $req['nama'];
+            $student->nis = $req['nis'];
+            $student->jenis_kelamin = $req['jenis_kelamin'];
+            $student->major_id = $req['major_id'];
+            $student->kelas = $req['kelas'];
+            $student->phone = $req['phone'];
+            $student->email = $req['email'];
+            $student->tgl_masuk = $req['tgl_masuk'];
+            $student->save();
 
           return redirect()
               ->route('students.index')

@@ -19,5 +19,6 @@ class Expense extends Model
         "description",
         "sumber",
         "foto",
+        "nominal",
     ];
 }

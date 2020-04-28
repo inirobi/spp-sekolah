@@ -33,6 +33,7 @@ Route::get('/userAuth', function() {
 
 //majors
 Route::resource('/majors', 'MajorController');
+//student
 Route::resource('students', 'StudentController');
 
 /**
@@ -44,3 +45,5 @@ Route::resource('user', 'UserController');
  * Route resource untuk Kategori Pembiayaan
  */
 Route::resource('financing', 'FinancingCategoryController');
+Route::resource('expense', 'ExpenseController');
+

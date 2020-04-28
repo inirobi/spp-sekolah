@@ -15,7 +15,8 @@ class FinancingCategory extends Model
      * Kolom yang dapat di isi
      */
     protected $fillable = [
-        "terakhir_dibayar",
+        "nama",
+        "besaran",
     ];
 
     /**
@@ -29,7 +30,7 @@ class FinancingCategory extends Model
     /**
      * Relasi One to Many
      */
-    public function reset()
+    public function history()
     {
         return $this->hasMany('App\FinancingCategoryReset', 'financing_category_id');
     }

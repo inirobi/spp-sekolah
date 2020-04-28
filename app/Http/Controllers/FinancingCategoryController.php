@@ -3,9 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Major;
+use App\FinancingCategory;
+use App\FinancingCategoryReset;
+use App\Payment;
+use App\Student;
 
-class MajorController extends Controller
+use DB;
+
+class FinancingCategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,9 +19,9 @@ class MajorController extends Controller
      */
     public function index()
     {
-        $majors = Major::all();
-        $no=1;
-        return view('master.major.index', compact('majors','no'));
+        $datas = FinancingCategory::all();
+        $no = 1;
+        return view('master.financingcategory.index', compact('datas', 'no'));
     }
 
     /**
@@ -26,7 +31,7 @@ class MajorController extends Controller
      */
     public function create()
     {
-        //
+         //
     }
 
     /**
@@ -39,23 +44,34 @@ class MajorController extends Controller
     {
         $this->validate($request,[
             'nama' => 'required',
+            'besaran' => 'required',
         ]);
 
         try {
             $req = $request->all();
-            Major::create([
+            FinancingCategory::create([
                 'id' => null,
                 'nama' => $req['nama'],
-              ]);
-          return redirect()
-              ->route('majors.index')
-              ->with('success', 'Data jurursan berhasil disimpan!');
+                'besaran' => $req['besaran'],
+            ]);
+            $id = DB::getPdo()->lastInsertId();
+            //untuk history perubahan harga
+            FinancingCategoryReset::create([
+                'id' => null,
+                'financing_category_id' => $id,
+                'besaran' => $req['besaran'],
+            ]);
+
+        return redirect()
+            ->route('financing.index')
+            ->with('success', 'Data jurursan berhasil disimpan!');
 
         }catch(Exception $e){
-          return redirect()
-              ->route('majors.create')
-              ->with('error', 'Data jurursan gagal disimpan!');
+        return redirect()
+            ->route('financing.create')
+            ->with('error', 'Data jurursan gagal disimpan!');
         }
+        
     }
 
     /**
@@ -77,7 +93,7 @@ class MajorController extends Controller
      */
     public function edit($id)
     {
-        //
+        
     }
 
     /**
@@ -91,22 +107,29 @@ class MajorController extends Controller
     {
         $this->validate($request,[
             'nama' => 'required',
+            'besaran' => 'required',
         ]);
 
         try {
           $req = $request->all();
-          $major = Major::findOrFail($id);
-          $major->nama = $req['nama'];
-          $major->save();
+          $data = FinancingCategory::findOrFail($id);
+          $data->nama = $req['nama'];
+          $data->besaran = $req['besaran'];
+          $data->save();
+          FinancingCategoryReset::create([
+            'id' => null,
+            'financing_category_id' => $id,
+            'besaran' => $req['besaran'],
+            ]);
 
           return redirect()
-              ->route('majors.index')
-              ->with('success', 'Data jurusan berhasil diubah!');
+              ->route('financing.index')
+              ->with('success', 'Data telah diubah!');
 
         } catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e){
           return redirect()
-              ->route('majors.index')
-              ->with('error', 'Data jurusan gagal diubah!');
+              ->route('financing.index')
+              ->with('error', 'Data gagal diubah!');
         }
     }
 
@@ -119,16 +142,17 @@ class MajorController extends Controller
     public function destroy($id)
     {
         try {
-            $major = Major::findOrFail($id)->delete();
-  
+            FinancingCategory::destroy($id);
+            FinancingCategoryReset::where('financing_category_id', $id)->delete();
             return redirect()
-                ->route('majors.index')
-                ->with('success', 'Data jurusan berhasil dihapus!');
-  
-          } catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e){
+            ->route('financing.index')
+            ->with('success', 'Berhasil dihapus!');
+
+        } catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e){
             return redirect()
-                ->route('majors.index')
-                ->with('error', 'Data jurusan gagal dihapus!');
-          }
+                ->route('financing.index')
+                ->with('error', 'Gagal dihapus!');
+      }
+        
     }
 }

@@ -33,10 +33,11 @@ Route::get('/userAuth', function() {
 
 //majors
 Route::resource('/majors', 'MajorController');
+//student
 Route::resource('students', 'StudentController');
 
 /**
  * Route resource untuk User
  */
 Route::resource('user', 'UserController');
-
+Route::resource('expense', 'ExpenseController');

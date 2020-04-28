@@ -27,7 +27,7 @@
                 </a>
             </li>
             <li>
-                <a title="Data Pengeluaran" class="" href="#" aria-expanded="false">
+                <a title="Data Pengeluaran" class="" href="{{ route('expense.index') }}" aria-expanded="false">
                     <span class="fa fa-tags sub-icon-mg" aria-hidden="true"></span>
                     <span class="mini-click-non ">Pengeluaran</span>
                 </a>

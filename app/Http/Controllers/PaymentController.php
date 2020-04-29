@@ -8,6 +8,8 @@ use App\FinancingCategory;
 use App\Payment;
 use App\Student;
 use App\PaymentPeriode;
+use App\PaymentDetail;
+use App\PaymentView;
 use DB;
 
 class PaymentController extends Controller
@@ -82,11 +84,32 @@ class PaymentController extends Controller
      */
     public function show($id)
     {
-        $datas = FinancingCategory::findOrFail($id);
-        $students = Student::all();
-        $periodes = PaymentPeriode::where('financing_category_id',$id)->get();
+        //numbering
         $no = 1;
-        return view('pembayaran.show', compact('datas', 'students', 'no', 'periodes'));
+        //data siswa
+        $datas=Student::selectRaw('students.*, payments.jenis_pembayaran,`getBesaranBiayaTerbayar`(students.id, '.$id.') AS terbayar')
+                ->leftJoin('payments','payments.student_id','=','students.id')
+                ->leftJoin('financing_categories', 'financing_categories.id', '=', 'payments.financing_category_id')
+                ->leftJoin('payment_details','payment_details.payment_id','=','payments.id')
+                ->groupBy('students.id')
+                ->get();
+        //data master show data untuk header
+        $financing = FinancingCategory::findOrFail($id)
+                    ->selectRaw('*, getBesaranBiayaKategoriPembiayaan(financing_categories.id) as besaran')
+                    ->where('id',$id)
+                    ->get();
+        $financing = $financing[0];
+        //Untuk penghitung banyak periode pembayaran
+        $periode = PaymentPeriode::where('financing_category_id',$id)->count(); 
+        // $students = Student::all();
+        if ($periode==0 && $financing->nama=="Bayar per Bulan") {
+            return redirect()
+                ->route('payment.index')
+                ->with('error', 'Periode pembiayaan kosong. Untuk Pembiayaan dengan jenis per Bulan, periode harus dicantumkan!');
+        }
+        // echo "<pre>";
+        // var_dump($datas);
+        return view('pembayaran.show', compact('datas','financing','periode','no'));
     }
 
     /**
@@ -166,5 +189,79 @@ class PaymentController extends Controller
         return FinancingCategoryReset::select(DB::raw('@row:=@row+1 as rowNumber, format(besaran,0) as besaran'),'created_at')
                                     ->where('financing_category_id',$id)
                                     ->get();;
+    }
+    
+    /**
+     * @description Mencari nilai besaran pada kategori pembiayaan tertentu
+     * 
+     * @param id FinancingCategory kategori pembiayaan sebagai kata kunci
+     * @return {int} mengembalikan nilai besaran
+     */
+    public function getBesaranBiayaKategoriPembiayaan($id)
+    {
+        $data = FinancingCategory::select('besaran')
+                                ->where('id',$id)
+                                ->get();
+        return $data[0]->besaran;
+    }
+
+    /**
+     * @description Mencari nilai besaran biaya telah terbayar
+     * 
+     * @param id Student
+     * @param id Category dari FinancingCategory
+     * @return {int} nominal biaya telah dibayar
+     */
+    public function getBesaranBiayaTerbayar($id_student, $id_category)
+    {
+        $data = PaymentDetail::selectRaw('sum(nominal) as nominal')
+                            ->join('payments','payment_details.payment_id','=','payments.id')
+                            ->join('students','payments.student_id','=','students.id')
+                            ->where([
+                                ['students.id','=',$id_student],
+                                ['payments.financing_category_id','=',$id_category]
+                            ])
+                            ->get();
+        return intval($data[0]->nominal);
+    }
+
+    public function storeMetodePembayaran(Request $request)
+    {
+        $req = $request->all();
+        echo "<pre>";
+        var_dump($req);
+    }
+
+    /**
+     * @description me
+     */
+    public function detail($id)
+    {
+        //numbering
+        $no = 1;
+        //data siswa
+        $datas=Student::selectRaw('students.*, payments.jenis_pembayaran,`getBesaranBiayaTerbayar`(students.id, '.$id.') AS terbayar')
+                ->leftJoin('payments','payments.student_id','=','students.id')
+                ->leftJoin('financing_categories', 'financing_categories.id', '=', 'payments.financing_category_id')
+                ->leftJoin('payment_details','payment_details.payment_id','=','payments.id')
+                ->groupBy('students.id')
+                ->get();
+        //data master show data untuk header
+        $financing = FinancingCategory::findOrFail($id)
+                    ->selectRaw('*, getBesaranBiayaKategoriPembiayaan(financing_categories.id) as besaran')
+                    ->where('id',$id)
+                    ->get();
+        $financing = $financing[0];
+        //Untuk penghitung banyak periode pembayaran
+        $periode = PaymentPeriode::where('financing_category_id',$id)->count(); 
+        // $students = Student::all();
+        if ($periode==0 && $financing->nama=="Bayar per Bulan") {
+            return redirect()
+                ->route('payment.index')
+                ->with('error', 'Periode pembiayaan kosong. Untuk Pembiayaan dengan jenis per Bulan, periode harus dicantumkan!');
+        }
+        // echo "<pre>";
+        // var_dump($datas);
+        return view('pembayaran.detail', compact('datas','financing','periode','no'));
     }
 }

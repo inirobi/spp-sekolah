@@ -47,12 +47,20 @@ Route::resource('user', 'UserController');
 Route::resource('financing', 'FinancingCategoryController');
 Route::get('financing/history/{id}', 'FinancingCategoryController@history');
 Route::get('financing/periode/{id}', 'FinancingCategoryController@periode')->name('financing.periode');
+Route::get('financing/ajax/periode/{id}', 'FinancingCategoryController@periode_ajax');
+
+/**
+ * Route Periode Pembayaran
+ */
+Route::post('financing/periode/store', 'FinancingCategoryController@periode_store')->name('periode.store');
 
 /**
  * Route resource untuk Pembayaran
  */
 Route::resource('payment', 'PaymentController');
 // Route::get('payment/{id}/{}', 'FinancingCategoryController@history');
+Route::post('payment/metode','PaymentController@storeMetodePembayaran')->name('payment.storeMethod');
+Route::get('payment/details/{id}','PaymentController@details')->name('payment.details');
 
 /**
  * Route resource untuk Pengeluaran

@@ -79,8 +79,6 @@
                                         <td>
                                             @if($siswa->jenis_pembayaran==null)
                                                 <span class="badge" style="background-color:yellow;color:black">Waiting</span>
-                                            @elseif($siswa->jenis_pembayaran=="Cicilan")
-                                                <span class="badge" style="background-color:">Nunggak</span>
                                             @elseif($sisa!=0)
                                                 <span class="badge" style="background-color:red">Nunggak</span>
                                             @else
@@ -89,15 +87,14 @@
                                         </td>
                                         <td>
                                             @if($financing->jenis=="Sekali Bayar" && $siswa->jenis_pembayaran==null)
-                                            <button class="btn btn-primary" onclick="addConfirm(1,'as')" title="Pilih Metode Pembayaran">
-                                                <i class="fa fa-history"> Metode</i>
-                                            </button>
-                                            @elseif($periode==0 && $financing->jenis=="Bayar per Bulan")
+                                            <a href="#" class="btn btn-success"
+                                                title="Process"><i class="fa fa-history"onclick="addConfirm(1,'as')"> Process</i></a>
+                                            @elseif($periode==0)
                                             <a href="" class="btn btn-danger"
                                                 title="Harap isi periode" disabled><i class="fa fa-times"> Process</i></a>
                                             @else
                                             <a href="{{ route('payment.show',1) }}" class="btn btn-success"
-                                                title="Lihat Detail Pembayaran" ><i class="fa fa-history"> Detail</i></a>
+                                                title="Process" ><i class="fa fa-history"> Process</i></a>
                                             @endif
                                         </td>
                                     </tr>
@@ -125,17 +122,18 @@
                 <h5 class="modal-title" id="modalAddLabel">Pilih Metode Pembayaran Pembiayaan</h5>
             </div>
             <div class="modal-body">
-                <form action="{{ route('payment.storeMethod') }}" role="form" method="post">
-                {{csrf_field()}}
-                <div class="form-group">
-                    <label class="control-label col-md-4">Metode Pembayaran<kode>*</kode></label>
-                    <div class="chosen-select-single mg-b-20">
-                        <select class="chosen-select" name="metode_pembayaran" id="metode_pembayaran_add">
-                            <option value="Tunai">Tunai</option>
-                            <option value="Cicilan">Cicilan</option>
-                        </select>
+                <form action="{{ route('financing.store') }}" role="form" method="post">
+                    {{csrf_field()}}
+                    <div class="form-group">
+                        <label class="control-label col-md-2">Kategori</label>
+                        <input name='nama' placeholder="Masukan ketegori pembiayaan" type='text' class='form-control'
+                            required>
                     </div>
-                </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-4">Besaran Nominal (Rp.)</label>
+                        <input name='besaran' placeholder="Masukan nominal pembayaran" type='number' min="0"
+                            class='form-control' required>
+                    </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
@@ -250,23 +248,12 @@
 <!-- normalize CSS -->
 <link rel="stylesheet" href="{{ asset('assets/css/data-table/bootstrap-table.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/css/data-table/bootstrap-editable.css') }}">
-<!-- forms CSS
-============================================ -->
-<link rel="stylesheet" href="{{asset('assets/css/form/all-type-forms.css')}}">
-<!-- chosen CSS
-============================================ -->
-<link rel="stylesheet" href="{{asset('assets/css/chosen/bootstrap-chosen.css')}}">
 @endpush
 
 @push('scripts')
 
 <script>
-    function closeModal()
-    {
-        $('.button_add').bind('click');
-    }
     function addConfirm(id_siswa, nama) {
-        $('.button_add').off('click');
         $('#modalAdd').modal();
     }
 
@@ -310,11 +297,6 @@
 <script src="{{ asset('assets/js/editable/bootstrap-datetimepicker.js') }}"></script>
 <script src="{{ asset('assets/js/editable/bootstrap-editable.js') }}"></script>
 <script src="{{ asset('assets/js/editable/xediable-active.js') }}"></script>
-
-<!-- chosen JS
-    ============================================ -->
-<script src="{{ asset('assets/js/chosen/chosen.jquery.js')}}"></script>
-<script src="{{ asset('assets/js/chosen/chosen-active.js')}}"></script>
 
 <script>
 function history(nama, besaran, link = "/"){

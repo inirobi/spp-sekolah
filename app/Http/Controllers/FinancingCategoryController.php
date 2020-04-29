@@ -170,6 +170,11 @@ class FinancingCategoryController extends Controller
                                     ->where('financing_category_id',$id)
                                     ->get();;
     }
+
+    public function periode_ajax($id = null)
+    {
+        return PaymentPeriode::all();
+    }
     
     public function periode($id)
     {
@@ -178,6 +183,21 @@ class FinancingCategoryController extends Controller
         $periodes = PaymentPeriode::select(DB::raw('@row:=@row+1 as rowNumber'),'payment_periodes.*')
                                     ->where('financing_category_id',$id)
                                     ->get();
-        return view('master.financingcategory.periodes',compact('periodes','category'));
+        return view('master.financingcategory.periode',compact('periodes','category'));
+    }
+
+    public function periode_store(Request $req)
+    {
+        $d =$req->all();
+        try {
+
+            return redirect()
+                    ->route('financing.periode',$d['id'])
+                    ->with('success','Berhasil ditambahkan!');
+        } catch (\Throwable $th) {
+            return redirect()
+                    ->route('financing.periode',$d['id'])
+                    ->with('error','Gagal ditambahkan!');
+        }
     }
 }

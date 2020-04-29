@@ -53,12 +53,12 @@ class UserController extends Controller
                 'password' => Hash::make($req['password']),
               ]);
           return redirect()
-              ->route('users.index')
+              ->route('user.index')
               ->with('success', 'User baru telah ditambahkan!');
 
         }catch(Exception $e){
           return redirect()
-              ->route('users.create')
+              ->route('user.create')
               ->with('error', 'Gagal menambah user!');
         }
     }
@@ -82,12 +82,12 @@ class UserController extends Controller
                 'nama' => $req['nama'],
               ]);
           return redirect()
-              ->route('users.index')
+              ->route('user.index')
               ->with('success', 'Data user berhasil disimpan!');
 
         }catch(Exception $e){
           return redirect()
-              ->route('users.create')
+              ->route('user.create')
               ->with('error', 'Data user gagal disimpan!');
         }
     }
@@ -123,12 +123,12 @@ class UserController extends Controller
           $major->save();
 
           return redirect()
-              ->route('users.index')
+              ->route('user.index')
               ->with('success', 'Data user berhasil diubah!');
 
         } catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e){
           return redirect()
-              ->route('users.index')
+              ->route('user.index')
               ->with('error', 'Data user gagal diubah!');
         }
     }
@@ -145,12 +145,12 @@ class UserController extends Controller
             $user = User::findOrFail($id)->delete();
   
             return redirect()
-                ->route('users.index')
+                ->route('user.index')
                 ->with('success', 'Data user berhasil dihapus!');
   
           } catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e){
             return redirect()
-                ->route('users.index')
+                ->route('user.index')
                 ->with('error', 'Data jurusan gagal diubah!');
           }
     }

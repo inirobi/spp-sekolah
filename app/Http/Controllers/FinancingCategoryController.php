@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\FinancingCategory;
 use App\FinancingCategoryReset;
+use App\PaymentPeriode;
 
 use DB;
 
@@ -168,5 +169,15 @@ class FinancingCategoryController extends Controller
         return FinancingCategoryReset::select(DB::raw('@row:=@row+1 as rowNumber, format(besaran,0) as besaran'), 'jenis','created_at')
                                     ->where('financing_category_id',$id)
                                     ->get();;
+    }
+    
+    public function periode($id)
+    {
+        $category = FinancingCategory::where('id',$id)->get();
+        DB::statement(DB::raw('set @row:=0'));
+        $periodes = PaymentPeriode::select(DB::raw('@row:=@row+1 as rowNumber'),'payment_periodes.*')
+                                    ->where('financing_category_id',$id)
+                                    ->get();
+        return view('master.financingcategory.periodes',compact('periodes','category'));
     }
 }

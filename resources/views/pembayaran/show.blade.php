@@ -12,8 +12,23 @@
                             <div class="container-sm">
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <h3>Kategori Pembiayaan</h3>
-                                        <small class="text-muted">Silahkan pilih kategori pembiayaan</small>
+                                        <h3>Menu Pembayaran {{$datas->nama}}</h3>
+                                        <small class="text-muted">Klik tombol process untuk transaksi</small>
+                                    </div>
+                                    <div class="col-md-6">
+                                    
+                                        @if(sizeof($periodes)==0)
+                                            <div style="float:right; margin-right:15px">
+                                            <div class="row">
+                                                <a href="{{ route('financing.periode',$datas->id)}}" style="float:right"class=" btn btn-success"><i class="fa fa-plus"></i>&nbsp;Periode</a>
+                                            </div>
+                                                <div class="row">
+                                                    <small style="color: red">Silahkan isi periode terlebih dahulu</small>
+                                                </div>
+                                            </div>
+                                        @else
+                                            select option
+                                        @endif
                                     </div>
                                 </div>
                             </div>
@@ -37,13 +52,34 @@
                                     <tr>
                                         <th data-field="state" data-checkbox="true"></th>
                                         <th data-field="id">No</th>
-                                        <th data-field="name">Deskripsi</th>
-                                        <th data-field="besaran">Besaran (Rp.)</th>
+                                        <th data-field="name">Nama</th>
+                                        <th data-field="kelas">Kelas</th>
+                                        <th data-field="jurusan">Jurusan</th>
+                                        <th data-field="total">Total Biaya {{$datas->nama}}</th>
+                                        <th data-field="terbayar">Sudah dibayar</th>
+                                        <th data-field="tunggakan">Belum Dibayar</th>
+                                        <th data-field="banyak">Tunggakan</th>
                                         <th data-field="action">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    
+                                    @foreach($students as $siswa)
+                                    <tr>
+                                        <td></td>
+                                        <td>{{$no++}}</td>
+                                        <td>{{$siswa->nama}}</td>
+                                        <td>{{$siswa->kelas}}</td>
+                                        <td>{{$siswa->major->nama}}</td>
+                                        <td>{{$siswa->major->nama}}</td>
+                                        <td>{{$siswa->major->nama}}</td>
+                                        <td>{{ floor(strtotime($siswa->major->created_at) / (60 * 60 * 24 * 365))}}</td>
+                                        <td>{{$siswa->id}} Bulan</td>
+                                        <td>
+                                            <a href="{{ route('payment.show',$siswa->id) }}" class="btn btn-success"
+                                                title="History"><i class="fa fa-history"> Process</i></a>
+                                        </td>
+                                    </tr>
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>

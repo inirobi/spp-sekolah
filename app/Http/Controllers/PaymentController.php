@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\FinancingCategory;
 use App\Payment;
 use App\Student;
-
+use App\PaymentPeriode;
 use DB;
 
 class PaymentController extends Controller
@@ -82,7 +82,11 @@ class PaymentController extends Controller
      */
     public function show($id)
     {
-        
+        $datas = FinancingCategory::findOrFail($id);
+        $students = Student::all();
+        $periodes = PaymentPeriode::where('financing_category_id',$id)->get();
+        $no = 1;
+        return view('pembayaran.show', compact('datas', 'students', 'no', 'periodes'));
     }
 
     /**

@@ -35,23 +35,29 @@
                                 data-toolbar="#toolbar">
                                 <thead>
                                     <tr>
+                                        <div style="text-align: center">
                                         <th data-field="state" data-checkbox="true"></th>
-                                        <th data-field="id">No</th>
-                                        <th data-field="name">Deskripsi</th>
-                                        <th data-field="besaran">Besaran (Rp.)</th>
-                                        <th data-field="action">Action</th>
+                                        <th data-field="id"><div style="text-align: center">No</div></th>
+                                        <th data-field="name"><div style="text-align: center">Nama</div></th>
+                                        <th data-field="jenis"><div style="text-align: center">Jenis Pembiayaan</div></th>
+                                        <th data-field="besaran"><div style="text-align: center">Besaran (Rp.)</div></th>
+                                        <th data-field="action"><div style="text-align: center">Action</div></th>
+                                        </div>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach($datas as $data)
                                     <tr>
                                         <td></td>
-                                        <td>{{$no++}}</td>
+                                        <td><div style="text-align: center">{{$no++}}</div></td>
                                         <td>{{$data->nama}}</td>
-                                        <td>{{$data->besaran}}</td>
+                                        <td><div style="text-align: center">{{$data->jenis}}</div></td>
+                                        <td><div style="text-align: right">{{number_format($data->besaran)}}</div></td>
                                         <td>
-                                            <a href="{{ route('payment.show',$data->id) }}" class="btn btn-info"
-                                                title="History"><i class="fa fa-history"> Process</i></a>
+                                            <div style="text-align: center;">
+                                                <a href="{{ route('payment.show',$data->id) }}" class="btn btn-success"
+                                                title="History" style="color:white"><i class="fa fa-history"> Process</i></a>
+                                            </div>
                                         </td>
                                     </tr>
                                     @endforeach

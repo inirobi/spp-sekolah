@@ -35,4 +35,9 @@ class FinancingCategory extends Model
     {
         return $this->hasMany('App\FinancingCategoryReset', 'financing_category_id');
     }
+
+    public function periode()
+    {
+        return $this->hasMany('App\PaymentPeriode');
+    }
 }

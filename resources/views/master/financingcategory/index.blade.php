@@ -13,11 +13,13 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <h3>Data Kategori Pembiayaan</h3>
+                                        <small>Tombol history muncul kalau ada perubahan data</small>
                                     </div>
                                     <div class="col-md-6">
                                         <a style="float:right" data-toggle="modal" href="#modalAdd"
                                             class="btn btn-success" title="Tambah"><i class="fa fa-plus"></i> Tambah
                                         </a>
+                                        
                                     </div>
                                 </div>
                             </div>
@@ -53,9 +55,19 @@
                                         <td></td>
                                         <td>{{$no++}}</td>
                                         <td>{{$data->nama}}</td>
-                                        <td>{{$data->besaran}}</td>
-                                        <td>{{$data->jenis}}</td>
                                         <td>
+                                            <div style="text-align: right">
+                                            {{number_format($data->besaran)}}
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div style="text-align: center">{{$data->jenis}}</div>
+                                        </td>
+                                        <td>
+                                        <div style="text-align: center">
+                                            @if($data->jenis=='Bayar per Bulan')
+                                            <a href="{{route('financing.periode',$data)}}" class="btn btn-success" title="History"><i class="fa fa-history"> Periode</i></a>
+                                            @endif
                                             @if($data->history->count()>1)
                                             <a href="#" class="btn btn-info"
                                                 onclick="history('{{$data->nama}}','{{ number_format($data->besaran, 0, ".", ".")}}', '{{$data->jenis}}','{{ url('financing/history',$data->id) }}')"
@@ -67,6 +79,7 @@
                                             <a href="{{ route('financing.destroy',$data) }}" class="btn btn-danger"
                                                 onclick="event.preventDefault();destroy('{{ route('financing.destroy',$data) }}');"
                                                 title="Hapus"><i class="fa fa-trash"></i> Hapus</a>
+                                                </div>
                                         </td>
                                     </tr>
                                     @endforeach
@@ -244,7 +257,6 @@
     </div>
 </div>
 
-
 <!-- hapus -->
 <form id="destroy-form" method="POST">
     @method('DELETE')
@@ -272,8 +284,6 @@
         $('#editForm').attr('action', "{{ url('financing') }}/" + id);
         $('#modalUpdate').modal();
     }
-
-    
 
     function destroy(action) {
         swal({

@@ -44,4 +44,9 @@ class User extends Authenticatable
     {
         return $this->belongsToMany('App\Payment', 'payment_details', 'user_id', 'payment_id');
     }
+
+    public function paymentDetail()
+    {
+        return $this->hasMany('App\PaymentDetail');
+    }
 }

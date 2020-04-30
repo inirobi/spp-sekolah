@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- favicon
 		============================================ -->
-    <link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
     <!-- Google Fonts
 		============================================ -->
     <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,700,900" rel="stylesheet">
@@ -118,8 +118,7 @@
                                                     <li class="nav-item">
                                                         <a href="#" data-toggle="dropdown" role="button"
                                                             aria-expanded="false" class="nav-link dropdown-toggle">
-                                                            <img src="{{ asset('assets/img/product/pro4.jpg') }}" alt="" />
-                                                            <span class="admin-name">Prof.Anderson</span>
+                                                            <span class="admin-name">Hi, {{Session::get('nama')}}</span>
                                                             <i class="fa fa-angle-down edu-icon edu-down-arrow"></i>
                                                         </a>
                                                         <ul role="menu"
@@ -131,7 +130,7 @@
                                                                 </a>
                                                             </li>
                                                             <li>
-                                                                <a title="Rekapitulasi" class="" href="#" aria-expanded="false">
+                                                                <a title="Keluar" class="" href="{{route('logout')}}" aria-expanded="false">
                                                                     <span class="fa fa-sign-out sub-icon-mg" aria-hidden="true"></span>
                                                                     <span class="mini-click-non ">Keluar</span>
                                                                 </a>
@@ -181,6 +180,7 @@
                     </div>
                 </div>
                 <!-- Breadcumb end -->
+                @stack('breadcumb-custom')
             </div>
             @include('layouts.message')
             @yield('content')

@@ -17,7 +17,7 @@ class Payment extends Model
     protected $fillable = [
         "student_id",
         "financing_category_id", 
-        "terakhir_dibayar",
+        "jenis_pembayaran",
     ];
 
     /**
@@ -25,7 +25,7 @@ class Payment extends Model
      */
     public function paymentDetail()
     {
-        return $this->hasMany('App\PaymentDetail', 'payment_id');
+        return $this->hasMany('App\PaymentDetail');
     }
 
     /**

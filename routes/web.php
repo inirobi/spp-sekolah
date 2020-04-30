@@ -11,23 +11,14 @@
 |
 */
 
-Route::get('/', function () {
-    return view('dashboard.index');
-});
+/**
+ * @description Route home
+ * 
+ */
 
-
-// hanya untuk tamu yg belum auth
-Route::get('/login', 'LoginController@getLogin')->middleware('guest');
-Route::post('/login', 'LoginController@postLogin');
-Route::get('/logout', 'LoginController@logout');
-
-Route::get('/adminAuth', function() {
-    return view('admin');
-})->middleware('auth:admin');
-
-Route::get('/userAuth', function() {
-    return view('user');
-})->middleware('auth:user');
+ Route::get('home', function(){
+     return view('dashboard.index');
+ })->name('home');
 
 //============================MASTER=================
 
@@ -60,7 +51,8 @@ Route::post('financing/periode/store', 'FinancingCategoryController@periode_stor
 Route::resource('payment', 'PaymentController');
 // Route::get('payment/{id}/{}', 'FinancingCategoryController@history');
 Route::post('payment/metode','PaymentController@storeMetodePembayaran')->name('payment.storeMethod');
-Route::get('payment/details/{id}','PaymentController@details')->name('payment.details');
+Route::get('payment/details/{id}/{id_siswa}/{id_payment}','PaymentController@details')->name('payment.details.cicilan');
+Route::post('payment/details/store','PaymentController@cicilanStore')->name('payment.details.cicilan.store');
 
 /**
  * Route resource untuk Pengeluaran
@@ -71,3 +63,13 @@ Route::resource('expense', 'ExpenseController');
  * Route resource untuk Pembayaran
  */
 Route::resource('rekap', 'RekapController');
+
+
+/**
+ * Route Login
+ */
+Route::get('/','LoginController@index')->name('default');
+Route::get('/login','LoginController@index')->name('login');
+Route::post('/login', 'loginController@loginPost')->name('login.store');
+Route::get('/logout', 'HomeController@logout')->name('logout');
+Route::post('/ChangePassword', 'HomeController@change')->name('password.change');

@@ -17,6 +17,7 @@ class Jurnal extends Model
     protected $fillable = [
         "expense_id",
         "payment_id",
+        "description",
         "debit",
         "kredit",
     ];

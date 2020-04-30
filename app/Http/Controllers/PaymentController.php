@@ -3,17 +3,27 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Session;
+use Illuminate\Routing\Redirector;
 use App\FinancingCategory;
 use App\Payment;
 use App\Student;
 use App\PaymentPeriode;
 use App\PaymentDetail;
 use App\PaymentView;
+use App\Jurnal;
 use DB;
 
 class PaymentController extends Controller
 {
+    public function __construct(Request $request, Redirector $redirect)
+    {
+        
+        // if(!Session::get('login')){
+        //     $redirect->to('login')->with('danger','Kamu tidak punya akses')->send();
+        // }
+
+    }
     /**
      * Display a listing of the resource.
      *
@@ -228,14 +238,63 @@ class PaymentController extends Controller
     public function storeMetodePembayaran(Request $request)
     {
         $req = $request->all();
-        echo "<pre>";
-        var_dump($req);
+        $req['date'] = date('Y-m-d', time());
+        $req['user_id'] = Session::get('id');
+        $req['siswa'] = Student::where('id',$req['student_id'])->first();
+        $req['description'] = "Pembayaran ".$req['financing_category']." dari ".$req['student_name']." kelas ".$req['siswa']->kelas." ( ".$req['siswa']->major->nama." )"." diterima oleh ".$req['penerima'];
+        if($req['metode_pembayaran']=='Tunai')
+        {
+            Payment::create([
+                'id' => null,
+                'student_id' => $req['student_id'],
+                'jenis_pembayaran' => $req['metode_pembayaran'],
+                'financing_category_id' => $req['financing_category_id'],
+            ]);
+            $payment_id = DB::getPdo()->lastInsertId();
+            PaymentDetail::create([
+                'id' => null,
+                'payment_id' => $payment_id,
+                'tgl_dibayar' => $req['date'],
+                'nominal' => $req['nominal'],
+                'user_id' => $req['user_id'],
+                'status' => 'Lunas',
+            ]);
+            Jurnal::create([
+                'id' => null,
+                'payment_id' => $payment_id,
+                'expense_id' => 0,
+                'debit' => $req['nominal'],
+                'kredit' => 0,
+                'description' => $req['description'],
+            ]);
+            return redirect()
+                ->route('payment.show', $req['financing_category_id'])
+                ->with('success', 'Lunas!');
+        }else
+        {
+            $cek = Payment::where('student_id',$req['student_id'])->groupBy('student_id')->count();
+            if($cek==0){
+                Payment::create([
+                    'id' => null,
+                    'student_id' => $req['student_id'],
+                    'jenis_pembayaran' => $req['metode_pembayaran'],
+                    'financing_category_id' => $req['financing_category_id'],
+                    ]);
+                    $payment_id = DB::getPdo()->lastInsertId();
+                return redirect()
+                    ->route('payment.details.cicilan', [$req['financing_category_id'], $req['student_id'], $payment_id])
+                    ->with('success', 'Metode Pembayaran disimpan!');
+            }
+            return redirect()
+                ->route('payment.show', $req['financing_category_id'])
+                ->with('error', 'Metode Pembayaran telah di isi');
+        }
     }
 
     /**
      * @description me
      */
-    public function detail($id)
+    public function details($id, $id_siswa, $id_payment)
     {
         //numbering
         $no = 1;
@@ -245,6 +304,7 @@ class PaymentController extends Controller
                 ->leftJoin('financing_categories', 'financing_categories.id', '=', 'payments.financing_category_id')
                 ->leftJoin('payment_details','payment_details.payment_id','=','payments.id')
                 ->groupBy('students.id')
+                ->where('students.id', $id_siswa)
                 ->get();
         //data master show data untuk header
         $financing = FinancingCategory::findOrFail($id)
@@ -252,16 +312,85 @@ class PaymentController extends Controller
                     ->where('id',$id)
                     ->get();
         $financing = $financing[0];
+        //data Pembiayaan
+        $payments = Payment::where('id',$id_payment)->first();
+        $payment_details = PaymentDetail::where('payment_id',$id_payment)->get();
         //Untuk penghitung banyak periode pembayaran
         $periode = PaymentPeriode::where('financing_category_id',$id)->count(); 
-        // $students = Student::all();
+        
         if ($periode==0 && $financing->nama=="Bayar per Bulan") {
             return redirect()
                 ->route('payment.index')
                 ->with('error', 'Periode pembiayaan kosong. Untuk Pembiayaan dengan jenis per Bulan, periode harus dicantumkan!');
         }
-        // echo "<pre>";
-        // var_dump($datas);
-        return view('pembayaran.detail', compact('datas','financing','periode','no'));
+
+        $date = $this->getTanggalHariIni();
+        
+        return view('pembayaran.cicilan', compact('datas','financing','payments', 'payment_details','periode','no','date'));
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function cicilanStore(Request $request)
+    {
+
+        $request = $request->all();
+        
+        $total = FinancingCategory::select('besaran')->where('id', $request['financing_category_id'])->first();
+        $sudah_dibayar = PaymentDetail::selectRaw('sum(nominal) as nominal')->where('payment_id',$request['payment_id'])->first();
+        $total =$total->besaran;
+        $sudah_dibayar = intval($sudah_dibayar->nominal);
+        $selisih = $total - ($sudah_dibayar + intval($request['nominal']));
+        $sisa = intval($request['nominal'])+intval($selisih);
+        $nominal = $request['nominal'];
+        $status = 'Nunggak';
+        if($selisih<0){
+            $nominal = $sisa;
+            $status = 'Lunas';
+        }elseif($selisih==0){
+            $status='Lunas';
+        }
+        $date = $this->convertToCorrectDateValue($request['calendar']);
+        PaymentDetail::create([
+            'id' => null,
+            'payment_id' => $request['payment_id'],
+            'tgl_dibayar' => $date,
+            'nominal' => $nominal,
+            'user_id' => Session::get('id'),
+            'status' => $status,
+        ]);
+        return redirect()
+                ->route('payment.details.cicilan', [$request['financing_category_id'], $request['student_id'], $request['payment_id']])
+                ->with('success', 'Pembayaran disimpan!');
+    }
+
+
+    /**
+     * 
+     * @return string tanggal dalam format dd/mm/yyyy
+     */
+    public function getTanggalHariIni()
+    {
+        $date = now();
+        $date = explode(" ", $date);
+        $date = $date[0];
+        $date = explode("-", $date);
+        $date = $date[2]."/".$date[1]."/".$date[0];
+        return $date;
+    }
+    /**
+     * 
+     * @param string invalid format
+     * @return string tanggal dalam format dd/mm/yyyy
+     */
+    public function convertToCorrectDateValue($date)
+    {
+        $date = explode("/", $date);
+        $date = $date[2]."/".$date[1]."/".$date[0];
+        return $date;
     }
 }

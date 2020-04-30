@@ -1,48 +1,51 @@
 <?php
 
 namespace App\Http\Controllers;
-
-use Illuminate\Http\Request;
-use App\Admin;
 use App\User;
-use Auth;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Session;
+use DB;
 
 class LoginController extends Controller
 {
-  public function getLogin()
-  {
-    return view('login');
-  }
-
-  public function postLogin(Request $request)
-  {
-
-      // Validate the form data
-    $this->validate($request, [
-      'email' => 'required|email',
-      'password' => 'required'
-    ]);
-
-      // Attempt to log the user in
-      // Passwordnya pake bcrypt
-    if (Auth::guard('admin')->attempt(['email' => $request->email, 'password' => $request->password])) {
-        // if successful, then redirect to their intended location
-      return redirect()->intended('/admin');
-    } else if (Auth::guard('user')->attempt(['email' => $request->email, 'password' => $request->password])) {
-      return redirect()->intended('/user');
+    public function index(){
+        if(!Session::get('login'))
+        {
+            return view('auth.login');
+        }
+        else
+        {   
+            return redirect('home');
+        }
     }
 
-  }
+    public function loginPost(Request $request){
 
-  public function logout()
-  {
-    if (Auth::guard('admin')->check()) {
-      Auth::guard('admin')->logout();
-    } elseif (Auth::guard('user')->check()) {
-      Auth::guard('user')->logout();
+        $email = $request->email;
+        $password = $request->password;
+
+        $data = User::where('email',$email)->first();
+        
+        if($data){ //apakah username tersebut ada atau tidak
+            if(Hash::check($password, $data->password)){
+                Session::put('id',$data->id);                
+                Session::put('nama',$data->name);
+                Session::put('email',$data->email);
+                Session::put('login','TRUE');
+                return redirect('home')
+                    ->with('success', 'Selamat datang '.$data->name);
+            }
+            else{
+                return redirect('login')
+                    ->with('warning', 'Password salah')
+                    ->withInput();
+            }
+        }
+        else{
+            return redirect('login')
+                    ->with('warning', 'Email tidak terdaftar')
+                    ->withInput();
+        }
     }
-
-    return redirect('/');
-
-  }
 }

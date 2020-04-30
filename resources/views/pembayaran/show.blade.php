@@ -79,8 +79,6 @@
                                         <td>
                                             @if($siswa->jenis_pembayaran==null)
                                                 <span class="badge" style="background-color:yellow;color:black">Waiting</span>
-                                            @elseif($siswa->jenis_pembayaran=="Cicilan")
-                                                <span class="badge" style="background-color:">Nunggak</span>
                                             @elseif($sisa!=0)
                                                 <span class="badge" style="background-color:red">Nunggak</span>
                                             @else
@@ -89,15 +87,21 @@
                                         </td>
                                         <td>
                                             @if($financing->jenis=="Sekali Bayar" && $siswa->jenis_pembayaran==null)
-                                            <button class="btn btn-primary" onclick="addConfirm(1,'as')" title="Pilih Metode Pembayaran">
-                                                <i class="fa fa-history"> Metode</i>
-                                            </button>
+                                                <button class="btn btn-primary" onclick="addConfirm('{{$siswa->id}}','{{$siswa->nama}}')" title="Pilih Metode Pembayaran">
+                                                    <i class="fa fa-history"> Metode</i>
+                                                </button>
                                             @elseif($periode==0 && $financing->jenis=="Bayar per Bulan")
-                                            <a href="" class="btn btn-danger"
+                                                <a href="" class="btn btn-danger"
                                                 title="Harap isi periode" disabled><i class="fa fa-times"> Process</i></a>
+                                            @elseif($sisa==0 && $siswa->jenis_pembayaran=="Cicilan")
+                                                <a href="{{ route('payment.show',1) }}" class="btn btn-success"
+                                                title="Cetak Bukti Pembayaran" style="color:white; background-color:green"><i class="fa fa-print"> Invoice</i></a>
+                                            @elseif($siswa->jenis_pembayaran=="Cicilan" && $sisa!=0)
+                                                <a href="{{ route('payment.show',1) }}" class="btn btn-warning"
+                                                title="Cetak Bukti Pembayaran" style="color:black; background-color:orange"><i class="fa fa-eye"> Rincian</i></a>
                                             @else
-                                            <a href="{{ route('payment.show',1) }}" class="btn btn-success"
-                                                title="Lihat Detail Pembayaran" ><i class="fa fa-history"> Detail</i></a>
+                                                <a href="{{ route('payment.show',1) }}" class="btn btn-success"
+                                                title="Cetak Bukti Pembayaran" style="color:white; background-color:green"><i class="fa fa-print"> Invoice</i></a>
                                             @endif
                                         </td>
                                     </tr>
@@ -127,6 +131,26 @@
             <div class="modal-body">
                 <form action="{{ route('payment.storeMethod') }}" role="form" method="post">
                 {{csrf_field()}}
+                <input type="hidden" name="financing_category_id" value="{{$financing->id}}">
+                <input type="hidden" name="financing_category" value="{{$financing->nama}}">
+                <input type="hidden" name="nominal" value="{{$financing->besaran}}">
+                <input type="hidden" name="student_id" id="student_id_add" value="">
+                <input type="hidden" name="student_name" id="student_name_add" value="">
+                <input type="hidden" name="penerima" value="{{ Session::get('nama') }}">
+                <div class="row mb-3">
+                    <div class="col-md-3 col-sm-3">
+                        Pembiayaan
+                    </div>
+                    :
+                    <strong><span>{{$financing->nama}}</span></strong>
+                </div>
+                <div class="row">
+                    <div class="col-md-3 col-sm-3">
+                        Nominal Pembayaran
+                    </div>
+                    : <strong>Rp. <span >{{number_format($financing->besaran,0,',','.')}}</span></strong>
+                </div>
+                <hr>
                 <div class="form-group">
                     <label class="control-label col-md-4">Metode Pembayaran<kode>*</kode></label>
                     <div class="chosen-select-single mg-b-20">
@@ -139,7 +163,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                <button type='submit' class="btn btn-primary"><i class="fa fa-floppy-o"></i> Save</button>
+                <button type='submit' class="btn btn-primary"><i class="fa fa-floppy-o"></i> Submit</button>
                 </form>
             </div>
         </div>
@@ -266,7 +290,8 @@
         $('.button_add').bind('click');
     }
     function addConfirm(id_siswa, nama) {
-        $('.button_add').off('click');
+        $('#student_id_add').attr('value',id_siswa);
+        $('#student_name_add').attr('value',nama);
         $('#modalAdd').modal();
     }
 
@@ -344,7 +369,7 @@ $('#modalHistory').modal();
 
 @push('breadcrumb-left')
 <h3>Menu Pembayaran {{$financing->nama}}</h3>
-<span class="all-pro-ad">Kategori Pembayaran : <strong>{{$financing->jenis}}</strong></span>
+<span class="all-pro-ad">Metode Pembayaran : <strong>{{$financing->jenis}}</strong></span>
 @endpush
 
 @push('breadcrumb-right')

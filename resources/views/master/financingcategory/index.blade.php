@@ -42,11 +42,11 @@
                                 <thead>
                                     <tr>
                                         <th data-field="state" data-checkbox="true"></th>
-                                        <th data-field="id">No</th>
-                                        <th data-field="name">Deskripsi</th>
-                                        <th data-field="besaran">Besaran (Rp.)</th>
-                                        <th data-field="jenis">Jenis Pembiayaan</th>
-                                        <th data-field="action">Action</th>
+                                        <th data-field="id"><div style="text-align: center">No</div></th>
+                                        <th data-field="name"><div style="text-align: center">Deskripsi</div></th>
+                                        <th data-field="besaran"><div style="text-align: center">Besaran (Rp.)</div></th>
+                                        <th data-field="jenis"><div style="text-align: center">Jenis Pembiayaan</div></th>
+                                        <th data-field="action"><div style="text-align: center">Action</div></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -57,7 +57,7 @@
                                         <td>{{$data->nama}}</td>
                                         <td>
                                             <div style="text-align: right">
-                                            {{number_format($data->besaran)}}
+                                            {{number_format($data->besaran, 0, ",", ".")}}
                                             </div>
                                         </td>
                                         <td>
@@ -66,11 +66,11 @@
                                         <td>
                                         <div style="text-align: center">
                                             @if($data->jenis=='Bayar per Bulan')
-                                            <a href="{{route('financing.periode',$data)}}" class="btn btn-success" title="History"><i class="fa fa-history"> Periode</i></a>
+                                            <a href="{{route('financing.periode',$data)}}" class="btn btn-success" title="Periode"><i class="fa fa-history"> Periode</i></a>
                                             @endif
                                             @if($data->history->count()>1)
                                             <a href="#" class="btn btn-info"
-                                                onclick="history('{{$data->nama}}','{{ number_format($data->besaran, 0, ".", ".")}}', '{{$data->jenis}}','{{ url('financing/history',$data->id) }}')"
+                                                onclick="history('{{$data->nama}}','{{ number_format($data->besaran, 0, ",", ".")}}', '{{$data->jenis}}','{{ url('financing/history',$data->id) }}')"
                                                 title="History"><i class="fa fa-history"> History</i></a>
                                             @endif
                                             <a href="#" class="btn btn-warning"
@@ -353,4 +353,15 @@ $.ajax({
 });
 $('#modalHistory').modal();
 }</script>
+@endpush
+
+@push('breadcrumb-right')
+<div style="float:right">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb" style="margin-bottom:0">
+            <li class="breadcrumb-item"><a href="{{ url('/')}}">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Pembiayaan</li>
+        </ol>
+    </nav>
+</div>
 @endpush

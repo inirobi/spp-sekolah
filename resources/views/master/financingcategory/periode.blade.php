@@ -17,11 +17,19 @@
                         <form action="{{route('periode.store')}}" method="post">
                             @csrf
                             <input type="hidden" name="id" value="{{ $category[0]->id}}">
+                            <input type="hidden" name="id_data">
                             <div class="form-group data-custon-pick" id="data_4">
-                                <label>Pilih Periode</label>
+                                <label>Pilih Periode (mm/dd/yyyy)</label>
                                 <div class="input-group date">
                                     <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                                    <input type="text" class="form-control" name="calendar" value="06/06/2020">
+                                    <input type="text" class="form-control" name="calendar" value="06/01/2020">
+                                </div>
+                            </div>
+                            <div class="form-group data-custon-pick">
+                                <label>Nominal</label>
+                                <div class="input-group">
+                                    <span class="input-group-addon"><strong>Rp.</strong></span>
+                                    <input type="nominal" class="form-control" name="nominal" value="{{ $category[0]->besaran}}">
                                 </div>
                             </div>
                             <div class="login-btn-inner">
@@ -74,22 +82,39 @@
                                             <tr>
                                                 <th data-field="state" data-checkbox="true"></th>
                                                 <th data-field="id">No</th>
+                                                <th data-field="date" data-editable="false">Terakhir Update</th>
                                                 <th data-field="bulan" data-editable="false">Bulan</th>
                                                 <th data-field="tahun" data-editable="false">Tahun</th>
-                                                <th data-field="date" data-editable="false">Dibuat</th>
-                                                <th data-field="action">Action</th>
+                                                <th data-field="nominal" data-editable="false">Nominal</th>
+                                                <th data-field="action" data-editable="false">Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @php $no=1; @endphp
+                                            @php 
+                                                $no=1;
+                                                $bulan=['','Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];                                            
+                                            @endphp
                                             @foreach($periodes as $periode)
                                             <tr>
                                                 <td></td>
                                                 <td>{{ $no++ }}</td>
-                                                <td>{{ $periode->bulan }}</td>
+                                                <td>{{ $periode->updated_at }}</td>
+                                                <td>{{ $bulan[$periode->bulan] }}</td>
                                                 <td>{{ $periode->tahun }}</td>
-                                                <td>{{ $periode->created_at }}</td>
-                                                <td>{{ $periode->created_at }}</td>
+                                                <td>
+                                                    <div style="text-align:right">
+                                                    {{ $periode->nominal }}
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div style="text-align:center">
+                                                <button class="btn btn-danger editable"
+                                                title="Hapus periode {{$category[0]->nama}}" style="color:white" 
+                                                onclick="event.preventDefault();destroy('{{ route('periode.destroy',[$periode,$category[0]->id]) }}');">
+                                                    <i class="fa fa-trash"></i>
+                                                </button>
+                                                    </div>
+                                                </td>
                                             </tr>
                                             @endforeach
                                         </tbody>
@@ -104,6 +129,11 @@
     </div>
 </div>
 <!-- Static Table End -->
+<!-- hapus -->
+<form id="destroy-form" method="POST">
+    @method('DELETE')
+    @csrf
+</form>
 @endsection
 
 @push('styles')
@@ -142,4 +172,41 @@
 		============================================ -->
     <script src="{{asset('assets/js/datapicker/bootstrap-datepicker.js')}}"></script>
     <script src="{{asset('assets/js/datapicker/datepicker-active.js')}}"></script>
+
+<script>
+    function destroy(action) {
+        swal({
+            title: 'Apakah anda yakin?',
+            text: 'Setelah dihapus, data pembayaran pada periode ini akan terhapus!',
+            icon: 'warning',
+            buttons: ["Cancel", "Yes!"],
+        }).then(function (value) {
+            if (value) {
+                document.getElementById('destroy-form').setAttribute('action', action);
+                document.getElementById('destroy-form').submit();
+            } else {
+                swal("Data kamu aman!");
+            }
+        });
+    }
+</script>
+
+@endpush
+
+
+@push('breadcrumb-left')
+<button onclick="javascript:history.back()" class="btn btn-primary">Kembali</button>
+@endpush
+
+@push('breadcrumb-right')
+<div style="float:right">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb" style="margin-bottom:0">
+            <li class="breadcrumb-item"><a href="{{ url('/')}}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{{url('/financing')}}">Pembiayaan</a></li>
+            <li class="breadcrumb-item"><a href="">{{ $category[0]->nama}}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Periode</li>
+        </ol>
+    </nav>
+</div>
 @endpush

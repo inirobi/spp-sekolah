@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Major;
 use App\Student;
+use App\FinancingCategory;
+use App\Payment;
+
+use DB;
 
 class StudentController extends Controller
 {
@@ -47,6 +51,8 @@ class StudentController extends Controller
                     ->route('students.index')
                     ->with('error', 'Inputan tidak valid!');
             }
+            $date = explode("/",$req['tgl_masuk']);
+            $date = $date[2].'-'.$date[0].'-'.$date[1];
             Student::create([
                 'id' => null,
                 'nis' => $req['nis'],
@@ -55,8 +61,17 @@ class StudentController extends Controller
                 'major_id' => $req['major_id'],
                 'phone' => $req['phone'],
                 'email' => $req['email'],
-                'tgl_masuk' => $req['tgl_masuk'],
+                'tgl_masuk' => $date,
               ]);
+            $id = DB::getPdo()->lastInsertId();
+            $categories = FinancingCategory::all();
+            for ($i=0; $i < $categories->count(); $i++) { 
+                Payment::create([
+                    'financing_category_id' => $categories[$i]->id,
+                    'student_id' => $id,
+                    'jenis_pembayaran' => "Waiting",
+                ]);
+            }
           return redirect()
               ->route('students.index')
               ->with('success', 'Data siswa berhasil disimpan!');

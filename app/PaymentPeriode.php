@@ -17,11 +17,19 @@ class PaymentPeriode extends Model
     protected $fillable = [
         "financing_category_id",
         "bulan", 
-        "tahun",
+        "tahun", 
+        "nominal",
     ];
 
     public function financingCategory()
     {
         return $this->belongsTo('App\FinancingCategory', "financing_category_id");
     }
+
+    public function pembayaran()
+    {
+        return $this->hasMany('App\PaymentPeriodeDetail');
+    }
+
+    
 }

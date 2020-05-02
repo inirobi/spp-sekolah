@@ -40,4 +40,14 @@ class Student extends Model
     {
         return $this->belongsToMany('App\FinancingCategory');
     }
+
+    public function periode()
+    {
+        return $this->hasMany('App\PaymentPeriodeStudent');
+    }
+
+    public function pembayaran()
+    {
+        return $this->hasMany('App\Payment');
+    }
 }

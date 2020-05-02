@@ -17,6 +17,7 @@ class CreateFinancingCategoriesTable extends Migration
             $table->bigIncrements('id');
             $table->string('nama');
             $table->integer('besaran');
+            $table->enum('jenis',['Bayar per Bulan','Sekali Bayar']);
             $table->timestamps();
         });
     }

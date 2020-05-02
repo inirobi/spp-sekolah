@@ -17,6 +17,7 @@ class CreateFinancingCategoryResetsTable extends Migration
             $table->bigIncrements('id');
             $table->integer('financing_category_id');
             $table->integer('besaran');
+            $table->enum('jenis',['Bayar per Bulan','Sekali Bayar']);
             $table->timestamps();
         });
     }

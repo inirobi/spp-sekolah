@@ -131,8 +131,8 @@
       </div>
       </div>
       <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal" tabindex="-1">Close</button>
           <button type='submit' class="btn btn-primary"><i class="fa fa-floppy-o"></i> Save</button>
-          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
         </form>
       </div>
     </div>
@@ -198,8 +198,8 @@
       </div>
       </div>
       <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal" tabindex="-1">Close</button>
           <button type='submit' class="btn btn-primary"><i class="fa fa-floppy-o"></i> Save</button>
-          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
         </form>
       </div>
     </div>
@@ -310,3 +310,14 @@
     <script src="{{ asset('assets/js/datapicker/bootstrap-datepicker.js')}}"></script>
     <script src="{{ asset('assets/js/datapicker/datepicker-active.js')}}"></script>
   @endpush
+
+@push('breadcrumb-right')
+<div style="float:right">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb" style="margin-bottom:0">
+            <li class="breadcrumb-item"><a href="{{ url('/')}}">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Pengeluaran</li>
+        </ol>
+    </nav>
+</div>
+@endpush

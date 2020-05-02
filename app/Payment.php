@@ -35,4 +35,9 @@ class Payment extends Model
     {
         return $this->belongsToMany('App\User');
     }
+
+    public function student()
+    {
+        return $this->belongsToMany('App\Student', 'payments', 'student_id');
+    }
 }

@@ -19,6 +19,7 @@ class CreateExpensesTable extends Migration
             $table->text('description');
             $table->enum('sumber', ['Sekolah','Yayasan']);
             $table->string('foto');
+            $table->bigInteger('nominal');
             $table->timestamps();
         });
     }

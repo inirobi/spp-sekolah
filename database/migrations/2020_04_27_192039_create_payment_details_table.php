@@ -15,10 +15,11 @@ class CreatePaymentDetailsTable extends Migration
     {
         Schema::create('payment_details', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('tgl_dibayar');
             $table->integer('payment_id');
-            $table->date('tgl_dibayar');
-            $table->integer('nominal');
             $table->integer('user_id');
+            $table->integer('nominal');
+            $table->enum('status',['Lunas','Nunggak','Waiting']);
             $table->timestamps();
         });
     }

@@ -61,23 +61,40 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach($datas as $siswa)
+                                    @foreach($datas as $payment)
                                         @php
-                                            $besaran = intval(($periode!=0)?intval($periode*$financing->besaran):$financing->besaran);
-                                            $terbayar = intval(($siswa->terbayar!=0)?$siswa->terbayar:0);
-                                            $sisa = $besaran - $terbayar;
+                                            $sisa = $financing->besaran - $payment->terbayar;
                                         @endphp
+                                    @if($payment->student[0]!=null)
                                     <tr>
                                         <td></td>
                                         <td>{{$no++}}</td>
-                                        <td>{{$siswa->nama}}</td>
-                                        <td>{{$siswa->kelas}} - {{$siswa->major->nama}}</td>
-                                        <td>{{$besaran}}</td>
-                                        <td>{{$terbayar}}</td>
-                                        <td>{{$sisa}}</td>
-                                        <td>{{($siswa->jenis_pembayaran==null)?'Belum ditambahkan':$siswa->jenis_pembayaran}}</td>
+                                        <td>{{$payment->student[0]->nama}}</td>
+                                        <td>{{$payment->student[0]->kelas}} - {{$payment->student[0]->major->nama}}</td>
+                                        <td>{{$financing->besaran}}</td>
                                         <td>
-                                            @if($siswa->jenis_pembayaran==null)
+                                            @if($payment->jenis_pembayaran=="Waiting")
+                                                <span class="badge" style="background-color:yellow;color:black">Waiting</span>
+                                            @else
+                                                {{($payment->terbayar)}}
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if($payment->jenis_pembayaran=="Waiting")
+                                                <span class="badge" style="background-color:yellow;color:black">Waiting</span>
+                                            @else
+                                                {{$sisa}}
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if($payment->jenis_pembayaran=="Waiting")
+                                                <span class="badge" style="background-color:yellow;color:black">Waiting</span>
+                                            @else
+                                                {{$payment->jenis_pembayaran}}
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if($payment->jenis_pembayaran=="Waiting")
                                                 <span class="badge" style="background-color:yellow;color:black">Waiting</span>
                                             @elseif($sisa!=0)
                                                 <span class="badge" style="background-color:red">Nunggak</span>
@@ -86,18 +103,32 @@
                                             @endif
                                         </td>
                                         <td>
-                                            @if($financing->jenis=="Sekali Bayar" && $siswa->jenis_pembayaran==null)
-                                            <a href="#" class="btn btn-success"
-                                                title="Process"><i class="fa fa-history"onclick="addConfirm(1,'as')"> Process</i></a>
-                                            @elseif($periode==0)
-                                            <a href="" class="btn btn-danger"
-                                                title="Harap isi periode" disabled><i class="fa fa-times"> Process</i></a>
+                                            @if($financing->jenis=="Sekali Bayar")
+                                                
                                             @else
-                                            <a href="{{ route('payment.show',1) }}" class="btn btn-success"
-                                                title="Process" ><i class="fa fa-history"> Process</i></a>
+
+                                            @endif
+
+                                            @if($financing->jenis=="Sekali Bayar" && $payment->student[0]->jenis_pembayaran==null)
+                                                <button class="btn btn-primary" onclick="addConfirm('{{$payment->student[0]->id}}','{{$payment->student[0]->nama}}')" title="Pilih Metode Pembayaran">
+                                                    <i class="fa fa-history"> Metode</i>
+                                                </button>
+                                            @elseif($periode==0 && $financing->jenis=="Bayar per Bulan")
+                                                <a href="" class="btn btn-danger"
+                                                title="Harap isi periode" disabled><i class="fa fa-times"> Process</i></a>
+                                            @elseif($sisa==0 && $payment->student[0]->jenis_pembayaran=="Cicilan")
+                                                <a href="{{ route('payment.show',1) }}" class="btn btn-success"
+                                                title="Cetak Bukti Pembayaran" style="color:white; background-color:green"><i class="fa fa-print"> Invoice</i></a>
+                                            @elseif($payment->student[0]->jenis_pembayaran=="Cicilan" && $sisa!=0)
+                                                <a href="{{ route('payment.show',1) }}" class="btn btn-warning"
+                                                title="Cetak Bukti Pembayaran" style="color:black; background-color:orange"><i class="fa fa-eye"> Rincian</i></a>
+                                            @else
+                                                <a href="{{ route('payment.show',1) }}" class="btn btn-success"
+                                                title="Cetak Bukti Pembayaran" style="color:white; background-color:green"><i class="fa fa-print"> Invoice</i></a>
                                             @endif
                                         </td>
                                     </tr>
+                                    @endif
                                     @endforeach
                                 </tbody>
                             </table>
@@ -106,7 +137,7 @@
                 </div>
             </div>
         </div>
-    </div> 
+    </div>
 </div>
 <!-- Static Table End -->
 
@@ -122,22 +153,42 @@
                 <h5 class="modal-title" id="modalAddLabel">Pilih Metode Pembayaran Pembiayaan</h5>
             </div>
             <div class="modal-body">
-                <form action="{{ route('financing.store') }}" role="form" method="post">
-                    {{csrf_field()}}
-                    <div class="form-group">
-                        <label class="control-label col-md-2">Kategori</label>
-                        <input name='nama' placeholder="Masukan ketegori pembiayaan" type='text' class='form-control'
-                            required>
+                <form action="{{ route('payment.storeMethod') }}" role="form" method="post">
+                {{csrf_field()}}
+                <input type="hidden" name="payment_id" value="{{$datas[0]->id}}">
+                <input type="hidden" name="financing_category_id" value="{{$financing->id}}">
+                <input type="hidden" name="financing_category" value="{{$financing->nama}}">
+                <input type="hidden" name="nominal" value="{{$financing->besaran}}">
+                <input type="hidden" name="student_id" id="student_id_add" value="">
+                <input type="hidden" name="student_name" id="student_name_add" value="">
+                <input type="hidden" name="penerima" value="{{ Session::get('nama') }}">
+                <div class="row mb-3">
+                    <div class="col-md-3 col-sm-3">
+                        Pembiayaan
                     </div>
-                    <div class="form-group">
-                        <label class="control-label col-md-4">Besaran Nominal (Rp.)</label>
-                        <input name='besaran' placeholder="Masukan nominal pembayaran" type='number' min="0"
-                            class='form-control' required>
+                    :
+                    <strong><span>{{$financing->nama}}</span></strong>
+                </div>
+                <div class="row">
+                    <div class="col-md-3 col-sm-3">
+                        Nominal Pembayaran
                     </div>
+                    : <strong>Rp. <span >{{number_format($financing->besaran,0,',','.')}}</span></strong>
+                </div>
+                <hr>
+                <div class="form-group">
+                    <label class="control-label col-md-4">Metode Pembayaran<kode>*</kode></label>
+                    <div class="chosen-select-single mg-b-20">
+                        <select class="chosen-select" name="metode_pembayaran" id="metode_pembayaran_add">
+                            <option value="Tunai">Tunai</option>
+                            <option value="Cicilan">Cicilan</option>
+                        </select>
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                <button type='submit' class="btn btn-primary"><i class="fa fa-floppy-o"></i> Save</button>
+                <button type='submit' class="btn btn-primary"><i class="fa fa-floppy-o"></i> Submit</button>
                 </form>
             </div>
         </div>
@@ -239,7 +290,7 @@
 </form>
 @endsection
 
-@push('styles')
+@push('styles') 
 <!-- x-editor CSS  -->
 <link rel="stylesheet" href="{{ asset('assets/css/editor/select2.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/css/editor/datetimepicker.css') }}">
@@ -248,12 +299,24 @@
 <!-- normalize CSS -->
 <link rel="stylesheet" href="{{ asset('assets/css/data-table/bootstrap-table.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/css/data-table/bootstrap-editable.css') }}">
+<!-- forms CSS
+============================================ -->
+<link rel="stylesheet" href="{{asset('assets/css/form/all-type-forms.css')}}">
+<!-- chosen CSS
+============================================ -->
+<link rel="stylesheet" href="{{asset('assets/css/chosen/bootstrap-chosen.css')}}">
 @endpush
 
 @push('scripts')
 
 <script>
+    function closeModal()
+    {
+        $('.button_add').bind('click');
+    }
     function addConfirm(id_siswa, nama) {
+        $('#student_id_add').attr('value',id_siswa);
+        $('#student_name_add').attr('value',nama);
         $('#modalAdd').modal();
     }
 
@@ -298,6 +361,11 @@
 <script src="{{ asset('assets/js/editable/bootstrap-editable.js') }}"></script>
 <script src="{{ asset('assets/js/editable/xediable-active.js') }}"></script>
 
+<!-- chosen JS
+    ============================================ -->
+<script src="{{ asset('assets/js/chosen/chosen.jquery.js')}}"></script>
+<script src="{{ asset('assets/js/chosen/chosen-active.js')}}"></script>
+
 <script>
 function history(nama, besaran, link = "/"){
 
@@ -326,7 +394,7 @@ $('#modalHistory').modal();
 
 @push('breadcrumb-left')
 <h3>Menu Pembayaran {{$financing->nama}}</h3>
-<span class="all-pro-ad">Kategori Pembayaran : <strong>{{$financing->jenis}}</strong></span>
+<span class="all-pro-ad">Metode Pembayaran : <strong>{{$financing->jenis}}</strong></span>
 @endpush
 
 @push('breadcrumb-right')

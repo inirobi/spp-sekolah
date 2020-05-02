@@ -17,11 +17,12 @@ class CreateStudentsTable extends Migration
             $table->bigIncrements('id');
             $table->string('nis','15');
             $table->string('nama');
+            $table->enum('jenis_kelamin',['L','P']);
             $table->enum('kelas',['X','XI','XII']);
             $table->integer('major_id');
             $table->string('phone','14');
             $table->string('email');
-            $table->date('tgl_masuk');
+            $table->string('tgl_masuk');
             $table->timestamps();
         });
     }

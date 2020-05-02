@@ -40,7 +40,8 @@
                                     <tr>
                                         <th data-field="state" data-checkbox="true"></th>
                                         <th data-field="id">No</th>
-                                        <th data-field="name">Nama User</th>
+                                        <th data-field="name">Nama</th>
+                                        <th data-field="username">Username</th>
                                         <th data-field="email">Email</th>
                                         <th data-field="tanggal_bergabung">Tanggal Bergabung</th>
                                         <th data-field="action">Action</th>
@@ -52,12 +53,13 @@
                                         <td></td>
                                         <td><div style="text-align:center;">{{$no++}}</div></td>
                                         <td>{{$data->name}}</td>
+                                        <td>{{$data->username}}</td>
                                         <td><div style="text-align:center;vertical-align:middle;">{{$data->email}}</div></td>
                                         <td><div style="text-align:center">{{$data->created_at}}</div></td>
                                         <td>
                                             <div style="text-align:center">
                                               <a href="#" class="btn btn-info"
-                                              onclick="editConfirm( '{{$data->id}}', '{{$data->name}}','{{$data->email}}')"
+                                              onclick="editConfirm( '{{$data->id}}', '{{$data->name}}', '{{$data->username}}','{{$data->email}}')"
                                               title="Edit"><i class="fa fa-edit"> Edit</i></a>
                                               <a href="{{ route('user.destroy',$data) }}" class="btn btn-danger"
                                               onclick="event.preventDefault();destroy('{{ route('user.destroy',$data) }}');"
@@ -96,6 +98,10 @@
                         <input name='nama' placeholder="Masukan nama" type='text' class='form-control' required>
                     </div>
                     <div class="form-group">
+                        <label class="control-label col-md-2">Username </label>
+                        <input name='username' placeholder="Masukan username" type='text' class='form-control' required>
+                    </div>
+                    <div class="form-group">
                         <label class="control-label col-md-2">Email </label>
                         <input name='email' placeholder="Masukan email mis. nama@example.com" type='text' class='form-control' required>
                     </div>
@@ -106,7 +112,7 @@
             </div>
             <div class="modal-footer">
                 <div style="float: right">
-                  <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-danger" data-dismiss="modal" tabindex="-1">Close</button>
                   <button type='submit' class="btn btn-primary"><i class="fa fa-floppy-o"></i> Save</button>
                 </div>
                 </form>
@@ -134,6 +140,10 @@
                         <input name='nama' id="nama" placeholder="Masukan nama" type='text' class='form-control' required>
                     </div>
                     <div class="form-group">
+                        <label class="control-label col-md-2">Username </label>
+                        <input name='username' id="username" placeholder="Masukan username" title="Hanya dapat mengubah nama saja" type='text' class='form-control' required disabled>
+                    </div>
+                    <div class="form-group">
                         <label class="control-label col-md-2">Email </label>
                         <input name='email' id="email" placeholder="Masukan email mis. nama@example.com" type='text' title="Hanya dapat mengubah nama saja" class='form-control' required disabled>
                     </div>
@@ -144,7 +154,7 @@
             </div>
             <div class="modal-footer">
                 <div style="float: right">
-                  <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-danger" data-dismiss="modal" tabindex="-1" tabindex="-1">Close</button>
                   <button type='submit' class="btn btn-primary"><i class="fa fa-floppy-o"></i> Save</button>
                 </div>
                 </form>
@@ -179,9 +189,10 @@
 @push('scripts')
 
 <script>
-    function editConfirm(id, nama, email) 
+    function editConfirm(id, nama, username, email) 
     {
       $('#nama').attr('value', nama);
+      $('#username').attr('value', username);
       $('#email').attr('value', email);
       $('#editForm').attr('action',"{{ url('users') }}/"+id)
       $('#modalUpdate').modal();
@@ -223,4 +234,15 @@
 <script src="{{ asset('assets/js/editable/bootstrap-datetimepicker.js') }}"></script>
 <script src="{{ asset('assets/js/editable/bootstrap-editable.js') }}"></script>
 <script src="{{ asset('assets/js/editable/xediable-active.js') }}"></script>
+@endpush
+
+@push('breadcrumb-right')
+<div style="float:right">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb" style="margin-bottom:0">
+            <li class="breadcrumb-item"><a href="{{ url('/')}}">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">User</li>
+        </ol>
+    </nav>
+</div>
 @endpush

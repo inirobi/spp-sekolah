@@ -18,7 +18,7 @@
                                         @if($financing->jenis=="Bayar per Bulan")
                                             <div style="float:right; margin-right:15px">
                                             <div class="row">
-                                                <a href="{{ route('financing.periode',$financing->id)}}" style="float:right"class=" btn btn-primary"><i class="fa fa-plus"></i>&nbsp;Periode</a>
+                                                <a href="{{ route('financing.periode',$financing->id)}}" title="Tambahkan periode {{$financing->nama}}" style="float:right"class=" btn btn-primary"><i class="fa fa-plus"></i>&nbsp;Periode</a>
                                             </div>
                                                 <div class="row">
                                                     @if($periode==0)
@@ -55,7 +55,7 @@
                                         <th data-field="total">Akumulasi Biaya</th>
                                         <th data-field="terbayar">Sudah dibayar</th>
                                         <th data-field="tunggakan">Sisa Pembayaran</th>
-                                        <th data-field="metode">Metode Pembayaran</th>
+                                        <th data-field="banyak">Tunggakan</th>
                                         <th data-field="status">Status</th>
                                         <th data-field="action">Action</th>
                                     </tr>
@@ -75,7 +75,7 @@
                                         <td>{{$besaran}}</td>
                                         <td>{{$terbayar}}</td>
                                         <td>{{$sisa}}</td>
-                                        <td>{{($siswa->jenis_pembayaran==null)?'Belum ditambahkan':$siswa->jenis_pembayaran}}</td>
+                                        <td>{{$no}} Bulan</td>
                                         <td>
                                             @if($siswa->jenis_pembayaran==null)
                                                 <span class="badge" style="background-color:yellow;color:black">Waiting</span>
@@ -93,7 +93,7 @@
                                             <a href="" class="btn btn-danger"
                                                 title="Harap isi periode" disabled><i class="fa fa-times"> Process</i></a>
                                             @else
-                                            <a href="{{ route('payment.show',1) }}" class="btn btn-success"
+                                            <a href="{{ route('payment.monthly.show.detail',[$financing->id, $siswa->id]) }}" class="btn btn-success"
                                                 title="Process" ><i class="fa fa-history"> Process</i></a>
                                             @endif
                                         </td>
@@ -106,7 +106,7 @@
                 </div>
             </div>
         </div>
-    </div> 
+    </div>
 </div>
 <!-- Static Table End -->
 

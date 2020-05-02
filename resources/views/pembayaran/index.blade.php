@@ -40,7 +40,7 @@
                                         <th data-field="id"><div style="text-align: center">No</div></th>
                                         <th data-field="name"><div style="text-align: center">Nama</div></th>
                                         <th data-field="jenis"><div style="text-align: center">Jenis Pembiayaan</div></th>
-                                        <th data-field="besaran"><div style="text-align: center">Besaran (Rp.)</div></th>
+                                        <th data-field="besaran"><div style="text-align: center">Besaran Default (Rp.)</div></th>
                                         <th data-field="action"><div style="text-align: center">Action</div></th>
                                         </div>
                                     </tr>
@@ -56,7 +56,7 @@
                                         <td>
                                             <div style="text-align: center;">
                                                 <a href="{{ route('payment.show',$data->id) }}" class="btn btn-success"
-                                                title="History" style="color:white"><i class="fa fa-history"> Process</i></a>
+                                                title="Proses pembayaran {{ $data->nama }}" style="color:white"><i class="fa fa-history"> Process</i></a>
                                             </div>
                                         </td>
                                     </tr>

@@ -16,8 +16,9 @@ class CreatePaymentPeriodesTable extends Migration
         Schema::create('payment_periodes', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('financing_category_id');
-            $table->string('bulan',15);
+            $table->integer('bulan');
             $table->integer('tahun');
+            $table->integer('nominal');
             $table->timestamps();
         });
     }

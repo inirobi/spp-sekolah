@@ -5,7 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\FinancingCategory;
 use App\FinancingCategoryReset;
+use App\Payment;
 use App\PaymentPeriode;
+use App\PaymentPeriodeDetail;
+use App\Student;
+use Illuminate\Support\Facades\Session;
 
 use DB;
 
@@ -58,6 +62,14 @@ class FinancingCategoryController extends Controller
                 'jenis' => $req['jenis'],
             ]);
             $id = DB::getPdo()->lastInsertId();
+            $students = Student::all();
+            for ($i=0; $i < $students->count(); $i++) { 
+                Payment::create([
+                    'financing_category_id' => $id,
+                    'student_id' => $students[$i]->id,
+                    'jenis_pembayaran' => "Waiting",
+                ]);
+            }
             //untuk history perubahan harga
             FinancingCategoryReset::create([
                 'id' => null,
@@ -65,10 +77,9 @@ class FinancingCategoryController extends Controller
                 'besaran' => $req['besaran'],
                 'jenis' => $req['jenis'],
             ]);
-
         return redirect()
             ->route('financing.index')
-            ->with('success', 'Data jurursan berhasil disimpan!');
+            ->with('success', 'Data jurusan berhasil disimpan!');
 
         }catch(Exception $e){
         return redirect()
@@ -178,26 +189,144 @@ class FinancingCategoryController extends Controller
     
     public function periode($id)
     {
+        $prev = Session::all();
+        $prev = $prev['_previous']['url'];
+
         $category = FinancingCategory::where('id',$id)->get();
+        
         DB::statement(DB::raw('set @row:=0'));
         $periodes = PaymentPeriode::select(DB::raw('@row:=@row+1 as rowNumber'),'payment_periodes.*')
                                     ->where('financing_category_id',$id)
                                     ->get();
-        return view('master.financingcategory.periode',compact('periodes','category'));
+        return view('master.financingcategory.periode',compact('periodes','category','prev'));
     }
 
+    /**
+     * store
+     */
     public function periode_store(Request $req)
     {
+        $bulan = ["Desember","Januari", "Februari", "Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November"];
         $d =$req->all();
         try {
+            $temp = $this->convertToArrayDateValue($d['calendar']);
+            $fixBulan = $bulan[(intval($temp[0])%12)];
+            $cek = PaymentPeriode::where([
+                ['bulan','=', $temp[0]],
+                ['tahun','=',$temp[2]],
+                ['financing_category_id','=',$d['id']],
+            ])->get()->count();
+            if($cek==0){
+                PaymentPeriode::create([
+                    'id' => null,
+                    'financing_category_id' => $d['id'], 
+                    'bulan' => $temp[0],
+                    'tahun' => $temp[2],
+                    'nominal' => $d['nominal'],
+                ]);
+                $id = DB::getPdo()->lastInsertId();
+                $payment = Payment::where('financing_category_id',$d['id'])->get();
+                $status = "Waiting";
+                for ($i=0; $i < $payment->count(); $i++) { 
+                    PaymentPeriodeDetail::create([
+                        'payment_periode_id' => $id,
+                        'payment_id' => $payment[$i]->id,
+                        'user_id' => 0,
+                        'status' => $status,
+                    ]);
+                }
 
+                return redirect()
+                        ->route('financing.periode',$d['id'])
+                        ->with('success','Berhasil ditambahkan!');
+            }
             return redirect()
                     ->route('financing.periode',$d['id'])
-                    ->with('success','Berhasil ditambahkan!');
-        } catch (\Throwable $th) {
+                    ->with('error','Periode pembayaran sudah ada!');
+        } catch (Throwable $th) {
             return redirect()
                     ->route('financing.periode',$d['id'])
                     ->with('error','Gagal ditambahkan!');
         }
     }
+
+    /**
+     * update periode
+     */
+    public function periode_update(Request $req)
+    {
+        $bulan = ["Desember","Januari", "Februari", "Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November"];
+        $d =$req->all();
+        try {
+            $temp = $this->convertToArrayDateValue($d['calendar']);
+            $fixBulan = $bulan[(intval($temp[0])%12)];
+            $cek = PaymentPeriode::findOrFail($d['id_data']);
+            $cek->bulan = $fixBulan;
+            $cek->tahun = $temp[2];
+            $cek->nominal = $d['nominal'];
+            $cek->save();
+            $fin = FinancingCategory::findOrFail($d['id']);
+            $fin->besaran=$d['nominal'];
+            $fin->save;
+            FinancingCategoryReset::create([
+                'id'=>null,
+                'financing_category_id' => $d['id'],
+                'besaran' => $d['nominal'],
+                'jenis' => $fin->jenis,
+            ]);
+            return redirect()
+                    ->route('financing.periode',$d['id'])
+                    ->with('success','Berhasil diubah!');
+        } catch (Throwable $th) {
+            return redirect()
+                    ->route('financing.periode',$d['id'])
+                    ->with('error','Gagal diubah!');
+        }
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function periode_destroy($id,$kategori)
+    {
+        try {
+            PaymentPeriodeDetail::where('payment_periode_id',$id)->delete();
+            PaymentPeriode::destroy($id);
+            return redirect()
+                    ->route('financing.periode',$kategori)
+                    ->with('success','Periode Pembayaran telah dihapus!');
+        } catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e){
+            return redirect()
+                    ->route('financing.periode',$kategori)
+                    ->with('success','Periode Pembayaran gagal dihapus!');
+      }
+        
+    } 
+
+    /**
+     * 
+     * @param string invalid format
+     * @return string tanggal dalam format dd/mm/yyyy
+     */
+    public function convertToCorrectDateValue($date)
+    {
+        $date = explode("/", $date);
+        $date = $date[2]."-".$date[1]."-".$date[0];
+        return $date;
+    }
+    
+    /**
+     * 
+     * @param string invalid format for mysql
+     * @return array tanggal
+     */
+    public function convertToArrayDateValue($date)
+    {
+        return explode("/", $date);
+    }
+
+    
 }

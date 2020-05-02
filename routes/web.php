@@ -44,16 +44,25 @@ Route::get('financing/ajax/periode/{id}', 'FinancingCategoryController@periode_a
  * Route Periode Pembayaran
  */
 Route::post('financing/periode/store', 'FinancingCategoryController@periode_store')->name('periode.store');
-
+Route::delete('financing/periode/destroy/{id}/{kategori}', 'FinancingCategoryController@periode_destroy')->name('periode.destroy');
+ 
 /**
  * Route resource untuk Pembayaran
  */
 Route::resource('payment', 'PaymentController');
-// Route::get('payment/{id}/{}', 'FinancingCategoryController@history');
+Route::get('payment/category/{id}', 'PaymentController@indexKategori2')->name('payment.category');
+/**
+ * Route pembayaran jenis "sekali bayar"
+ */
 Route::post('payment/metode','PaymentController@storeMetodePembayaran')->name('payment.storeMethod');
 Route::get('payment/details/{id}/{id_siswa}/{id_payment}','PaymentController@details')->name('payment.details.cicilan');
 Route::post('payment/details/store','PaymentController@cicilanStore')->name('payment.details.cicilan.store');
-
+/**
+ * Route pembayaran jenis "per bulan"
+ */
+Route::get('payment/perbulan/{id}', 'PaymentController@showBulanan')->name('payment.monthly.show');
+Route::get('payment/perbulan/detail/{id}/{id_student}', 'PaymentController@showBulananDetail')->name('payment.monthly.show.detail');
+Route::post('payment/perbulan/detail/','PaymentController@bulananStore')->name('payment.monthly.detail.store');
 /**
  * Route resource untuk Pengeluaran
  */

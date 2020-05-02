@@ -17,7 +17,7 @@ class CreatePaymentsTable extends Migration
             $table->bigIncrements('id');
             $table->integer('student_id');
             $table->integer('financing_category_id');
-            $table->enum('jenis_pembayaran',['Tunai','Cicilan']);
+            $table->enum('jenis_pembayaran',['Tunai','Cicilan','Waiting']);
             $table->timestamps();
         });
     }

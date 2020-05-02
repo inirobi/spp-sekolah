@@ -38,14 +38,14 @@ class MajorController extends Controller
     public function store(Request $request)
     {
         $this->validate($request,[
-            'nama' => 'required',
+            'jurusan' => 'required',
         ]);
 
         try {
             $req = $request->all();
             Major::create([
                 'id' => null,
-                'nama' => $req['nama'],
+                'nama' => $req['jurusan'],
               ]);
           return redirect()
               ->route('majors.index')

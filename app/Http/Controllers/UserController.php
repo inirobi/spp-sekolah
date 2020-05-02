@@ -49,6 +49,7 @@ class UserController extends Controller
             User::create([
                 'id' => null,
                 'name' => $req['nama'],
+                'username' => $req['username'],
                 'email' => $req['email'],
                 'password' => Hash::make($req['password']),
               ]);
@@ -71,25 +72,7 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        $this->validate($request,[
-            'nama' => 'required',
-        ]);
-
-        try {
-            $req = $request->all();
-            User::create([
-                'id' => null,
-                'nama' => $req['nama'],
-              ]);
-          return redirect()
-              ->route('user.index')
-              ->with('success', 'Data user berhasil disimpan!');
-
-        }catch(Exception $e){
-          return redirect()
-              ->route('user.create')
-              ->with('error', 'Data user gagal disimpan!');
-        }
+        //
     }
 
     /**

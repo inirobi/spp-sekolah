@@ -79,12 +79,15 @@
                                                 <strong>Info!</strong> Pembayaran telah lunas.
                                             </div>
                                             @endif
+                                            <a href="{{ route('financing.periode',$financing->id)}}"
+                                                style="color:white" class=" btn btn-success"><i
+                                                    class="fa fa-print"></i>&nbsp; Cetak</a>
                                         </div>
                                         <div class="col-md-6">
                                             <div style="float:right;">
                                                 <a href="{{ route('financing.periode',$financing->id)}}"
-                                                    style="color:white" class=" btn btn-success"><i
-                                                        class="fa fa-print"></i>&nbsp; Cetak</a>
+                                                    style="color:white" class=" btn btn-primary"><i
+                                                        class="fa fa-plus"></i>&nbsp;Pembayaran</a>
 
                                             </div>
                                         </div>
@@ -262,7 +265,7 @@
                 <input type="hidden" name="nominal">
                 <input type="hidden" name="bulan">
                 <input type="hidden" name="tahun">
-                <input type="hidden" name="siswa" value="{{$bigDatas[0]->siswa_id}}">
+                <input type="hidden" name="siswa" value="{{$datas[0]->id}}">
                 <input type="hidden" name="pembayaran" value="{{ $financing->nama }}">
                 <input type="hidden" name="penerima_id" value="{{ Session::get('id') }}">
                 <input type="hidden" name="penerima" value="{{ Session::get('nama') }}">
@@ -351,7 +354,7 @@
 <script src="{{ asset('assets/js/data-table/bootstrap-table-export.js') }}"></script>
 <!--  editable JS
 		============================================ -->
-<script src="{{ asset('assets/js/editable/jquery.mockjax.js') }}"></script>
+<script src="{{ asset('assets/js/editable/jquery.mockjax.js') }}"></script> 
 <script src="{{ asset('assets/js/editable/mock-active.js') }}"></script>
 <script src="{{ asset('assets/js/editable/select2.js') }}"></script>
 <script src="{{ asset('assets/js/editable/moment.min.js') }}"></script>
@@ -385,11 +388,11 @@
 
 @push('breadcrumb-left')
 <div class="col-md-1" style="item-align:center">
-<a onclick="javascript:history.back()" class="btn btn-primary" href="#" title="Kembali"><i class="fa fa-arrow-left" ></i></a>
+<a href="{{ url('/payment')}}/{{$financing->id}}" class="btn btn-primary" href="#" title="Kembali"><i class="fa fa-arrow-left" ></i></a>
 </div>
 <div class="col-md-11">
     <div style="margin-left:15px;">
-    <h4>{{$financing->nama}}</h4>
+    <h4>Rincian Pembayaran {{$financing->nama}}</h4>
     <span class="all-pro-ad">Kategori Pembayaran : <strong>{{$financing->jenis}}</strong></span>
     </div>
 </div>

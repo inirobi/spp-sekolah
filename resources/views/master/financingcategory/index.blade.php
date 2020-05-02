@@ -12,8 +12,6 @@
                             <div class="container-sm">
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <h3>Data Kategori Pembiayaan</h3>
-                                        <small>Tombol history muncul kalau ada perubahan data</small>
                                     </div>
                                     <div class="col-md-6">
                                         <a style="float:right" data-toggle="modal" href="#modalAdd"
@@ -353,6 +351,11 @@ $.ajax({
 });
 $('#modalHistory').modal();
 }</script>
+@endpush
+
+@push('breadcrumb-left')
+<h3>Data Kategori Pembiayaan</h3>
+<small>Tombol history muncul kalau ada perubahan data</small>
 @endpush
 
 @push('breadcrumb-right')

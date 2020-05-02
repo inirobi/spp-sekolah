@@ -40,4 +40,9 @@ class FinancingCategory extends Model
     {
         return $this->hasMany('App\PaymentPeriode');
     }
+
+    public function pembayaran()
+    {
+        return $this->hasMany('App\Payment');
+    }
 }

@@ -46,10 +46,21 @@ class StudentController extends Controller
     {
         try {
             $req = $request->all();
+            
+            echo '<pre>';
+            $n = explode(" ",now());
+            $n = strtotime($n[0]);
+
+            $l = strtotime($this->convertDateToSQLDate($req['tgl_masuk']));
+            echo $n."<hr>";
+            echo $l."<hr>";
+            // $t = $req[]
+            var_dump($category);die;
+            
             if (strlen($req['phone'])>14) {
                 return redirect()
-                    ->route('students.index')
-                    ->with('error', 'Inputan tidak valid!');
+                ->route('students.index')
+                ->with('error', 'Inputan tidak valid!');
             }
             $date = explode("/",$req['tgl_masuk']);
             $date = $date[2].'-'.$date[0].'-'.$date[1];
@@ -62,15 +73,24 @@ class StudentController extends Controller
                 'phone' => $req['phone'],
                 'email' => $req['email'],
                 'tgl_masuk' => $date,
-              ]);
-            $id = DB::getPdo()->lastInsertId();
+                ]);
             $categories = FinancingCategory::all();
+            $id = DB::getPdo()->lastInsertId();
             for ($i=0; $i < $categories->count(); $i++) { 
                 Payment::create([
                     'financing_category_id' => $categories[$i]->id,
                     'student_id' => $id,
                     'jenis_pembayaran' => "Waiting",
                 ]);
+            }
+            
+            $payment = Payment::where('student_id', $id)->get();
+            for ($i=0; $i < $payment->count(); $i++) { 
+                if($payment[$i]->category[0]->jenis=="Bayar per Bulan"){
+                    #code
+                }else{
+                    #code
+                }
             }
           return redirect()
               ->route('students.index')
@@ -164,5 +184,11 @@ class StudentController extends Controller
                 ->route('Students.index')
                 ->with('error', 'Data siswa gagal diubah!');
           }
+    }
+
+    public function convertDateToSQLDate($date)
+    {
+        $temp = explode("/",$date);
+        return $temp[2]."-".$temp[0]."-".$temp[1];
     }
 }

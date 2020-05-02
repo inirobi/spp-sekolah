@@ -12,7 +12,6 @@
                             <div class="container-sm">
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <h3>Data Siswa</h3>
                                     </div>
                                     <div class="col-md-6">
                                         <a style="float:right" @php echo $jml < 1 ? 'onclick="peringatan()"':'data-toggle="modal" href="#modalAdd"' @endphp class="btn btn-success" ><i class="fa fa-plus"></i> Tambah </a>
@@ -318,12 +317,12 @@
                             </div>
                             <div class="form-group">
                                 <label class="control-label col-md-2">Email</label>
-                                <input name='email' id='email2' disabled placeholder=" Masukan Email" type='text'
-                                    class='form-control' required>
+                                <input name='email' id='email2' disabled placeholder="contoh siswa@baabulkamil.com" type='text'
+                                    class='form-control'>
                             </div>
                             <div class="form-group">
                                 <div class="form-group data-custon-pick" id="data_3">
-                                    <label>Tanggal<kode>*</kode></label>
+                                    <label>Tanggal Masuk<kode>*</kode></label>
                                     <div class="input-group date">
                                         <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                                         <input type="text" name='tgl_masuk' disabled id='tgl_masuk2'
@@ -484,6 +483,11 @@
         <script src="{{ asset('assets/js/datapicker/bootstrap-datepicker.js')}}"></script>
         <script src="{{ asset('assets/js/datapicker/datepicker-active.js')}}"></script>
         @endpush
+
+        @push('breadcrumb-left')
+        <h2>Data Siswa</h2>
+        @endpush
+
 
         @push('breadcrumb-right')
         <div style="float:right">

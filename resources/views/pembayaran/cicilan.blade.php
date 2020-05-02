@@ -23,7 +23,7 @@
                                 <label>Tanggal Pembayaran</label>
                                 <div class="input-group date">
                                     <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                                    <input type="text" class="form-control" name="calendar" value="{{$date}}" readonly>
+                                    <input type="text" class="form-control" name="calendar" value="{{$date}}" readonly disabled title="Tanggal pembayaran otomatis hari ini">
                                 </div>
                             </div>
                             <div class="form-group">
@@ -65,6 +65,8 @@
                                 <div class="container-sm">
                                     <div class="row">
                                         <div class="col-md-6">
+                                            <span class="">NIS :
+                                                <strong>{{$datas[0]->nis}}</strong></span><br>
                                             <span class="">Nama :
                                                 <strong>{{$datas[0]->nama}}</strong></span><br>
                                             <span class="">Kelas &nbsp;: <strong>{{$datas[0]->kelas}} -
@@ -98,11 +100,26 @@
                                         <thead>
                                             <tr>
                                                 <th data-field="state" data-checkbox="true"></th>
-                                                <th data-field="id">No</th>
-                                                <th data-field="tanggal">Tanggal Pembayaran</th>
-                                                <th data-field="tanggal_update">Terakhir Diupdate</th>
-                                                <th data-field="total">Penerima</th>
-                                                <th data-field="nominal">Nominal</th>
+                                                <th data-field="id">
+                                                    <div style="text-align: center">
+                                                    No
+                                                    </div>
+                                                </th>
+                                                <th data-field="tanggal">
+                                                    <div style="text-align: center">
+                                                    Tanggal Pembayaran
+                                                    </div>
+                                                </th>
+                                                <th data-field="nominal">
+                                                    <div style="text-align: center">
+                                                    Nominal
+                                                    </div>
+                                                </th>
+                                                <th data-field="total">
+                                                    <div style="text-align: center">
+                                                    Penerima
+                                                    </div>
+                                                </th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -115,11 +132,26 @@
                                             @endphp
                                             <tr>
                                                 <td></td>
-                                                <td>{{$no++}}</td>
-                                                <td>{{$data->created_at}}</td>
-                                                <td>{{$data->updated_at}}</td>
-                                                <td>{{$data->user->name}}</td>
-                                                <td>{{number_format($data->nominal,0,',','.')}}</td>
+                                                <td>
+                                                    <div style="text-align: center">
+                                                    {{$no++}}
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div style="text-align: center">
+                                                    {{$data->created_at}}
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div style="text-align: right">
+                                                    {{number_format($data->nominal,0,',','.')}}
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div style="text-align: center">
+                                                    {{$data->user->name}}
+                                                    </div>
+                                                </td>
                                             </tr>
                                             @endforeach
                                             @php
@@ -137,7 +169,7 @@
                                                         <table>
                                                             <tbody>
                                                                 <tr>
-                                                                    <td>Total Pembayaran</td>
+                                                                    <td>Total</td>
                                                                     <td>:</td>
                                                                     <td>Rp.</td>
                                                                     <td>
@@ -159,13 +191,18 @@
                                                                     </td>
                                                                 </tr>
                                                                 <tr>
-                                                                    <td>Sisa Pembayaran</td>
+                                                                    <td>Tunggakan</td>
                                                                     <td>:</td>
                                                                     <td>Rp.</td>
                                                                     <td>
                                                                         <div style="text-align: right">
-                                                                            <span class="" style="font-size:18px;">
-                                                                                <strong>{{number_format($sisa,0,',','.')}}</strong></span>
+                                                                            @if($sisa!=0)
+                                                                            <span class="" style="font-size:24px;color:red">
+                                                                            @else
+                                                                            <span class="" style="font-size:24px;color:green">
+                                                                            @endif
+                                                                                <strong>{{number_format($sisa,0,',','.')}}</strong>
+                                                                            </span>
                                                                         </div>
                                                                     </td>
                                                                 </tr>
@@ -256,15 +293,26 @@
 @endpush
 
 @push('breadcrumb-left')
-<h3>Pembayaran {{$financing->nama}}</h3>
-<span class="all-pro-ad">Metode Pembayaran : <strong>{{$payments->jenis_pembayaran}}</strong></span>
+<div class="col-md-1" style="item-align:center">
+<a class="btn btn-primary" href="{{ route('payment.show',$financing->id)}}" title="Kembali"><i class="fa fa-arrow-left" ></i></a>
+</div>
+<div class="col-md-11">
+    <div style="margin-left:15px;">
+    <h4>Cicilan {{$financing->nama}}</h4>
+    <span class="all-pro-ad">Kategori Pembayaran : <strong>{{$financing->jenis}}</strong></span>
+    </div>
+</div>
 @endpush
 
 @push('breadcrumb-right')
-<ul class="breadcome-menu">
-    <li><a href="#">Home</a> <span class="bread-slash">/</span>
-    </li>
-    <li><span class="bread-blod">Dashboard V.1</span>
-    </li>
-</ul>
+<div style="float:right">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb" style="margin-bottom:0">
+            <li class="breadcrumb-item"><a href="{{ url('/')}}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{{ url('/payment')}}">Pembayaran</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('payment.show',$financing->id)}}">{{$financing->nama}}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Details</li>
+        </ol>
+    </nav>
+</div>
 @endpush

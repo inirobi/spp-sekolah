@@ -113,40 +113,26 @@
                                         </td>
                                         <td>
                                             <div style="text-align:center">
-                                            @if($siswa->cekWaiting==0 && $siswa->bulan_tidak_bayar==0 && $sisa==0)
-                                                <span class="badge" style="background-color:green">Lunas</span>
-                                            @else
-                                                @if($siswa->cekWaiting!=0)
+                                            @if($siswa->jenis_pembayaran=="Waiting")
                                                     <span class="badge" style="background-color:yellow;color:black">Waiting</span>
-                                                @endif
-                                                @if($siswa->cekWaiting!=0 && $siswa->cekWaiting!=$siswa->bulan_tidak_bayar||$sisa!=0)
+                                            @elseif($siswa->jenis_pembayaran=="Cicilan" && $sisa!=0)
                                                     <span class="badge" style="background-color:red">Nunggak</span>
-                                                @endif
+                                            @else
+                                                <span class="badge" style="background-color:green">Lunas</span>
                                             @endif
                                             </div>
                                         </td>
                                         <td>
-                                            @if($financing->jenis=="Sekali Bayar")
-                                                @if($financing->jenis=="Sekali Bayar" && $siswa->jenis_pembayaran=="Waiting")
-                                                    <button class="btn btn-primary" onclick="addConfirm('{{$siswa->id}}','{{$siswa->nama}}')" title="Pilih Metode Pembayaran">
-                                                        <i class="fa fa-info-circle"> Metode</i>
-                                                    </button>
-                                                @elseif($periode==0 && $financing->jenis=="Bayar per Bulan")
-                                                    <a href="" class="btn btn-danger"
-                                                    title="Harap isi periode" disabled><i class="fa fa-times"> Process</i></a>
-                                                @elseif(true)
-                                                    <a href="{{ route('payment.monthly.show.detail',[$siswa->payment_id,$siswa->id]) }}" class="btn btn-success"
-                                                    title="Detail Pembayaran" style="color:white; background-color:green"><i class="fa fa-eye"> Detail</i></a>
-                                                @elseif($siswa->jenis_pembayaran=="Cicilan" && $sisa!=0)
-                                                    <a href="{{ route('payment.show',1) }}" class="btn btn-warning"
-                                                    title="Cetak Bukti Pembayaran" style="color:black; background-color:orange"><i class="fa fa-eye"> Rincian</i></a>
-                                                @else
-                                                    <a href="{{ route('payment.show',1) }}" class="btn btn-success"
-                                                    title="Cetak Bukti Pembayaran" style="color:white; background-color:green"><i class="fa fa-print"> Invoice</i></a>
-                                                @endif
+                                            @if($siswa->jenis_pembayaran=="Waiting")
+                                                <button class="btn btn-warning" onclick="addConfirm({{$siswa}})" title="Pilih Metode Pembayaran" style="color:black;  ">
+                                                    <i class="fa fa-info-circle"> Metode</i>
+                                                </button>
+                                            @elseif($siswa->jenis_pembayaran=="Cicilan" && $sisa!=0)
+                                                <a href="{{ route('payment.details.cicilan', [$financing->id, $siswa->id, $siswa->payment_id]) }}" class="btn btn-primary"
+                                                title="Cetak Bukti Pembayaran" style="color:white;"><i class="fa fa-eye"> Rincian</i></a>
                                             @else
-                                                <a href="{{ route('payment.monthly.show.detail',[$siswa->payment_id,$siswa->id]) }}" class="btn btn-success"
-                                                title="Detail Pembayaran" style="color:white; background-color:green"><i class="fa fa-eye"> Detail</i></a>
+                                                <a href="{{ route('payment.show',1) }}" class="btn btn-success"
+                                                title="Cetak Bukti Pembayaran" style="color:white; background-color:green"><i class="fa fa-print"> Invoice</i></a>
                                             @endif
                                         </td>
                                     </tr>
@@ -176,6 +162,7 @@
             <div class="modal-body">
                 <form action="{{ route('payment.storeMethod') }}" role="form" method="post">
                 {{csrf_field()}}
+                <input type="hidden" name="payment_id">
                 <input type="hidden" name="financing_category_id" value="{{$financing->id}}">
                 <input type="hidden" name="financing_category" value="{{$financing->nama}}">
                 <input type="hidden" name="nominal" value="{{$financing->besaran}}">
@@ -215,99 +202,6 @@
     </div>
 </div>
 
-<!-- modal edit -->
-<div class="modal fade bd-example-modal-lg" id="modalUpdate" tabindex="-1" role="dialog"
-    aria-labelledby="modalUpdateLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <h5 class="modal-title" id="modalAddLabel">Ubah Kategori Pembiayaan</h5>
-            </div>
-            <div class="modal-body">
-                <form id="editForm" role="form" method="post">
-                    @method('PUT')
-                    {{csrf_field()}}
-                    <div class="form-group">
-                        <label class="control-label col-md-2">Kategori</label>
-                        <input name='nama' placeholder="Masukan ketegori pembiayaan" type='text' class='form-control'
-                            id="nama" required>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-md-4">Besaran Nominal (Rp.)</label>
-                        <input name='besaran' placeholder="Masukan nominal pembayaran" type='number' min="0"
-                            class='form-control' id="besaran" required>
-                    </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                <button type='submit' class="btn btn-primary"><i class="fa fa-floppy-o"></i> Save</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- modal history -->
-<div class="modal fade bd-example-modal-lg" id="modalHistory" tabindex="-1" role="dialog"
-    aria-labelledby="modalHistoryLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <h4 class="modal-title" id="title_modal_history">History Perubahan Data</h4>
-            </div>
-            <div class="modal-body">
-                <div class="row mb-3">
-                    <div class="col-md-3 col-sm-3">
-                        Kategori Pembiayaan
-                    </div>
-                    :
-                    <strong><span id="kategori_history_modal"></span></strong>
-                </div>
-                
-                <div class="row">
-                    <div class="col-md-3 col-sm-3">
-                        Besaran Pembiayaan
-                    </div>
-                    : <strong>Rp. <span id="besaran_history_modal"></span></strong>
-                </div>
-                <hr>
-                <div class="row">
-                    <div class="col-md-12 col-sm-12">
-                        <div class="static-table-list">
-                            <table class="table" id="table_history">
-                                <thead>
-                                    <tr>
-                                        <th>No</th>
-                                        <th>Waktu Update</th>
-                                        <th>Besaran</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="$('#table_history tbody tr').remove();">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-<!-- hapus -->
-<form id="destroy-form" method="POST">
-    @method('DELETE')
-    @csrf
-</form>
 @endsection
 
 @push('styles')
@@ -334,32 +228,16 @@
     {
         $('.button_add').bind('click');
     }
-    function addConfirm(id_siswa, nama) {
-        $('#student_id_add').attr('value',id_siswa);
-        $('#student_name_add').attr('value',nama);
-        $('#modalAdd').modal();
+    function addConfirm(data) {
+      $('input[name=student_id]').attr('value',data.id);
+      $('input[name=student_name]').attr('value',data.nama);
+      $('input[name=payment_id]').attr('value',data.payment_id);
+      $('input[name=nominal]').attr('value',data.nominal);
+      $('input[name=bulan]').attr('value',data.bulan);
+      $('input[name=tahun]').attr('value',data.tahun);        
+      $('#nominal').html(data.nominal);
+      $('#modalAdd').modal();
     }
-
-    function editConfirm() {
-        $('#modalUpdate').modal();
-    }
-
-    function destroy(action) {
-        swal({
-            title: 'Apakah anda yakin?',
-            text: 'Setelah dihapus, Anda tidak akan dapat mengembalikan data ini!',
-            icon: 'warning',
-            buttons: ["Cancel", "Yes!"],
-        }).then(function (value) {
-            if (value) {
-                document.getElementById('destroy-form').setAttribute('action', action);
-                document.getElementById('destroy-form').submit();
-            } else {
-                swal("Data kamu aman!");
-            }
-        });
-    }
-
 </script>
 <!-- data table JS
 		============================================ -->
@@ -385,36 +263,18 @@
     ============================================ -->
 <script src="{{ asset('assets/js/chosen/chosen.jquery.js')}}"></script>
 <script src="{{ asset('assets/js/chosen/chosen-active.js')}}"></script>
-
-<script>
-function history(nama, besaran, link = "/"){
-
-$('#kategori_history_modal').html(nama);
-$('#besaran_history_modal').html(besaran);
-$.ajax({
-    type: "GET",
-    dataType: "json",
-    url: link,
-    success: function (response) {
-        $.each(response, function(i, item) {
-            var $tr = $('<tr>').append(
-                $('<td>').text(item.rowNumber),
-                $('<td>').text(item.created_at),
-                $('<td>').text('Rp. '+item.besaran)
-            ).appendTo('#table_history');
-        });
-    },
-    error: function (error) {
-        alert(error);
-    }
-});
-$('#modalHistory').modal();
-}</script>
 @endpush
 
 @push('breadcrumb-left')
-<h3>Menu Pembayaran {{$financing->nama}}</h3>
-<span class="all-pro-ad">Metode Pembayaran : <strong>{{$financing->jenis}}</strong></span>
+<div class="col-md-1" style="item-align:center">
+<a href="{{ url('/payment')}}" class="btn btn-primary" href="#" title="Kembali"><i class="fa fa-arrow-left" ></i></a>
+</div>
+<div class="col-md-11">
+    <div style="margin-left:15px;">
+    <h4>Menu Pembayaran {{$financing->nama}}</h4>
+    <span class="all-pro-ad">Kategori Pembayaran : <strong>{{$financing->jenis}}</strong></span>
+    </div>
+</div>
 @endpush
 
 @push('breadcrumb-right')

@@ -19,7 +19,7 @@ class PaymentPeriodeDetail extends Model
         "payment_id",
         "user_id",
         "status",
-    ];
+    ]; 
 
     public function periode()
     {

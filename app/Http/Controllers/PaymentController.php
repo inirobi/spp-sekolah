@@ -147,20 +147,21 @@ class PaymentController extends Controller
             
             return view('pembayaran.show', compact('datas','financing','periode','no'));
         }else{
-            abort(404);
-            $datas=Student::selectRaw('students.*, payments.id AS payment_id,payments.jenis_pembayaran, getNominalPembayaranBulanan(payments.financing_category_id) AS akumulasi,getNominalTerbayarBulanan(payments.id) AS terbayar, getBulanTidakTerbayar(payments.id) AS bulan_tidak_terbayar, getCountWaiting(payments.id) as cekWaiting, getCountDetailBulanan(payments.id) as cekCountDetail, payment_periode_details.status')
+            $datas=Student::selectRaw('students.*, payments.id AS payment_id,payments.jenis_pembayaran, `getBesaranBiayaKategoriPembiayaan`(payments.financing_category_id) AS akumulasi,getNominalTerbayarBulanan(payments.id) AS terbayar, getBulanTidakTerbayar(payments.id) AS bulan_tidak_terbayar, getCountWaiting(payments.id) as cekWaiting, getCountDetailBulanan(payments.id) as cekCountDetail, payment_periode_details.status')
             ->leftJoin('payments','payments.student_id','=','students.id')
             ->leftJoin('payment_periode_details','payment_periode_details.payment_id','=','payments.id')
             ->where('payments.financing_category_id',$id)
             ->groupBy('students.id')
             ->get();
             $financing = $cek;
+            // echo '<pre>';
+            // var_dump($datas);die;
             
             $periode = PaymentPeriode::where('financing_category_id',$id)->count(); 
             
             $payments = Payment::where('financing_category_id', $id)->get();
             
-            return view('pembayaran.show', compact('datas','financing','periode','no'));
+            return view('pembayaran.show_sekali_bayar', compact('datas','financing','periode','no'));
         }
     }
 
@@ -221,8 +222,21 @@ class PaymentController extends Controller
     public function destroy($id)
     {
         try {
+            $cek = FinancingCategory::findOrFail($id);
             FinancingCategory::destroy($id);
             FinancingCategoryReset::where('financing_category_id', $id)->delete();
+            $payments = Payment::where('financing_category_id', $id)->get();
+            if($cek->jenis=="Bayar per Bulan"){
+                PaymentPeriode::where('financing_category_id', $id)->delete();
+                for ($i=0; $i < $payments->count(); $i++) { 
+                    PaymentPeriodeDetail::where('payment_id', $payments[$i]->id)->delete();
+                }
+            }else{
+                for ($i=0; $i < $payments->count(); $i++) { 
+                    PaymentDetail::where('payment_id', $payments[$i]->id)->delete();
+                }
+            }
+            Payment::where('financing_category_id', $id)->delete();
             return redirect()
             ->route('financing.index')
             ->with('success', 'Berhasil dihapus!');
@@ -296,23 +310,20 @@ class PaymentController extends Controller
                 'nominal' => $req['nominal'],
                 'user_id' => $req['user_id'],
                 'status' => 'Lunas',
-            ]);
+                ]);
             return redirect()
-                ->route('payment.show', $req['financing_category_id'])
-                ->with('success', 'Lunas!');
+            ->route('payment.show', $req['financing_category_id'])
+            ->with('success', 'Lunas!');
         }else
         {
-            $cek = Payment::where('student_id',$req['student_id'])->groupBy('student_id')->count();
-            if($cek==0){
-                Payment::create([
-                    'id' => null,
-                    'student_id' => $req['student_id'],
-                    'jenis_pembayaran' => $req['metode_pembayaran'],
-                    'financing_category_id' => $req['financing_category_id'],
-                    ]);
-                    $payment_id = DB::getPdo()->lastInsertId();
+            $cek = Payment::where('id',$req['payment_id'])->first();
+            // echo '<pre>';
+            // var_dump($cek->jenis_pembayaran);die;
+            if($cek->jenis_pembayaran=="Waiting"){
+                $cek->jenis_pembayaran="Cicilan";
+                $cek->save();
                 return redirect()
-                    ->route('payment.details.cicilan', [$req['financing_category_id'], $req['student_id'], $payment_id])
+                    ->route('payment.details.cicilan', [$req['financing_category_id'], $req['student_id'], $cek->id])
                     ->with('success', 'Metode Pembayaran disimpan!');
             }
             return redirect()
@@ -439,7 +450,7 @@ class PaymentController extends Controller
         return view('pembayaran.perbulan', compact('datas','financing','periode','no'));
     }
 
-    public function showBulananDetail($id, $id_student)
+    public function showBulananDetail($id, $id_student, $category)
     {
         //numbering
         $no = 1;
@@ -448,14 +459,9 @@ class PaymentController extends Controller
                     ->join('payments','payments.id','=','payment_periode_details.payment_id')
                     ->join('students','students.id','=','payments.student_id')
                     ->join('payment_periodes','payment_periodes.id','=','payment_periode_details.payment_periode_id')
-                    ->where([
-                        ['payments.id','=',$id],
-                    ])->get();
-
-        // echo '<pre>';
-        // var_dump($bigDatas);die;
+                    ->where('payment_id',$id)->get();
         //
-        $datas=Student::selectRaw('students.*, payments.jenis_pembayaran,`getBesaranBiayaTerbayar`(students.id, '.$bigDatas[0]->financing_category_id.') AS terbayar')
+        $datas=Student::selectRaw('students.*, payments.jenis_pembayaran,`getBesaranBiayaTerbayar`(students.id, '.$category.') AS terbayar')
                 ->leftJoin('payments','payments.student_id','=','students.id')
                 ->leftJoin('financing_categories', 'financing_categories.id', '=', 'payments.financing_category_id')
                 ->leftJoin('payment_details','payment_details.payment_id','=','payments.id')
@@ -464,14 +470,14 @@ class PaymentController extends Controller
                 ->get();
         //data master show data untuk header
         $financing = FinancingCategory::selectRaw('*, getBesaranBiayaKategoriPembiayaan(financing_categories.id) as besaran')
-                    ->where('id',$bigDatas[0]->financing_category_id)
+                    ->where('id',$category)
                     ->get();
         $financing = $financing[0];
         //data Pembiayaan
         $payments = Payment::where('id',$id)->first();
         $payment_details = PaymentDetail::where('payment_id',$id)->get();
         //Untuk penghitung banyak periode pembayaran
-        $periode = PaymentPeriode::where('financing_category_id',$bigDatas[0]->financing_category_id)->count(); 
+        $periode = PaymentPeriode::where('financing_category_id',$category)->count(); 
         
         if ($periode==0 && $financing->nama=="Bayar per Bulan") {
             return redirect()

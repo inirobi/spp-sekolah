@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\FinancingCategory;
 use App\FinancingCategoryReset;
 use App\Payment;
+use App\PaymentDetail;
 use App\PaymentPeriode;
 use App\PaymentPeriodeDetail;
 use App\Student;
@@ -55,7 +56,7 @@ class FinancingCategoryController extends Controller
 
         try {
             $req = $request->all();
-            FinancingCategory::create([
+            $create = FinancingCategory::create([
                 'id' => null,
                 'nama' => $req['nama'],
                 'besaran' => $req['besaran'],
@@ -68,7 +69,7 @@ class FinancingCategoryController extends Controller
                     'financing_category_id' => $id,
                     'student_id' => $students[$i]->id,
                     'jenis_pembayaran' => "Waiting",
-                ]);
+                    ]);
             }
             //untuk history perubahan harga
             FinancingCategoryReset::create([
@@ -76,10 +77,29 @@ class FinancingCategoryController extends Controller
                 'financing_category_id' => $id,
                 'besaran' => $req['besaran'],
                 'jenis' => $req['jenis'],
-            ]);
-        return redirect()
-            ->route('financing.index')
-            ->with('success', 'Data jurusan berhasil disimpan!');
+                ]);
+            $date = $this->convertToDateArrayFromDateTime($create->created_at);
+            if($req['jenis']=="Bayar per Bulan"){
+                $periode = PaymentPeriode::create([
+                    "financing_category_id" => $id,
+                    "bulan" => $date[1], 
+                    "tahun" => $date[0], 
+                    "nominal" => $create->besaran,
+                ]);
+                $payments = Payment::where('financing_category_id', $id)->get();
+                $status = "Waiting";
+                for ($i=0; $i < $payments->count() ; $i++) { 
+                    PaymentPeriodeDetail::create([
+                        'payment_periode_id' => $periode->id,
+                        'payment_id' => $payments[$i]->id,
+                        'user_id' => 0,
+                        'status' => $status,
+                    ]);
+                }
+            }
+            return redirect()
+                ->route('financing.index')
+                ->with('success', 'Data jurusan berhasil disimpan!');
 
         }catch(Exception $e){
         return redirect()
@@ -159,19 +179,32 @@ class FinancingCategoryController extends Controller
      */
     public function destroy($id)
     {
+        $cek = FinancingCategory::where('id', $id)->first();
         try {
-            FinancingCategory::destroy($id);
             FinancingCategoryReset::where('financing_category_id', $id)->delete();
+            PaymentPeriode::where('financing_category_id', $id)->delete();
+            FinancingCategory::destroy($id);
+            $p = Payment::where('financing_category_id', $id)->get();
+            Payment::where('financing_category_id', $id)->delete();
+            if($cek['jenis']=="Bayar per Bulan"){
+                // Hapus PaymentPeriodeDetail aka Bayaran bayar per bulan
+                for ($i=0; $i < $p->count(); $i++) { 
+                    PaymentPeriodeDetail::where('payment_id',$p[$i]->id)->delete();
+                }
+            }else{
+                //Hapus PaymentDetail aka Bayaran sekali bayar yang dicicil
+                for ($i=0; $i < $p->count(); $i++) { 
+                    PaymentDetail::where('payment_id',$p[$i]->id)->delete();
+                }
+            }
             return redirect()
-            ->route('financing.index')
-            ->with('success', 'Berhasil dihapus!');
-
+                ->route('financing.index')
+                ->with('success', 'Berhasil dihapus!');
         } catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e){
             return redirect()
                 ->route('financing.index')
                 ->with('error', 'Gagal dihapus!');
-      }
-        
+        }
     } 
 
     public function history($id)
@@ -235,7 +268,6 @@ class FinancingCategoryController extends Controller
                         'status' => $status,
                     ]);
                 }
-
                 return redirect()
                         ->route('financing.periode',$d['id'])
                         ->with('success','Berhasil ditambahkan!');
@@ -328,5 +360,16 @@ class FinancingCategoryController extends Controller
         return explode("/", $date);
     }
 
+    /**
+     * Date time to Date array
+     * 
+     * @param string datetime
+     * @return array tanggal
+     */
+    public function convertToDateArrayFromDateTime($datetime)
+    {
+        $data = explode(" ", $datetime);
+        return explode("-",$data[0]);
+    }
     
 }

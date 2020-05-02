@@ -7,18 +7,6 @@
         <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="sparkline13-list">
-                    <div class="sparkline13-hd">
-                        <div class="main-sparkline13-hd">
-                            <div class="container-sm">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <h3>Pilih Kategori Pembiayaan</h3>
-                                        <small class="text-muted">Klik process untuk melakukan transaksi</small>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                     <div class="sparkline13-graph" style="margin-top: 20px">
                         <div class="datatable-dashv1-list custom-datatable-overright">
                             <div id="toolbar">
@@ -285,5 +273,21 @@ $.ajax({
     }
 });
 $('#modalHistory').modal();
-}</script>
+}</script> 
+@endpush
+
+@push('breadcrumb-left')
+<h3>Pilih Kategori Pembiayaan</h3>
+<small class="text-muted">Klik process untuk melakukan transaksi</small>
+@endpush
+
+@push('breadcrumb-right')
+<div style="float:right">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb" style="margin-bottom:0">
+            <li class="breadcrumb-item"><a href="{{ url('/')}}">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Pembayaran</li>
+        </ol>
+    </nav>
+</div>
 @endpush

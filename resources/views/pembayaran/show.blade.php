@@ -7,31 +7,6 @@
         <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="sparkline13-list">
-                    <div class="sparkline13-hd">
-                        <div class="main-sparkline13-hd">
-                            <div class="container-sm">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        
-                                    </div>
-                                    <div class="col-md-6">
-                                        @if($financing->jenis=="Bayar per Bulan")
-                                            <div style="float:right; margin-right:15px">
-                                            <div class="row">
-                                                <a href="{{ route('financing.periode',$financing->id)}}" style="float:right"class=" btn btn-primary"><i class="fa fa-plus"></i>&nbsp;Periode</a>
-                                            </div>
-                                                <div class="row">
-                                                    @if($periode==0)
-                                                    <small style="color: red">Silahkan isi periode terlebih dahulu</small>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                        @endif
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                     <div class="sparkline13-graph">
                         <div class="datatable-dashv1-list custom-datatable-overright">
                             <div id="toolbar">
@@ -135,7 +110,7 @@
                                                     <a href="" class="btn btn-danger"
                                                     title="Harap isi periode" disabled><i class="fa fa-times"> Process</i></a>
                                                 @elseif(true)
-                                                    <a href="{{ route('payment.monthly.show.detail',[$siswa->payment_id,$siswa->id]) }}" class="btn btn-success"
+                                                    <a href="{{ route('payment.monthly.show.detail',[$siswa->payment_id,$siswa->id, $financing->id]) }}" class="btn btn-success"
                                                     title="Detail Pembayaran" style="color:white; background-color:green"><i class="fa fa-eye"> Detail</i></a>
                                                 @elseif($siswa->jenis_pembayaran=="Cicilan" && $sisa!=0)
                                                     <a href="{{ route('payment.show',1) }}" class="btn btn-warning"
@@ -145,7 +120,7 @@
                                                     title="Cetak Bukti Pembayaran" style="color:white; background-color:green"><i class="fa fa-print"> Invoice</i></a>
                                                 @endif
                                             @else
-                                                <a href="{{ route('payment.monthly.show.detail',[$siswa->payment_id,$siswa->id]) }}" class="btn btn-success"
+                                                <a href="{{ route('payment.monthly.show.detail',[$siswa->payment_id,$siswa->id,$financing->id]) }}" class="btn btn-success"
                                                 title="Detail Pembayaran" style="color:white; background-color:green"><i class="fa fa-eye"> Detail</i></a>
                                             @endif
                                         </td>
@@ -413,8 +388,15 @@ $('#modalHistory').modal();
 @endpush
 
 @push('breadcrumb-left')
-<h3>Menu Pembayaran {{$financing->nama}}</h3>
-<span class="all-pro-ad">Metode Pembayaran : <strong>{{$financing->jenis}}</strong></span>
+<div class="col-md-1" style="item-align:center">
+<a href="{{ url('/payment')}}" class="btn btn-primary" href="#" title="Kembali"><i class="fa fa-arrow-left" ></i></a>
+</div>
+<div class="col-md-11">
+    <div style="margin-left:15px;">
+    <h4>Menu Pembayaran {{$financing->nama}}</h4>
+    <span class="all-pro-ad">Kategori Pembayaran : <strong>{{$financing->jenis}}</strong></span>
+    </div>
+</div>
 @endpush
 
 @push('breadcrumb-right')

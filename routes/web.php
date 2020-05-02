@@ -61,7 +61,7 @@ Route::post('payment/details/store','PaymentController@cicilanStore')->name('pay
  * Route pembayaran jenis "per bulan"
  */
 Route::get('payment/perbulan/{id}', 'PaymentController@showBulanan')->name('payment.monthly.show');
-Route::get('payment/perbulan/detail/{id}/{id_student}', 'PaymentController@showBulananDetail')->name('payment.monthly.show.detail');
+Route::get('payment/perbulan/detail/{payment}/{student}/{category}', 'PaymentController@showBulananDetail')->name('payment.monthly.show.detail');
 Route::post('payment/perbulan/detail/','PaymentController@bulananStore')->name('payment.monthly.detail.store');
 /**
  * Route resource untuk Pengeluaran

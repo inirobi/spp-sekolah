@@ -25,7 +25,7 @@ class RekapController extends Controller
         return view('export.index');
     }
 
-    public function print($id)
+    public function print($id) 
     {
         // echo '<pre>';
         // var_dump($id);die;
@@ -53,6 +53,12 @@ class RekapController extends Controller
             $pdf = PDF::loadView('export.pengeluaran',compact('tanggal','user','rincian','datas','no'));
             return $pdf->stream();
         }
+    }
+
+    public function kwitansi()
+    {
+        $pdf = PDF::loadView('export.kwitansi');
+        return $pdf->stream();
     }
 
     /**

@@ -14,8 +14,6 @@
                         </div>
                     @endif
 
-                    {{Session::get('nama')}}
-
                     You are logged in!
                 </div>
             </div>

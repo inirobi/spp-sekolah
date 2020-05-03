@@ -10,12 +10,14 @@ use DB;
 
 class HomeController extends Controller
 {
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
     public function __construct()
     {
-        if(!Session::get('login'))
-        {
-            return view('auth.login');
-        }
+        $this->middleware('auth');
     }
 
     public function index()

@@ -79,10 +79,15 @@ Route::resource('rekap', 'RekapController');
  */
 Route::get('/','LoginController@index')->name('default');
 Route::get('/login','LoginController@index')->name('login');
-Route::post('/login', 'loginController@loginPost')->name('login.store');
+Route::post('/login', 'LoginController@loginPost')->name('login.store');
 Route::get('/logout', 'HomeController@logout')->name('logout');
 Route::get('/change', 'HomeController@edit')->name('password.edit');
 Route::post('/change', 'HomeController@update')->name('password.update');
 
 Route::get('export','RekapController@index')->name('pdf');
 Route::get('export/{id}','RekapController@print')->name('pdf.print');
+Route::get('export_kwitansi','RekapController@kwitansi')->name('pdf.print.kwitansi');
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');

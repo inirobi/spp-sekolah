@@ -1,12 +1,9 @@
 @extends('layouts.app')
 
-<<<<<<< HEAD
 @section('title')
 SPP | Kategori Pembayaran
 @endsection
 
-=======
->>>>>>> 5712863acc5007702de3b0ee794de8ebf220b77d
 @section('content')
 
 <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">

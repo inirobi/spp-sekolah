@@ -9,11 +9,7 @@
             <nav class="sidebar-nav left-sidebar-menu-pro">
                 <ul class="metismenu" id="menu1">
                     <li>
-<<<<<<< HEAD
                         <a title="Dashboard" href="{{ url('/') }}" aria-expanded="false">
-=======
-                        <a title="Dashboard" class="icon-wrap" href="{{ url('/') }}" aria-expanded="false">
->>>>>>> 5712863acc5007702de3b0ee794de8ebf220b77d
                             <span class="fa fa-home sub-icon-mg" aria-hidden="true"></span>
                             <span class="mini-click-non ">Dashboard</span>
                         </a>

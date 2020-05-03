@@ -1,6 +1,5 @@
 @extends('layouts.app')
 
-<<<<<<< HEAD
 @section('title')
 SPP | Dashboard
 @endsection
@@ -75,12 +74,6 @@ SPP | Dashboard
 <!-- Static Table Start -->
 <div class="data-table-area mg-b-15 mg-t-15">
     <div class="container-fluid" style="margin-top:20">
-=======
-@section('content')
-<!-- Static Table Start -->
-<div class="data-table-area mg-b-15">
-    <div class="container-fluid">
->>>>>>> 5712863acc5007702de3b0ee794de8ebf220b77d
         <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="sparkline13-list">
@@ -89,20 +82,9 @@ SPP | Dashboard
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="main-sparkline13-hd">
-<<<<<<< HEAD
                                     </div>
                                 </div>
                                 <div class="col-md-6">
-=======
-                                        <h3>Nama Tabel</h3>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <button style="float: right;" type="button" class="btn btn-custon-rounded-three btn-success">
-                                        <i class="fa fa-magic edu-checked-pro" aria-hidden="true"></i>
-                                        Tambah
-                                    </button>
->>>>>>> 5712863acc5007702de3b0ee794de8ebf220b77d
                                 </div>
                             </div>
                         </div>

@@ -1,12 +1,9 @@
 @extends('layouts.app')
 
-<<<<<<< HEAD
 @section('title')
 SPP | Jurusan
 @endsection
 
-=======
->>>>>>> 5712863acc5007702de3b0ee794de8ebf220b77d
 @section('content')
 
 <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
@@ -185,12 +182,9 @@ SPP | Jurusan
 <script src="{{ asset('assets/js/editable/xediable-active.js') }}"></script>
 @endpush
 
-<<<<<<< HEAD
 @push('breadcrumb-left')
 <h2>Menu Jurusan</h2>
 @endpush
-=======
->>>>>>> 5712863acc5007702de3b0ee794de8ebf220b77d
 @push('breadcrumb-right')
 <div style="float:right">
     <nav aria-label="breadcrumb">

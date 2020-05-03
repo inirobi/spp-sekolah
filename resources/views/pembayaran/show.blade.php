@@ -1,12 +1,9 @@
 @extends('layouts.app')
 
-<<<<<<< HEAD
 @section('title')
 SPP | Pembayaran
 @endsection
 
-=======
->>>>>>> 5712863acc5007702de3b0ee794de8ebf220b77d
 @section('content')
 <!-- Static Table Start -->
 <div class="data-table-area mg-b-15">
@@ -49,11 +46,7 @@ SPP | Pembayaran
                                 <tbody>
                                 @foreach($datas as $siswa)
                                         @php
-<<<<<<< HEAD
                                             $besaran = intval($siswa->akumulasi);
-=======
-                                            $besaran = $siswa->akumulasi;
->>>>>>> 5712863acc5007702de3b0ee794de8ebf220b77d
                                             $terbayar = intval(($siswa->terbayar!=0)?$siswa->terbayar:0);
                                             $sisa = $besaran - $terbayar;
                                         @endphp
@@ -61,29 +54,15 @@ SPP | Pembayaran
                                         <td></td>
                                         <td>{{$no++}}</td>
                                         <td>{{$siswa->nama}}</td>
-<<<<<<< HEAD
                                         <td>{{$siswa->kelas}} - {{$siswa->jurusan}}</td>
-=======
-                                        <td>{{$siswa->kelas}} - {{$siswa->major->nama}}</td>
->>>>>>> 5712863acc5007702de3b0ee794de8ebf220b77d
                                         <td>
                                             <div style="text-align:right">
                                                 {{number_format($siswa->akumulasi,0,',','.')}}
                                             </div>
                                         </td>
                                         <td>
-<<<<<<< HEAD
                                             <div style="text-align:right">
                                                 {{number_format($siswa->terbayar,0,',','.')}}
-=======
-                                            @if($siswa->stajenis_pembayaran=="Waiting")
-                                            <div style="text-align:center">
-                                                <span class="badge" style="background-color:yellow;color:black">Waiting</span>
-                                            @else
-                                            <div style="text-align:right">
-                                                {{number_format($terbayar,0,',','.')}}
-                                            @endif
->>>>>>> 5712863acc5007702de3b0ee794de8ebf220b77d
                                             </div>
                                         </td>
                                         <td>
@@ -102,27 +81,16 @@ SPP | Pembayaran
                                             </div>
                                         @else
                                             <div style="text-align:center">
-<<<<<<< HEAD
                                                 {{$siswa->bulan_tidak_bayar}} Bulan
-=======
-                                                {{$siswa->bulan_tidak_terbayar}} Bulan
->>>>>>> 5712863acc5007702de3b0ee794de8ebf220b77d
                                             </div>
                                         @endif
                                         </td>
                                         <td>
                                             <div style="text-align:center">
-<<<<<<< HEAD
                                             @if($siswa->cekWaiting==0 && $siswa->bulan_tidak_bayar==0 && $sisa==0 && $siswa->akumulasi!=0)
                                                 <span class="badge" style="background-color:green">Lunas</span>
                                             @else
                                                 @if($siswa->cekWaiting!=0 || $siswa->akumulasi==0)
-=======
-                                            @if($siswa->cekWaiting==0 && $siswa->bulan_tidak_bayar==0 && $sisa==0)
-                                                <span class="badge" style="background-color:green">Lunas</span>
-                                            @else
-                                                @if($siswa->cekWaiting!=0)
->>>>>>> 5712863acc5007702de3b0ee794de8ebf220b77d
                                                     <span class="badge" style="background-color:yellow;color:black">Waiting</span>
                                                 @endif
                                                 @if($siswa->cekWaiting!=0 && $siswa->cekWaiting!=$siswa->bulan_tidak_bayar||$sisa!=0)

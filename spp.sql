@@ -201,7 +201,7 @@ CREATE TABLE `payment_periode_details` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=121 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=128 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 /*Data for the table `payment_periode_details` */
 
@@ -233,7 +233,14 @@ insert  into `payment_periode_details`(`id`,`payment_periode_id`,`payment_id`,`u
 (117,43,165,0,'Nunggak','2020-05-03 12:40:43','2020-05-03 12:42:09'),
 (118,44,165,1,'Lunas','2020-05-03 12:40:53','2020-05-03 12:42:34'),
 (119,45,165,1,'Lunas','2020-05-03 12:41:03','2020-05-03 12:42:52'),
-(120,46,165,1,'Lunas','2020-05-03 12:41:12','2020-05-03 12:43:05');
+(120,46,165,1,'Lunas','2020-05-03 12:41:12','2020-05-03 12:43:05'),
+(121,47,162,0,'Waiting','2020-05-03 22:14:56','2020-05-03 22:14:56'),
+(122,47,163,0,'Waiting','2020-05-03 22:14:56','2020-05-03 22:14:56'),
+(123,47,164,0,'Waiting','2020-05-03 22:14:56','2020-05-03 22:14:56'),
+(124,47,165,0,'Waiting','2020-05-03 22:14:56','2020-05-03 22:14:56'),
+(125,47,166,0,'Waiting','2020-05-03 22:14:56','2020-05-03 22:14:56'),
+(126,47,167,0,'Waiting','2020-05-03 22:14:56','2020-05-03 22:14:56'),
+(127,47,168,0,'Waiting','2020-05-03 22:14:56','2020-05-03 22:14:56');
 
 /*Table structure for table `payment_periodes` */
 
@@ -248,7 +255,7 @@ CREATE TABLE `payment_periodes` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=48 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 /*Data for the table `payment_periodes` */
 
@@ -259,7 +266,8 @@ insert  into `payment_periodes`(`id`,`financing_category_id`,`bulan`,`tahun`,`no
 (43,27,10,2019,220000,'2020-05-03 05:16:23','2020-05-03 05:16:23'),
 (44,27,11,2019,220000,'2020-05-03 05:16:38','2020-05-03 05:16:38'),
 (45,27,12,2019,220000,'2020-05-03 05:17:01','2020-05-03 05:17:01'),
-(46,27,1,2020,220000,'2020-05-03 05:17:12','2020-05-03 05:17:12');
+(46,27,1,2020,220000,'2020-05-03 05:17:12','2020-05-03 05:17:12'),
+(47,27,5,2020,220000,'2020-05-03 22:14:56','2020-05-03 22:14:56');
 
 /*Table structure for table `payments` */
 

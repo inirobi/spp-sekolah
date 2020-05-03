@@ -76,6 +76,10 @@ Route::resource('expense', 'ExpenseController');
  */
 Route::resource('rekap', 'RekapController');
 
+/**
+ * Route resource untuk Pembayaran
+ */
+Route::resource('income', 'IncomeController');
 
 /**
  * Route Login

@@ -5,17 +5,12 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Ramsey\Uuid\Uuid;
 use Illuminate\Support\Facades\DB;
-use App\Expense;
+use App\Income;
 use App\Pencatatan;
 use Illuminate\Support\Facades\Session;
 
-class ExpenseController extends Controller
+class IncomeController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-
     /**
      * Display a listing of the resource.
      *
@@ -23,9 +18,9 @@ class ExpenseController extends Controller
      */
     public function index()
     {
-        $datas = Expense::all();
+        $datas = Income::all();
         $no=1;
-        return view('pengeluaran.index', compact('datas','no'));
+        return view('pemasukan.index', compact('datas','no'));
     }
 
     /**
@@ -58,7 +53,7 @@ class ExpenseController extends Controller
             $tujuan_upload = 'nota';
             $file->move($tujuan_upload,$uuid.$nama_file);
             
-            Expense::create([
+            Income::create([
                 'id' => null,
                 'title' => $req['title'],
                 'description' => $req['description'],
@@ -66,24 +61,24 @@ class ExpenseController extends Controller
                 'nominal' => $req['nominal'],
                 'foto' => $uuid.$nama_file,
             ]);
-            $desc = "Pembelian {$req['title']} oleh {$req['sumber']}";
+            $desc = "Pemasukan {$req['title']} dari {$req['sumber']}";
             $id = DB::getPdo()->lastInsertId();
             Pencatatan::create([
                 'id' => null,
-                'expense_id' =>$id,
+                'income_id' =>$id,
                 'payment_id' => 0,
-                'debit' => 0,
+                'debit' => $req['nominal'],
                 'description' => $desc,
-                'kredit' =>$req['nominal'],
+                'kredit' => 0,
             ]); 
 
           return redirect()
-              ->route('expense.index')
+              ->route('income.index')
               ->with('success', 'Data pengeluaran berhasil disimpan!');
 
         }catch(Exception $e){
           return redirect()
-              ->route('expense.create')
+              ->route('income.create')
               ->with('success', 'Data pengeluaran gagal disimpan!');
         }
     }
@@ -121,7 +116,7 @@ class ExpenseController extends Controller
     {   
         try {
             $req = $request->all();
-            $data = Expense::findOrFail($id);
+            $data = Income::findOrFail($id);
             if ($request->file('foto')!='') {
                 $file = $request->file('foto');
                 $nama_file = time()."_".$file->getClientOriginalName();
@@ -139,16 +134,16 @@ class ExpenseController extends Controller
             $data->save();
 
             $jur = DB::table('Pencatatans')
-            ->where('expense_id', $id)
+            ->where('Income_id', $id)
             ->update(['kredit' => $req['nominal'] ]);
 
           return redirect()
-              ->route('expense.index')
+              ->route('income.index')
               ->with('success', 'Data pengeluaran berhasil diubah!');
 
         } catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e){
           return redirect()
-              ->route('expense.index')
+              ->route('income.index')
               ->with('error', 'Data pengeluaran gagal diubah!');
         }
     }
@@ -162,17 +157,17 @@ class ExpenseController extends Controller
     public function destroy($id)
     {
         try {
-            Expense::findOrFail($id)->delete();
+            Income::findOrFail($id)->delete();
             DB::table('Pencatatans')
-            ->where('expense_id', $id)
+            ->where('Income_id', $id)
             ->delete();
             return redirect()
-                ->route('expense.index')
+                ->route('income.index')
                 ->with('success', 'Data pengeluaran berhasil dihapus!');
   
           } catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e){
             return redirect()
-                ->route('expense.index')
+                ->route('income.index')
                 ->with('error', 'Data pengeluaran gagal diubah!');
           }
     }

@@ -34,6 +34,12 @@
                         </a>
                     </li>
                     <li>
+                        <a title="Data Pembayaran" class="" href="{{ route('income.index') }}" aria-expanded="false">
+                            <span class="educate-icon educate-department sub-icon-mg" aria-hidden="true"></span>
+                            <span class="mini-click-non ">Pemasukan</span>
+                        </a>
+                    </li>
+                    <li>
                         <a title="Data Pengeluaran" class="" href="{{ route('expense.index') }}" aria-expanded="false">
                             <span class="fa fa-tags sub-icon-mg" aria-hidden="true"></span>
                             <span class="mini-click-non ">Pengeluaran</span>

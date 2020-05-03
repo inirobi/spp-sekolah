@@ -18,7 +18,10 @@ SPP | Dashboard
                             <i class="educate-icon educate-department"></i>
                         </div>
                         <div class="m-t-xl widget-cl-1">
-                            <h1 class="text-success">{{number_format($dashboard->pemasukan,0,',','.')}}</h1>
+                            <h1 class="text-success">Rp. {{number_format($dashboard->pemasukan,0,',','.')}}</h1>
+                            <a class="btn btn-success btn-block loginbtn" style="color:white" href="{{route('expense.index')}}">
+                                {{ __('Detail') }}
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -34,6 +37,9 @@ SPP | Dashboard
                         </div>
                             <div class="m-t-xl widget-cl-2">
                             <h1 class="text-info">{{number_format($dashboard->pengeluaran,0,',','.')}}</h1>
+                            <a class="btn btn-success btn-block loginbtn" style="color:white" href="{{route('expense.index')}}">
+                                {{ __('Detail') }}
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -49,6 +55,9 @@ SPP | Dashboard
                         </div>
                         <div class="m-t-xl widget-cl-3">
                             <h1 class="text-warning">{{number_format($dashboard->siswa,0,',','.')}}</h1>
+                            <a class="btn btn-success btn-block loginbtn" style="color:white" href="{{route('students.index')}}">
+                                {{ __('Detail') }}
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -64,6 +73,9 @@ SPP | Dashboard
                         </div>
                         <div class="m-t-xl widget-cl-4">
                             <h1 class="text-danger">{{number_format($dashboard->nunggak,0,',','.')}}</h1>
+                            <a class="btn btn-success btn-block loginbtn" style="color:white" href="{{route('payment.index')}}">
+                                {{ __('Detail') }}
+                            </a>
                         </div>
                     </div>
                 </div>

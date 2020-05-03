@@ -31,7 +31,7 @@ SPP | Change Password
     </div>
     @endif
 </div>
-<form method="POST" action="{{ route('password.update') }}" id="loginForm" onsubmit="return checkForm(this);">
+<form method="POST" action="{{ route('password.ubah') }}" id="loginForm" onsubmit="return checkForm(this);">
     @csrf
     <div class="form-group">
         <label for="password" class="control-label">{{ __('Old Password') }}</label>
@@ -97,7 +97,7 @@ SPP | Change Password
     } else {
       swal({
             title: 'Error!',
-            text: 'Password Tidak Sama!',
+            text: 'Password Baru Tidak Sama!',
         });
       form.password.focus();
       return false;

@@ -42,7 +42,13 @@ SPP | Pembayaran
                                     <tr>
                                         <td></td>
                                         <td><div style="text-align: center">{{$no++}}</div></td>
-                                        <td>{{$data->nama}}</td>
+                                        <td>{{$data->nama}}&nbsp;
+                                        @if($data->tunggakan)
+                                        <span class="badge" style="background-color:red;color:white;cursor:help" title="{{$data->tunggakan}} tunggakan di pembayaran {{$data->nama}}">{{$data->tunggakan}}</span>
+                                        @elseif($data->tunggakan_periode)
+                                        <span class="badge" style="background-color:red;color:white;cursor:help" title="{{$data->tunggakan_periode}} tunggakan di pembayaran {{$data->nama}}">{{$data->tunggakan_periode}}</span>
+                                        @endif
+                                        </td>
                                         <td><div style="text-align: center">{{$data->jenis}}</div></td>
                                         <td><div style="text-align: right">{{number_format($data->besaran)}}</div></td>
                                         <td>

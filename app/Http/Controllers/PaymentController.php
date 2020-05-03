@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Session; 
+use Illuminate\Support\Facades\Auth; 
 use Illuminate\Routing\Redirector;
 use App\FinancingCategory;
 use App\Payment;
@@ -30,7 +30,7 @@ class PaymentController extends Controller
     public function index()
     {
         
-        $datas = FinancingCategory::all();
+        $datas = FinancingCategory::selectRaw('financing_categories.*, getJumlahTunggakanKategori(financing_categories.id) as tunggakan, getCountNunggakPeriodeUseKategori(financing_categories.id) as tunggakan_periode')->get();
         $no = 1;
         return view('pembayaran.index', compact('datas', 'no'));
     }
@@ -137,7 +137,7 @@ class PaymentController extends Controller
             // ->get();
             
             $datas=DB::table('students')
-                        ->selectRaw('students.*,getNominalTerbayarBulanan(payments.id) AS terbayar, getCountBulananTidakTerbayar(payments.id) AS bulan_tidak_bayar, getCountWaiting(payments.id) AS cekWaiting, majors.nama AS jurusan, getAkumulasiPerBulan(payments.id) AS akumulasi, financing_categories.`nama` AS financing_nama, financing_categories.id AS financing_id, payments.`id` AS payment_id, payments.`jenis_pembayaran`')
+                        ->selectRaw('students.*,getNominalTerbayarBulanan(payments.id) AS terbayar, getCountBulananTidakTerbayar(payments.id) AS bulan_tidak_bayar, getCountNunggak(payments.id) as cekNunggak, getCountWaiting(payments.id) AS cekWaiting, majors.nama AS jurusan, getAkumulasiPerBulan(payments.id) AS akumulasi, financing_categories.`nama` AS financing_nama, financing_categories.id AS financing_id, payments.`id` AS payment_id, payments.`jenis_pembayaran`')
                         ->leftJoin('majors','majors.id','=','students.major_id')
                         ->leftJoin('payments','payments.student_id','=','students.id')
                         ->leftJoin('financing_categories','financing_categories.id','=','payments.financing_category_id')
@@ -302,7 +302,7 @@ class PaymentController extends Controller
     {
         $req = $request->all();
         $req['date'] = date('Y-m-d', time());
-        $req['user_id'] = Session::get('id');
+        $req['user_id'] = Auth::user()->id;
         $obj = Student::where('id',$req['student_id'])->first();
         // echo '<pre>';
         // var_dump($req);die;
@@ -332,11 +332,17 @@ class PaymentController extends Controller
             return redirect()
             ->route('payment.show', $req['financing_category_id'])
             ->with('success', 'Lunas!');
+        }
+        elseif($req['metode_pembayaran']=='Nunggak'){
+            $cek = Payment::where('id',$req['payment_id'])->first();
+            $cek->jenis_pembayaran="Nunggak";
+            $cek->save();
+            return redirect()
+            ->route('payment.show', $req['financing_category_id'])
+            ->with('success', 'Status pembayaran disimpan!');
         }else
         {
             $cek = Payment::where('id',$req['payment_id'])->first();
-            // echo '<pre>';
-            // var_dump($cek->jenis_pembayaran);die;
             if($cek->jenis_pembayaran=="Waiting"){
                 $cek->jenis_pembayaran="Cicilan";
                 $cek->save();
@@ -425,7 +431,7 @@ class PaymentController extends Controller
             'payment_id' => $request['payment_id'],
             'tgl_dibayar' => $date,
             'nominal' => $nominal,
-            'user_id' => Session::get('id'),
+            'user_id' => Auth::user()->id,
             'status' => $status,
         ]);
         Pencatatan::create([
@@ -509,10 +515,11 @@ class PaymentController extends Controller
         //numbering
         $no = 1;
         //data siswa
-        $bigDatas = PaymentPeriodeDetail::selectRaw('payment_periode_details.id,payment_periode_details.status, payment_periode_details.created_at, payments.financing_category_id, payment_periode_details.status, students.id as siswa_id, students.nama, students.kelas, payment_periodes.bulan,payment_periodes.tahun, payment_periode_details.updated_at, payment_periodes.nominal, payment_periodes.id as periode_id')
-                    ->join('payments','payments.id','=','payment_periode_details.payment_id')
-                    ->join('students','students.id','=','payments.student_id')
-                    ->join('payment_periodes','payment_periodes.id','=','payment_periode_details.payment_periode_id')
+        $bigDatas = PaymentPeriodeDetail::selectRaw('payment_periode_details.id,users.name as penerima, payment_periode_details.status, payment_periode_details.created_at, payments.financing_category_id, payment_periode_details.status, students.id as siswa_id, students.nama, students.kelas, payment_periodes.bulan,payment_periodes.tahun, payment_periode_details.updated_at, payment_periodes.nominal, payment_periodes.id as periode_id')
+                    ->leftJoin('payments','payments.id','=','payment_periode_details.payment_id')
+                    ->leftJoin('students','students.id','=','payments.student_id')
+                    ->leftJoin('users','users.id','=','payment_periode_details.user_id')
+                    ->leftJoin('payment_periodes','payment_periodes.id','=','payment_periode_details.payment_periode_id')
                     ->where('payment_id',$id)->get();
         //
         $datas=Student::selectRaw('students.id, students.nis, students.nama, students.kelas, students.major_id, payments.jenis_pembayaran, `getNominalTerbayarBulanan`(payments.id) AS terbayar, getAkumulasiPerBulan(payments.id) AS akumulasi, payments.id as payment_id, financing_categories.id as financing_id')
@@ -609,7 +616,7 @@ class PaymentController extends Controller
     {
         $req = $request->all();
         if($req['status']=="Lunas"){   
-            $user = Session::get('id');
+            $user = Auth::user()->id;
             $category = FinancingCategory::findOrFail($req['category_id']);
             $student = Student::findOrFail($req['student_id']);
             $periode = PaymentPeriode::findOrFail($req['periode_id']);

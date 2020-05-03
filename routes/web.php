@@ -89,7 +89,7 @@ Route::resource('income', 'IncomeController');
 // Route::post('/login', 'LoginController@loginPost')->name('login.store');
 // Route::get('/logout', 'HomeController@logout')->name('logout');
 Route::get('/change', 'HomeController@edit')->name('password.edit');
-Route::post('/change', 'HomeController@update')->name('password.update');
+Route::post('/change', 'HomeController@update')->name('password.ubah');
 
 Route::get('export','RekapController@index')->name('pdf');
 Route::get('export/{id}','RekapController@print')->name('pdf.print');

@@ -3,7 +3,11 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
+<<<<<<< HEAD
     <title>@yield('title')</title>
+=======
+    <title>Dashboard V.1 | Kiaalap - Kiaalap Admin Template</title>
+>>>>>>> 5712863acc5007702de3b0ee794de8ebf220b77d
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- favicon
@@ -124,7 +128,11 @@
                                                         <ul role="menu"
                                                             class="dropdown-header-top author-log dropdown-menu animated zoomIn">
                                                             <li>
+<<<<<<< HEAD
                                                                 <a title="Rekapitulasi" class="" href="{{route('password.edit')}}" aria-expanded="false">
+=======
+                                                                <a title="Rekapitulasi" class="" href="#" aria-expanded="false">
+>>>>>>> 5712863acc5007702de3b0ee794de8ebf220b77d
                                                                     <span class="fa fa-gears sub-icon-mg" aria-hidden="true"></span>
                                                                     <span class="mini-click-non ">Ubah Password</span>
                                                                 </a>

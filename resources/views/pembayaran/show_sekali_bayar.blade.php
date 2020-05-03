@@ -1,9 +1,12 @@
 @extends('layouts.app')
 
+<<<<<<< HEAD
 @section('title')
 SPP | Pembayaran
 @endsection
 
+=======
+>>>>>>> 5712863acc5007702de3b0ee794de8ebf220b77d
 @section('content')
 <!-- Static Table Start -->
 <div class="data-table-area mg-b-15">
@@ -79,14 +82,22 @@ SPP | Pembayaran
                                         <td></td>
                                         <td>{{$no++}}</td>
                                         <td>{{$siswa->nama}}</td>
+<<<<<<< HEAD
                                         <td>{{$siswa->kelas}} - {{$siswa->jurusan}}</td>
+=======
+                                        <td>{{$siswa->kelas}} - {{$siswa->major->nama}}</td>
+>>>>>>> 5712863acc5007702de3b0ee794de8ebf220b77d
                                         <td>
                                             <div style="text-align:right">
                                                 {{number_format($siswa->akumulasi,0,',','.')}}
                                             </div>
                                         </td>
                                         <td>
+<<<<<<< HEAD
                                             @if($siswa->jenis_pembayaran=="Waiting")
+=======
+                                            @if($siswa->stajenis_pembayaran=="Waiting")
+>>>>>>> 5712863acc5007702de3b0ee794de8ebf220b77d
                                             <div style="text-align:center">
                                                 <span class="badge" style="background-color:yellow;color:black">Waiting</span>
                                             @else
@@ -128,6 +139,7 @@ SPP | Pembayaran
                                         </td>
                                         <td>
                                             @if($siswa->jenis_pembayaran=="Waiting")
+<<<<<<< HEAD
                                                 <button class="btn btn-warning" onclick="addConfirm({{$siswa->id}},{{$siswa->payment_id}})" title="Pilih Metode Pembayaran" style="color:black;  ">
                                                     <i class="fa fa-info-circle"> Metode</i>
                                                 </button>
@@ -136,6 +148,16 @@ SPP | Pembayaran
                                                 title="Cetak Bukti Pembayaran" style="color:white;"><i class="fa fa-eye"> Rincian</i></a>
                                             @else
                                                 <a href="3" class="btn btn-success"
+=======
+                                                <button class="btn btn-warning" onclick="addConfirm({{$siswa}})" title="Pilih Metode Pembayaran" style="color:black;  ">
+                                                    <i class="fa fa-info-circle"> Metode</i>
+                                                </button>
+                                            @elseif($siswa->jenis_pembayaran=="Cicilan" && $sisa!=0)
+                                                <a href="{{ route('payment.details.cicilan', [$financing->id, $siswa->id, $siswa->payment_id]) }}" class="btn btn-primary"
+                                                title="Cetak Bukti Pembayaran" style="color:white;"><i class="fa fa-eye"> Rincian</i></a>
+                                            @else
+                                                <a href="{{ route('payment.show',1) }}" class="btn btn-success"
+>>>>>>> 5712863acc5007702de3b0ee794de8ebf220b77d
                                                 title="Cetak Bukti Pembayaran" style="color:white; background-color:green"><i class="fa fa-print"> Invoice</i></a>
                                             @endif
                                         </td>
@@ -164,13 +186,21 @@ SPP | Pembayaran
                 <h5 class="modal-title" id="modalAddLabel">Pilih Metode Pembayaran Pembiayaan</h5>
             </div>
             <div class="modal-body">
+<<<<<<< HEAD
                 <form action="{{ route('payment.storeMethod') }}" role="form" method="post" id="store">
+=======
+                <form action="{{ route('payment.storeMethod') }}" role="form" method="post">
+>>>>>>> 5712863acc5007702de3b0ee794de8ebf220b77d
                 {{csrf_field()}}
                 <input type="hidden" name="payment_id">
                 <input type="hidden" name="financing_category_id" value="{{$financing->id}}">
                 <input type="hidden" name="financing_category" value="{{$financing->nama}}">
                 <input type="hidden" name="nominal" value="{{$financing->besaran}}">
                 <input type="hidden" name="student_id" id="student_id_add" value="">
+<<<<<<< HEAD
+=======
+                <input type="hidden" name="student_name" id="student_name_add" value="">
+>>>>>>> 5712863acc5007702de3b0ee794de8ebf220b77d
                 <input type="hidden" name="penerima" value="{{ Session::get('nama') }}">
                 <div class="row mb-3">
                     <div class="col-md-3 col-sm-3">
@@ -198,8 +228,12 @@ SPP | Pembayaran
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+<<<<<<< HEAD
                 <button class="btn btn-primary" onclick="confirm()"><i class="fa fa-floppy-o"></i> Submit</button>
                 <!-- <button type='submit' class="btn btn-primary"><i class="fa fa-floppy-o"></i> Submit</button> -->
+=======
+                <button type='submit' class="btn btn-primary"><i class="fa fa-floppy-o"></i> Submit</button>
+>>>>>>> 5712863acc5007702de3b0ee794de8ebf220b77d
                 </form>
             </div>
         </div>
@@ -232,6 +266,7 @@ SPP | Pembayaran
     {
         $('.button_add').bind('click');
     }
+<<<<<<< HEAD
     function addConfirm(student_id, payment_id) {
       $('input[name=student_id]').attr('value',student_id);
       $('input[name=payment_id]').attr('value',payment_id);
@@ -252,6 +287,18 @@ SPP | Pembayaran
             }
         });
     }
+=======
+    function addConfirm(data) {
+      $('input[name=student_id]').attr('value',data.id);
+      $('input[name=student_name]').attr('value',data.nama);
+      $('input[name=payment_id]').attr('value',data.payment_id);
+      $('input[name=nominal]').attr('value',data.nominal);
+      $('input[name=bulan]').attr('value',data.bulan);
+      $('input[name=tahun]').attr('value',data.tahun);        
+      $('#nominal').html(data.nominal);
+      $('#modalAdd').modal();
+    }
+>>>>>>> 5712863acc5007702de3b0ee794de8ebf220b77d
 </script>
 <!-- data table JS
 		============================================ -->

@@ -1,9 +1,12 @@
 @extends('layouts.app')
 
+<<<<<<< HEAD
 @section('title')
 SPP | Pembayaran Bulanan
 @endsection
 
+=======
+>>>>>>> 5712863acc5007702de3b0ee794de8ebf220b77d
 @section('content')
 <!-- Static Table Start -->
 <div class="data-table-area mg-b-15">

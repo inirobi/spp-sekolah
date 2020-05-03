@@ -3,12 +3,20 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
+<<<<<<< HEAD
     <title>@yield('title')</title>
+=======
+    <title>SPP | Login</title>
+>>>>>>> 5712863acc5007702de3b0ee794de8ebf220b77d
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- favicon
 		============================================ -->
+<<<<<<< HEAD
     <link rel="shortcut icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+=======
+    <link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico">
+>>>>>>> 5712863acc5007702de3b0ee794de8ebf220b77d
     <!-- Google Fonts
 		============================================ -->
     <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,700,900" rel="stylesheet">

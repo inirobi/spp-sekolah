@@ -94,6 +94,16 @@ class FinancingCategoryController extends Controller
                     "tahun" => $date[0], 
                     "nominal" => $create->besaran,
                 ]);
+                $payments = Payment::where('financing_category_id', $id)->get();
+                $status = "Waiting";
+                for ($i=0; $i < $payments->count() ; $i++) { 
+                    PaymentPeriodeDetail::create([
+                        'payment_periode_id' => $periode->id,
+                        'payment_id' => $payments[$i]->id,
+                        'user_id' => 0,
+                        'status' => $status,
+                    ]);
+                }
             }
             return redirect()
                 ->route('financing.index')
@@ -255,6 +265,17 @@ class FinancingCategoryController extends Controller
                     'tahun' => $temp[2],
                     'nominal' => $d['nominal'],
                 ]);
+                $id = DB::getPdo()->lastInsertId();
+                $payment = Payment::where('financing_category_id',$d['id'])->get();
+                $status = "Waiting";
+                for ($i=0; $i < $payment->count(); $i++) { 
+                    PaymentPeriodeDetail::create([
+                        'payment_periode_id' => $id,
+                        'payment_id' => $payment[$i]->id,
+                        'user_id' => 0,
+                        'status' => $status,
+                    ]);
+                }
                 return redirect()
                         ->route('financing.periode',$d['id'])
                         ->with('success','Berhasil ditambahkan!');

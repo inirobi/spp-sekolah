@@ -1,9 +1,12 @@
 @extends('layouts.app')
 
+<<<<<<< HEAD
 @section('title')
 SPP | Pengeluaran
 @endsection
 
+=======
+>>>>>>> 5712863acc5007702de3b0ee794de8ebf220b77d
 @section('content')
 <!-- Static Table Start -->
 <div class="data-table-area mg-b-15">
@@ -16,6 +19,10 @@ SPP | Pengeluaran
                         <div class="container-sm">
                             <div class="row">
                                 <div class="col-md-6">
+<<<<<<< HEAD
+=======
+                                    <h3>Data Pengeluaran</h3>
+>>>>>>> 5712863acc5007702de3b0ee794de8ebf220b77d
                                 </div>
                                 <div class="col-md-6">
                                     <a style="float:right" data-toggle="modal" href="#modalAdd" @endphp class="btn btn-success" ><i class="fa fa-plus"></i> Tambah </a>
@@ -58,11 +65,15 @@ SPP | Pengeluaran
                                         <td>{{$data->title}}</td>
                                         <td>{{$data->description}}</td>
                                         <td>{{$data->sumber}}</td>
+<<<<<<< HEAD
                                         <td>
                                         <div style="text-align: right">
                                         {{number_format($data->nominal,0,',','.')}}
                                         </div>
                                         </td>
+=======
+                                        <td>{{$data->nominal}}</td>
+>>>>>>> 5712863acc5007702de3b0ee794de8ebf220b77d
                                         <td>
                                           <a href="#" class="btn btn-warning" onclick="editConfirm( '{{$data->id}}','{{$data->title}}','{{$data->description}}','{{$data->sumber}}','{{$data->nominal}}')" title="Edit"><i class="fa fa-edit"> Edit</i></a>
                                           <a href="{{ route('expense.destroy',$data) }}" class="btn btn-danger" onclick="event.preventDefault();destroy('{{ route('expense.destroy',$data) }}');" title="Hapus"><i class="fa fa-trash"></i> Hapus</a>
@@ -318,10 +329,13 @@ SPP | Pengeluaran
     <script src="{{ asset('assets/js/datapicker/datepicker-active.js')}}"></script>
   @endpush
 
+<<<<<<< HEAD
 @push('breadcrumb-left')
 <h3>Data Pengeluaran</h3>
 @endpush
 
+=======
+>>>>>>> 5712863acc5007702de3b0ee794de8ebf220b77d
 @push('breadcrumb-right')
 <div style="float:right">
     <nav aria-label="breadcrumb">

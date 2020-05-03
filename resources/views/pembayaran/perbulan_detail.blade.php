@@ -322,6 +322,7 @@
         </div>
     </div>
 </div>
+<<<<<<< HEAD
 
 
 <!-- modal add -->
@@ -396,6 +397,8 @@
         </div>
     </div>
 </div>
+=======
+>>>>>>> 5712863acc5007702de3b0ee794de8ebf220b77d
 @endsection
 
 @push('styles')

@@ -1,9 +1,12 @@
 @extends('layouts.app')
 
+<<<<<<< HEAD
 @section('title')
 SPP | Cicilan Pembayaran
 @endsection
 
+=======
+>>>>>>> 5712863acc5007702de3b0ee794de8ebf220b77d
 @section('content')
 
 <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
@@ -27,7 +30,11 @@ SPP | Cicilan Pembayaran
                                 <label>Tanggal Pembayaran</label>
                                 <div class="input-group date">
                                     <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+<<<<<<< HEAD
                                     <input type="text" class="form-control" name="calendar" value="{{$date}}" readonly title="Tanggal pembayaran otomatis hari ini">
+=======
+                                    <input type="text" class="form-control" name="calendar" value="{{$date}}" readonly disabled title="Tanggal pembayaran otomatis hari ini">
+>>>>>>> 5712863acc5007702de3b0ee794de8ebf220b77d
                                 </div>
                             </div>
                             <div class="form-group">
@@ -277,7 +284,11 @@ SPP | Cicilan Pembayaran
             }).then(function (value) {
                 if (value) {
                     let form = $('#form-bayar').serializeArray();
+<<<<<<< HEAD
                     if (form[5].value>0) {
+=======
+                    if ((form[5].value)) {
+>>>>>>> 5712863acc5007702de3b0ee794de8ebf220b77d
                         document.getElementById('form-bayar').submit();
                     } else {
                         swal({

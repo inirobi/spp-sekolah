@@ -1,9 +1,12 @@
 @extends('layouts.login')
 
+<<<<<<< HEAD
 @section('title')
 SPP | Login
 @endsection
 
+=======
+>>>>>>> 5712863acc5007702de3b0ee794de8ebf220b77d
 @section('content')
 <div class="row" align="center">
     <h2>{{ __('Login') }}</h2>

@@ -1,9 +1,12 @@
 @extends('layouts.app')
 
+<<<<<<< HEAD
 @section('title')
 SPP | Siswa
 @endsection
 
+=======
+>>>>>>> 5712863acc5007702de3b0ee794de8ebf220b77d
 @section('content')
 <!-- Static Table Start -->
 <div class="data-table-area mg-b-15">
@@ -42,7 +45,10 @@ SPP | Siswa
                                         <th data-field="nis"><div style="text-align:center;">NIS</div></th>
                                         <th data-field="name"><div style="text-align:center;">Nama</div></th>
                                         <th data-field="jenis_kelamin"><div style="text-align:center;">Jenis Kelamin</div></th>
+<<<<<<< HEAD
                                         <th data-field="kelas"><div style="text-align:center;">Kelas</div></th>
+=======
+>>>>>>> 5712863acc5007702de3b0ee794de8ebf220b77d
                                         <th data-field="major"><div style="text-align:center;">Nama Jurusan</div></th>
                                         <th data-field="action"><div style="text-align:center;">Action</div></th>
                                     </tr>
@@ -55,7 +61,10 @@ SPP | Siswa
                                         <td>{{$data->nis}}</td>
                                         <td>{{$data->nama}}</td>
                                         <td><div style="text-align:center;">{{$data->jenis_kelamin}}</div></td>
+<<<<<<< HEAD
                                         <td><div style="text-align:center;">{{$data->kelas}}</div></td>
+=======
+>>>>>>> 5712863acc5007702de3b0ee794de8ebf220b77d
                                         <td><div style="text-align:center;">{{$data->major->nama}}</div></td>
                                         <td>
                                         <div style="text-align:center;">

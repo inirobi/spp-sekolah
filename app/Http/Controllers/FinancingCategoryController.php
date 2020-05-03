@@ -10,6 +10,7 @@ use App\PaymentDetail;
 use App\PaymentPeriode;
 use App\PaymentPeriodeDetail;
 use App\Student;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
 use DB;
@@ -227,7 +228,7 @@ class FinancingCategoryController extends Controller
     
     public function periode($id)
     {
-        $prev = Session::all();
+        $prev = Auth::user();
         $prev = $prev['_previous']['url'];
 
         $category = FinancingCategory::where('id',$id)->get();

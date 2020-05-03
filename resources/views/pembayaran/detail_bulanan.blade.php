@@ -23,16 +23,16 @@ $bulan = ['',"Januari", "Februari", "Maret","April","Mei","Juni","Juli","Agustus
 
                     <div class="basic-login-inner">
                         
-                            <div class="form-group data-custon-pick" id="data_4">
+                            <div class="form-group">
                                 <label>NIS</label>
-                                <div class="input-group date">
+                                <div class="input-group">
                                     <span class="input-group-addon"><i class="fa fa-id-card-o"></i></span>
                                     <input type="text" class="form-control" name="calendar" value="{{$datas['nis']}}" readonly disable>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label>Nama</label>
-                                <div class="input-group date">
+                                <div class="input-group">
                                     <span class="input-group-addon"><i class="fa fa-user-circle"></i></span>
                                     <input type="text"class="form-control" name="nominal"
                                         value="{{$datas['nama']}}"readonly>
@@ -40,7 +40,7 @@ $bulan = ['',"Januari", "Februari", "Maret","April","Mei","Juni","Juli","Agustus
                             </div>
                             <div class="form-group">
                                 <label>Kelas</label>
-                                <div class="input-group date">
+                                <div class="input-group">
                                     <span class="input-group-addon"><i class="fa fa-mortar-board  "></i></span>
                                     <input type="text" min="0" class="form-control" name="nominal"
                                         value="{{$datas['kelas']}} - {{$datas->major->nama}}"readonly>
@@ -70,8 +70,6 @@ $bulan = ['',"Januari", "Februari", "Maret","April","Mei","Juni","Juli","Agustus
                                                 <a href="{{ route('financing.periode',$financing->id)}}"
                                                     style="color:white; margin-top:0" class=" btn btn-success" target="_blank"><i
                                                         class="fa fa-print"></i>&nbsp; Cetak</a>
-                                                  <button style="color:white" class="btn btn-primary" onclick="$('#modalPeriode').modal()"><i class="fa fa-plus" ></i>&nbsp; Tambah</button>
-
                                             </div>
                                         </div>
                                     </div>
@@ -167,7 +165,7 @@ $bulan = ['',"Januari", "Februari", "Maret","April","Mei","Juni","Juli","Agustus
                                                 <td>
                                                     <div style="text-align: center">
                                                     @if($data->status=="Lunas")
-                                                    {{Session::get('nama')}}
+                                                    {{$data->penerima}}
                                                     @elseif($data->status=="Waiting")
                                                     <span class="badge" style="background-color:yellow;color:black">Waiting</span>
                                                     @else

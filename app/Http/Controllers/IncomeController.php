@@ -57,7 +57,7 @@ class IncomeController extends Controller
                 'id' => null,
                 'title' => $req['title'],
                 'description' => $req['description'],
-                'sumber' => $req['sumber'],
+                'sumber' => $req['sumber' ],
                 'nominal' => $req['nominal'],
                 'foto' => $uuid.$nama_file,
             ]);
@@ -70,8 +70,7 @@ class IncomeController extends Controller
                 'debit' => $req['nominal'],
                 'description' => $desc,
                 'kredit' => 0,
-            ]); 
-
+            ]);
           return redirect()
               ->route('income.index')
               ->with('success', 'Data pengeluaran berhasil disimpan!');

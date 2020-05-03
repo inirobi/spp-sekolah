@@ -25,4 +25,9 @@ class PaymentPeriodeDetail extends Model
     {
         return $this->belongsTo('App\PaymentPeriode', "payment_periode_id");
     }
+    
+    public function user()
+    {
+        return $this->belongsTo('App\User', "user_id");
+    }
 }

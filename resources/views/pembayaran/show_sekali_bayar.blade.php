@@ -86,13 +86,8 @@ SPP | Pembayaran
                                             </div>
                                         </td>
                                         <td>
-                                            @if($siswa->jenis_pembayaran=="Waiting")
-                                            <div style="text-align:center">
-                                                <span class="badge" style="background-color:yellow;color:black">Waiting</span>
-                                            @else
                                             <div style="text-align:right">
                                                 {{number_format($terbayar,0,',','.')}}
-                                            @endif
                                             </div>
                                         </td>
                                         <td>
@@ -101,7 +96,6 @@ SPP | Pembayaran
                                             </div>
                                         </td>
                                         <td>
-                                        @if($financing->jenis=="Sekali Bayar")
                                             <div style="text-align:center">
                                             @if($siswa->jenis_pembayaran=="Waiting")
                                                 <span class="badge" style="background-color:yellow;color:black">Waiting</span>
@@ -109,25 +103,22 @@ SPP | Pembayaran
                                                 {{$siswa->jenis_pembayaran}}
                                             @endif
                                             </div>
-                                        @else
-                                            <div style="text-align:center">
-                                                {{$siswa->bulan_tidak_terbayar}} Bulan
-                                            </div>
-                                        @endif
                                         </td>
                                         <td>
                                             <div style="text-align:center">
                                             @if($siswa->jenis_pembayaran=="Waiting")
-                                                    <span class="badge" style="background-color:yellow;color:black">Waiting</span>
+                                                <span class="badge" style="background-color:yellow;color:black">Waiting</span>
+                                            @elseif($siswa->jenis_pembayaran=="Nunggak")
+                                                <span class="badge" style="background-color:red">Nunggak</span>
                                             @elseif($siswa->jenis_pembayaran=="Cicilan" && $sisa!=0)
-                                                    <span class="badge" style="background-color:red">Nunggak</span>
+                                                <span class="badge" style="background-color:yellow;color:black">Belum Lunas</span>
                                             @else
                                                 <span class="badge" style="background-color:green">Lunas</span>
                                             @endif
                                             </div>
                                         </td>
                                         <td>
-                                            @if($siswa->jenis_pembayaran=="Waiting")
+                                            @if($siswa->jenis_pembayaran=="Waiting" || $siswa->jenis_pembayaran=="Nunggak")
                                                 <button class="btn btn-warning" onclick="addConfirm({{$siswa->id}},{{$siswa->payment_id}})" title="Pilih Metode Pembayaran" style="color:black;  ">
                                                     <i class="fa fa-info-circle"> Metode</i>
                                                 </button>
@@ -171,7 +162,7 @@ SPP | Pembayaran
                 <input type="hidden" name="financing_category" value="{{$financing->nama}}">
                 <input type="hidden" name="nominal" value="{{$financing->besaran}}">
                 <input type="hidden" name="student_id" id="student_id_add" value="">
-                <input type="hidden" name="penerima" value="{{ Session::get('nama') }}">
+                <input type="hidden" name="penerima" value="{{ Auth::user()->nama }}">
                 <div class="row mb-3">
                     <div class="col-md-3 col-sm-3">
                         Pembiayaan
@@ -192,6 +183,7 @@ SPP | Pembayaran
                         <select class="chosen-select" name="metode_pembayaran" id="metode_pembayaran_add">
                             <option value="Tunai">Tunai</option>
                             <option value="Cicilan">Cicilan</option>
+                            <option value="Nunggak">Nunggak</option>
                         </select>
                     </div>
                 </div>

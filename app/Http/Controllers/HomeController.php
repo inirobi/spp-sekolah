@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Auth;
 use App\User;
 use DB;
 
@@ -82,16 +83,25 @@ class HomeController extends Controller
     public function update(Request $request)
     {
         $req=$request->all();
-        $user = User::findOrFail(Session::get('id'));
-        if(Hash::check($req['old_password'], $user->password)){
-            $user->password = bcrypt($req['password']);
-            $user->save();
-            return redirect()
+        // echo '<pre>';
+        // var_dump(Auth::user()->id);die;
+        try {
+            $user = User::findOrFail( Auth::user()->id );
+            if(Hash::check($req['old_password'], $user->password)){
+                $user->password = bcrypt($req['password']);
+                $user->save();
+                return redirect()
                 ->route('home')
                 ->with('success', 'Password telah diubah');
+            }
+        }catch (ModelNotFoundException $e) {
+            return redirect()
+                ->route('password.edit')
+                ->with('error', 'Password lama salah');
         }
         return redirect()
             ->route('password.edit')
             ->with('error', 'Password lama salah');
     }
+
 }

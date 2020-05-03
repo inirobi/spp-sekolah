@@ -54,7 +54,14 @@ class RekapController extends Controller
 
     public function kwitansi()
     {
+        $pdf = PDF::loadView('export.siswa');
+        return $pdf->stream();
+    }
+
+    public function listdata()
+    {
         $pdf = PDF::loadView('export.kwitansi');
+        $pdf->setPaper('A4', 'landscape');
         return $pdf->stream();
     }
 

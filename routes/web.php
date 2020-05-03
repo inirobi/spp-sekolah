@@ -93,7 +93,7 @@ Route::post('/change', 'HomeController@update')->name('password.update');
 
 Route::get('export','RekapController@index')->name('pdf');
 Route::get('export/{id}','RekapController@print')->name('pdf.print');
-Route::get('export_kwitansi','RekapController@kwitansi')->name('pdf.print.kwitansi');
+Route::get('export_kwitansi','RekapController@listdata')->name('pdf.print.kwitansi');
 
 Auth::routes();
 

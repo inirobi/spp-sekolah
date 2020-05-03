@@ -1,0 +1,95 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Session;
+use App\User;
+use DB;
+
+class HomeController extends Controller
+{
+    public function __construct()
+    {
+        if(!Session::get('login'))
+        {
+            return view('auth.login');
+        }
+    }
+
+    public function index()
+    {
+        $dashboard= DB::table('dashboard_view')->first();
+        return view('dashboard.index',compact('dashboard'));
+    }
+
+    public function logout(){
+        Session::flush();
+        return redirect('login')
+                    ->with('success', 'Terima kasih atas kerja keras anda!');
+    }
+
+    public function change(Request $request){
+        $this->validate($request,[
+            'name' => 'required',
+            'username' => 'required|max:16',
+            'pass' => 'required',
+            'confirm' => 'required'
+        ]);
+
+        try {
+            $req = $request->all();
+            if ($req['pass'] != $req['confirm'] ) {
+                return redirect('/home')->with('error','Password tidak sama');
+            }
+            if ($request->file('photo')!='') {
+                $file = $request->file('photo');
+                $nama_file = time()."_".$file->getClientOriginalName();
+                $tujuan_upload = 'foto-admin';
+                $file->move($tujuan_upload,$nama_file);
+                
+                DB::table('tb_admin')
+                ->update([
+                    'nama' => $req['name'],
+                    'username' => $req['username'],
+                    'password' => $req['pass'],
+                    'photo' => $nama_file
+                ]);
+            }else{
+                DB::table('tb_admin')
+                ->update([
+                    'nama' => $req['name'],
+                    'username' => $req['username'],
+                    'password' => $req['pass']
+                ]);
+            }
+                return redirect('/')->with('success','Username dan Password berhasi diubah');
+
+        }catch(Exception $e){
+          return redirect('/home')
+              ->with('error', $e->toString());
+        }
+    }
+
+    public function edit()
+    {
+        return view('user.index');
+    }
+    
+    public function update(Request $request)
+    {
+        $req=$request->all();
+        $user = User::findOrFail(Session::get('id'));
+        if(Hash::check($req['old_password'], $user->password)){
+            $user->password = bcrypt($req['password']);
+            $user->save();
+            return redirect()
+                ->route('home')
+                ->with('success', 'Password telah diubah');
+        }
+        return redirect()
+            ->route('password.edit')
+            ->with('error', 'Password lama salah');
+    }
+}

@@ -20,13 +20,7 @@ class PaymentController extends Controller
 {
     public function __construct()
     {
-        // echo '<pre>';
-        $x = Session::get('login');
-        // var_dump(gettype($x));die;
-        if($x=="NULL")
-        {
-            return view('auth.login');
-        }
+        $this->middleware('auth');
     }
     /**
      * Display a listing of the resource.

@@ -18,10 +18,7 @@ class FinancingCategoryController extends Controller
 {
     public function __construct()
     {
-        if(!Session::get('login'))
-        {
-            return view('auth.login');
-        }
+        $this->middleware('auth');
     }
 
     /**

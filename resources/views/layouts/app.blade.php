@@ -118,7 +118,7 @@
                                                     <li class="nav-item">
                                                         <a href="#" data-toggle="dropdown" role="button"
                                                             aria-expanded="false" class="nav-link dropdown-toggle">
-                                                            <span class="admin-name">Hi, {{Session::get('nama')}}</span>
+                                                            <span class="admin-name">Hi, {{ Auth::user()->name }}</span>
                                                             <i class="fa fa-angle-down edu-icon edu-down-arrow"></i>
                                                         </a>
                                                         <ul role="menu"
@@ -130,10 +130,14 @@
                                                                 </a>
                                                             </li>
                                                             <li>
-                                                                <a title="Keluar" class="" href="{{route('logout')}}" aria-expanded="false">
+                                                                <a title="Keluar" class="" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" aria-expanded="false">
                                                                     <span class="fa fa-sign-out sub-icon-mg" aria-hidden="true"></span>
                                                                     <span class="mini-click-non ">Keluar</span>
                                                                 </a>
+
+                                                                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                                                    @csrf
+                                                                </form>
                                                             </li>
                                                         </ul>
                                                     </li>

@@ -15,6 +15,9 @@
  * @description Route home
  *  
  */
+Route::get('/', function () {
+    return redirect()->route('home');
+});
 
  Route::get('home', 'HomeController@index')->name('home');
 
@@ -77,10 +80,10 @@ Route::resource('rekap', 'RekapController');
 /**
  * Route Login
  */
-Route::get('/','LoginController@index')->name('default');
-Route::get('/login','LoginController@index')->name('login');
-Route::post('/login', 'LoginController@loginPost')->name('login.store');
-Route::get('/logout', 'HomeController@logout')->name('logout');
+// Route::get('/','LoginController@index')->name('default');
+// Route::get('/login','LoginController@index')->name('login');
+// Route::post('/login', 'LoginController@loginPost')->name('login.store');
+// Route::get('/logout', 'HomeController@logout')->name('logout');
 Route::get('/change', 'HomeController@edit')->name('password.edit');
 Route::post('/change', 'HomeController@update')->name('password.update');
 

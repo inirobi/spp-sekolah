@@ -27,6 +27,7 @@ Route::get('/', function () {
 Route::resource('/majors', 'MajorController');
 //student
 Route::resource('students', 'StudentController');
+Route::post('students_filter', 'StudentController@filter')->name('students.filter');
 
 /**
  * Route resource untuk User

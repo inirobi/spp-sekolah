@@ -16,12 +16,15 @@ SPP | Siswa
                             <div class="container-sm">
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <form action="">
+                                        <form action="{{route('students.filter')}}" role="form" method="post">
+                                        @csrf
                                             <div style="float:left; display:flex; flex-direction:row; max-height:55">
-                                                <select class="form-control">
-                                                    <option value="">Export Basic</option>
-                                                    <option value="all">Export All</option>
-                                                    <option value="selected">Export Selected</option>
+                                                
+                                                <select class="form-control" name="jurusan"required>
+                                                <option value="">Semua</option>
+                                                    @foreach($majors as $d)
+                                                    <option value="{{$d->id}}">{{$d->nama}}</option>
+                                                    @endforeach
                                                 </select>
                                                 <button type='submit' class="btn btn-info" style="margin-left:5px;">Filter</button>
                                             </div>

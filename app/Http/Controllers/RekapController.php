@@ -166,16 +166,20 @@ class RekapController extends Controller
         $datas = PaymentPeriodeDetail::where([
             ['payment_id','=',$payment],
             ['status','=',"Lunas"]
-        ])->orderBy('students.kelas')->get();
+        ])->get();
         try {
-            $data['tanggal'] = $this->getTanggalHariIni();
-            $data['waktu'] = $this->getWaktuHariIni();
-            $data['nis'] = $datas[0]->payment->student[0]->nis;
-            $data['nama'] = $datas[0]->payment->student[0]->nama;
-            $data['kelas'] = $datas[0]->payment->student[0]->kelas;
-            $data['jurusan'] = $datas[0]->payment->student[0]->major->nama;
+            if (isset($datas[0]->payment->student[0])) {
+                $data['tanggal'] = $this->getTanggalHariIni();
+                $data['waktu'] = $this->getWaktuHariIni();
+                $data['nis'] = $datas[0]->payment->student[0]->nis;
+                $data['nama'] = $datas[0]->payment->student[0]->nama;
+                $data['kelas'] = $datas[0]->payment->student[0]->kelas;
+                $data['jurusan'] = $datas[0]->payment->student[0]->major->nama;
+            }else {
+                abort(404);
+            }
         } catch (Throwable $th) {
-            abort(500);die;
+            abort(500);
         }
         
         $pdf = PDF::loadView('export.kwitansi_bulanan',compact('user','siswa','data','no','datas'));

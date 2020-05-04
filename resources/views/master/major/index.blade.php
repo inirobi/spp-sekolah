@@ -174,17 +174,17 @@ SPP | Jurusan
             </div>
             <div class="form-group">
                 <label class="control-label col-md-2">Kelas X</label>
-                <input name='x' id='x' type='number' class='form-control' disabled>
+                <input name='x' id='x' type='number' class='form-control' required>
             </div>
             
             <div class="form-group">
                 <label class="control-label col-md-2">Kelas XI</label>
-                <input name='xi' id='xi' type='number' class='form-control' disabled>
+                <input name='xi' id='xi' type='number' class='form-control' required>
             </div>
             
             <div class="form-group">
                 <label class="control-label col-md-2">Kelas XII</label>
-                <input name='xii' id='xii' type='number' class='form-control' disabled>
+                <input name='xii' id='xii' type='number' class='form-control' required>
             </div>
             
             <div class="modal-footer">

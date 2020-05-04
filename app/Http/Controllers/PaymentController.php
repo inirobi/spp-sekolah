@@ -30,7 +30,9 @@ class PaymentController extends Controller
     public function index()
     {
         
-        $datas = FinancingCategory::selectRaw('financing_categories.*, getJumlahTunggakanKategori(financing_categories.id) as tunggakan, getCountNunggakPeriodeUseKategori(financing_categories.id) as tunggakan_periode')->get();
+        $datas = FinancingCategory::selectRaw('financing_categories.*, getJumlahTunggakanKategori(financing_categories.id) as tunggakan, getCountNunggakPeriodeUseKategori(financing_categories.id) as tunggakan_periode')
+            ->where('id','<>','1')
+            ->get();
         $no = 1;
         return view('pembayaran.index', compact('datas', 'no'));
     }

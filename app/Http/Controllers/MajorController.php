@@ -135,6 +135,19 @@ class MajorController extends Controller
           $major->nama = $req['id_jur'];
           $major->save();
 
+            DB::table('kelas')
+                ->where('major_id', $id)
+                ->where('kelas', 'X')
+                ->update(['nominal' => $req['x'] ]);
+            DB::table('kelas')
+                ->where('major_id', $id)
+                ->where('kelas', 'XI')
+                ->update(['nominal' => $req['xi'] ]);
+            DB::table('kelas')
+                ->where('major_id', $id)
+                ->where('kelas', 'XII')
+                ->update(['nominal' => $req['xii'] ]);
+
           return redirect()
               ->route('majors.index')
               ->with('success', 'Data jurusan berhasil diubah!');

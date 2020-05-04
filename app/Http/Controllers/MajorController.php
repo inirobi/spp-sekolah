@@ -4,8 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Major;
+use App\kelas;
 use Illuminate\Support\Facades\Session;
-
+use DB;
 class MajorController extends Controller
 {
     public function __construct()
@@ -22,6 +23,8 @@ class MajorController extends Controller
     {
         $majors = Major::all();
         $no=1;
+        // echo '<pre>';
+        // var_dump($majors[0]->kelas[1]->nominal);die;
         return view('master.major.index', compact('majors','no'));
     }
 
@@ -43,16 +46,41 @@ class MajorController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request,[
-            'jurusan' => 'required',
-        ]);
-
         try {
             $req = $request->all();
+            if($req['id_jur'] == '' || $req['x'] == '' || $req['xi'] == '' || $req['xii'] == ''){
+                return redirect()
+                    ->route('majors.index')
+                    ->with('error', '{Inputan tidak valid}!');
+            }
             Major::create([
                 'id' => null,
-                'nama' => $req['jurusan'],
+                'nama' => $req['id_jur'],
               ]);
+
+              $id = DB::getPdo()->lastInsertId();
+            
+            kelas::create([
+                'id' => null,
+                'kelas' => 'X',
+                'major_id' => $id,
+                'nominal' => $req['x'],
+              ]);
+
+            kelas::create([
+                'id' => null,
+                'kelas' => 'XI',
+                'major_id' => $id,
+                'nominal' => $req['xi'],
+              ]);
+
+            kelas::create([
+                'id' => null,
+                'kelas' => 'XII',
+                'major_id' => $id,
+                'nominal' => $req['xii'],
+              ]);
+
           return redirect()
               ->route('majors.index')
               ->with('success', 'Data jurursan berhasil disimpan!');
@@ -95,14 +123,16 @@ class MajorController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->validate($request,[
-            'nama' => 'required',
-        ]);
 
         try {
-          $req = $request->all();
+            $req = $request->all();
+            if($req['id_jur'] == ''){
+                return redirect()
+                    ->route('majors.index')
+                    ->with('error', '{Inputan tidak valid}!');
+            }
           $major = Major::findOrFail($id);
-          $major->nama = $req['nama'];
+          $major->nama = $req['id_jur'];
           $major->save();
 
           return redirect()
@@ -125,7 +155,8 @@ class MajorController extends Controller
     public function destroy($id)
     {
         try {
-            $major = Major::findOrFail($id)->delete();
+            Major::findOrFail($id)->delete();
+            DB::table('kelas')->where('major_id', '=', $id)->delete();
   
             return redirect()
                 ->route('majors.index')

@@ -25,4 +25,12 @@ class Major extends Model
     {
         return $this->hasMany('App\Student', 'major_id');
     }
+
+    /**
+     * Relasi One to Many
+     */
+    public function kelas()
+    {
+        return $this->hasMany('App\Kelas', 'major_id');
+    }
 }

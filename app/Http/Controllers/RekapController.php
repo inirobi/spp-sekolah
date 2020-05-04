@@ -80,15 +80,15 @@ class RekapController extends Controller
             $rincian = "Pemasukan";
             
             $datas = Pencatatan::where('debit','<>','0')->get();
-            
-            $pdf = PDF::loadView('export.pemasukan',compact('tanggal','user','rincian','datas','no'));
+            $title = "Laporan Pemasukan";
+            $pdf = PDF::loadView('export.pemasukan',compact('tanggal','user','rincian','datas','no','title'));
             return $pdf->stream();
         }elseif($id=="pengeluaran"){
             $rincian = "Pengeluaran";
-            
+            $title = "Laporan Pengeluaran";
             $datas = Pencatatan::where('kredit','<>','0')->get();
             
-            $pdf = PDF::loadView('export.pengeluaran',compact('tanggal','user','rincian','datas','no'));
+            $pdf = PDF::loadView('export.pengeluaran',compact('tanggal','user','rincian','datas','no','title'));
             return $pdf->stream();
         }
     }
@@ -130,7 +130,7 @@ class RekapController extends Controller
             ])->get();
         }
         $title="Rekapitulasi Pembiayaan {$kategori}";
-        $pdf = PDF::loadView('export.coba',compact('no','title','datas'));
+        $pdf = PDF::loadView('export.rekap_bulanan',compact('no','title','datas'));
         $pdf->setPaper('A4', 'landscape');
         return $pdf->stream();
     }

@@ -43,11 +43,12 @@ $total = [0,0,0,0];
     </tr>
 @endforeach
     <tr class="footer-section">
-        <th colspan="3" style="text-align:right"><span style="font-size:20px;font-weight:bold;">Total :</span></th>
+        <th colspan="3" style="text-align:center"><span style="font-size:20px;font-weight:bold;">Total </span></th>
         <th style="text-align:right;font-size:20px;font-weight:bold;">{{number_format($total[0],0,',','.')}}</th>
         <th style="text-align:right;font-size:20px;font-weight:bold;">{{number_format($total[1],0,',','.')}}</th>
         <th style="text-align:right;font-size:20px;font-weight:bold;">{{number_format($total[2],0,',','.')}}</th>
         <th class="footer-right">{{$total[3]}} Bulan</th>
     </tr>
 </table>
+<small>Dibuat pada {{now()}}</small>
 @endsection

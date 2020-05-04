@@ -85,24 +85,7 @@ class FinancingCategoryController extends Controller
                 'jenis' => $req['jenis'],
                 ]);
             $date = $this->convertToDateArrayFromDateTime($create->created_at);
-            if($req['jenis']=="Bayar per Bulan"){
-                $periode = PaymentPeriode::create([
-                    "financing_category_id" => $id,
-                    "bulan" => $date[1], 
-                    "tahun" => $date[0], 
-                    "nominal" => $create->besaran,
-                ]);
-                $payments = Payment::where('financing_category_id', $id)->get();
-                $status = "Waiting";
-                for ($i=0; $i < $payments->count() ; $i++) { 
-                    PaymentPeriodeDetail::create([
-                        'payment_periode_id' => $periode->id,
-                        'payment_id' => $payments[$i]->id,
-                        'user_id' => 0,
-                        'status' => $status,
-                    ]);
-                }
-            }
+           
             return redirect()
                 ->route('financing.index')
                 ->with('success', 'Data jurusan berhasil disimpan!');
@@ -192,17 +175,12 @@ class FinancingCategoryController extends Controller
             FinancingCategory::destroy($id);
             $p = Payment::where('financing_category_id', $id)->get();
             Payment::where('financing_category_id', $id)->delete();
-            if($cek['jenis']=="Bayar per Bulan"){
-                // Hapus PaymentPeriodeDetail aka Bayaran bayar per bulan
-                for ($i=0; $i < $p->count(); $i++) { 
-                    PaymentPeriodeDetail::where('payment_id',$p[$i]->id)->delete();
-                }
-            }else{
-                //Hapus PaymentDetail aka Bayaran sekali bayar yang dicicil
-                for ($i=0; $i < $p->count(); $i++) { 
-                    PaymentDetail::where('payment_id',$p[$i]->id)->delete();
-                }
+            
+            //Hapus PaymentDetail aka Bayaran sekali bayar yang dicicil
+            for ($i=0; $i < $p->count(); $i++) { 
+                PaymentDetail::where('payment_id',$p[$i]->id)->delete();
             }
+        
             return redirect()
                 ->route('financing.index')
                 ->with('success', 'Berhasil dihapus!');

@@ -22,7 +22,7 @@ SPP | Pengeluaran
                                       <a href="{{route('pdf.print','pengeluaran')}}" style="color:white; margin-top:0" class=" btn btn-info" target="_blank"><i class="fa fa-print"></i>&nbsp; Cetak</a>
                                       <a data-toggle="modal" href="#modalAdd" @endphp class="btn btn-success" ><i class="fa fa-plus"></i> Tambah </a>
                                     </div>
-                                </div>
+                                </div> 
                             </div>
                         </div>
                         </div>
@@ -130,7 +130,7 @@ SPP | Pengeluaran
                                 Browse
                                 <input type="file" name='foto' onchange="document.getElementById('prepend-big-btn').value = this.value;">
                             </div>
-                            <input type="text" id="prepend-big-btn" placeholder="no file selected">
+                            <input type="text" id="prepend-big-btn" placeholder="no file selected" required>
                         </div>
                     </div>
                 </div>
@@ -183,7 +183,7 @@ SPP | Pengeluaran
           </div>
           <div class="form-group">
             <label class="control-label col-md-2">Nominal<kode>*</kode></label>
-            <input name='nominal' id='nominal' placeholder="Masukan Nominal" type='number' class='form-control' required>
+            <input name='nominal' id='nominal' placeholder="Masukan Nominal" type='number' class='form-control' readonly required>
           </div>
           <div class="form-group">
           <div class="form-group-inner">

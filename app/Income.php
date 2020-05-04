@@ -21,4 +21,9 @@ class Income extends Model
         "foto",
         "nominal",
     ];
+
+    public function pencatatan()
+    {
+        return $this->hasMany('App\Pencatatan');
+    }
 }

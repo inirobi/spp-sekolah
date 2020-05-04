@@ -70,7 +70,7 @@ class ExpenseController extends Controller
             $id = DB::getPdo()->lastInsertId();
             Pencatatan::create([
                 'id' => null,
-                'expense_id' =>$id,
+                'expense_id' => $id,
                 'payment_id' => 0,
                 'debit' => 0,
                 'description' => $desc,
@@ -165,15 +165,14 @@ class ExpenseController extends Controller
             Expense::findOrFail($id)->delete();
             DB::table('Pencatatans')
             ->where('expense_id', $id)
-            ->delete();
+            ->delete();   
+        } catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e){
             return redirect()
-                ->route('expense.index')
-                ->with('success', 'Data pengeluaran berhasil dihapus!');
-  
-          } catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e){
-            return redirect()
-                ->route('expense.index')
-                ->with('error', 'Data pengeluaran gagal diubah!');
-          }
+            ->route('expense.index')
+            ->with('error', 'Data pengeluaran gagal diubah!');
+        }
+        return redirect()
+            ->route('expense.index')
+            ->with('success', 'Data pengeluaran berhasil dihapus!');
     }
 }

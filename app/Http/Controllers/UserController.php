@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Hash; 
 use App\User;
 use Illuminate\Support\Facades\Session;
 
@@ -43,6 +43,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+
         $this->validate($request,[
             'nama' => 'required',
             'email' => 'required',
@@ -75,9 +76,27 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request,$id)
     {
-        //
+        $this->validate($request,[
+            'nama' => 'required',
+        ]);
+        
+        try {
+        $req = $request->all();
+          $major = User::findOrFail($id);
+          $major->name = $req['nama'];
+          $major->save();
+
+          return redirect()
+              ->route('user.index')
+              ->with('success', 'Data user berhasil diubah!');
+
+        } catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e){
+          return redirect()
+              ->route('user.index')
+              ->with('error', 'Data user gagal diubah!');
+        }
     }
 
     /**
@@ -100,6 +119,8 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
+        echo '<pre>';
+        var_dump('me');die;
         $this->validate($request,[
             'nama' => 'required',
         ]);

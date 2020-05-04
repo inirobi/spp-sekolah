@@ -19,5 +19,17 @@ class Pencatatan extends Model
         "nominal",
         "debit",
         "kredit",
+        "expense_id",
+        "income_id",
     ];
+
+    public function expense()
+    {
+        return $this->belongsTo('App\Expense','expense_id');
+    }
+
+    public function income()
+    {
+        return $this->belongsTo('App\Income','income_id');
+    }
 }

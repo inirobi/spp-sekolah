@@ -132,7 +132,7 @@ SPP | Pemasukan
                                 Browse
                                 <input type="file" name='foto' onchange="document.getElementById('prepend-big-btn').value = this.value;">
                             </div>
-                            <input type="text" id="prepend-big-btn" placeholder="no file selected">
+                            <input type="text" id="prepend-big-btn" placeholder="no file selected" required>
                         </div>
                     </div>
                 </div>
@@ -185,7 +185,7 @@ SPP | Pemasukan
           </div>
           <div class="form-group">
             <label class="control-label col-md-2">Nominal<kode>*</kode></label>
-            <input name='nominal' id='nominal' placeholder="Masukan Nominal" type='number' class='form-control' required>
+            <input name='nominal' id='nominal' placeholder="Masukan Nominal" type='number' class='form-control' readonly required>
           </div>
           <div class="form-group">
           <div class="form-group-inner">

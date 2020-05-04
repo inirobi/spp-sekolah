@@ -137,7 +137,8 @@ SPP | User Management
               <h4 class="modal-title" id="modalUpdateLabel">Update User Data</h4>
             </div>
             <div class="modal-body">
-                <form id="editForm" role="form" method="put">
+                <form id="editForm" role="form" method="post">
+                @method('PUT')
                     {{csrf_field()}}
                     <div class="form-group">
                         <label class="control-label col-md-2">Nama </label>
@@ -198,7 +199,7 @@ SPP | User Management
       $('#nama').attr('value', nama);
       $('#username').attr('value', username);
       $('#email').attr('value', email);
-      $('#editForm').attr('action',"{{ url('users') }}/"+id)
+      $('#editForm').attr('action',"{{ url('user') }}/"+id)
       $('#modalUpdate').modal();
     }
 

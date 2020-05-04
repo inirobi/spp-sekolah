@@ -45,7 +45,7 @@
                 </a>
             </li>
             <li>
-                <a title="User Managemet" class="" href="{{ url('user') }}" aria-expanded="false">
+                <a title="User Managemet" class="" href="{{ route('user.index') }}" aria-expanded="false">
                     <span class="fa fa-id-badge sub-icon-mg" aria-hidden="true"></span>
                     <span class="mini-click-non ">User Management</span>
                 </a>

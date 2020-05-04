@@ -36,7 +36,7 @@ SPP | Dashboard
                             <i class="educate-icon educate-apps"></i>
                         </div>
                             <div class="m-t-xl widget-cl-2">
-                            <h1 class="text-info">{{number_format($dashboard->pengeluaran,0,',','.')}}</h1>
+                            <h1 class="text-info">Rp. {{number_format($dashboard->pengeluaran,0,',','.')}}</h1>
                             <a class="btn btn-success btn-block loginbtn" style="color:white" href="{{route('expense.index')}}">
                                 {{ __('Detail') }}
                             </a>

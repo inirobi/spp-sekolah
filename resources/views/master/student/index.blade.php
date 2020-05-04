@@ -16,10 +16,23 @@ SPP | Siswa
                             <div class="container-sm">
                                 <div class="row">
                                     <div class="col-md-6">
+                                        <form action="">
+                                            <div style="float:left; display:flex; flex-direction:row; max-height:55">
+                                                <select class="form-control">
+                                                    <option value="">Export Basic</option>
+                                                    <option value="all">Export All</option>
+                                                    <option value="selected">Export Selected</option>
+                                                </select>
+                                                <button type='submit' class="btn btn-info" style="margin-left:5px;">Filter</button>
+                                            </div>
+                                        </form>
                                     </div>
                                     <div class="col-md-6">
-                                        <a style="float:right" @php echo $jml < 1 ? 'onclick="peringatan()"':'data-toggle="modal" href="#modalAdd"' @endphp class="btn btn-success" ><i class="fa fa-plus"></i> Tambah </a>
-                                </div>
+                                        <div style="float:right;">
+                                            <a href="# style="color:white; margin-top:0" class=" btn btn-info" target="_blank"><i class="fa fa-print"></i>&nbsp; Cetak</a>
+                                            <a @php echo $jml < 1 ? 'onclick="peringatan()"':'data-toggle="modal" href="#modalAdd"' @endphp class="btn btn-success" ><i class="fa fa-plus"></i> Tambah </a>
+                                        </div>
+                                    </div>
                             </div>
                         </div>
                         </div>

@@ -9,6 +9,10 @@ use Illuminate\Support\Facades\Auth;
 use App\User;
 use DB;
 
+use App\FinancingCategory;
+use App\Payment;
+use App\PaymentPeriodeDetail;
+
 class HomeController extends Controller
 {
     /**

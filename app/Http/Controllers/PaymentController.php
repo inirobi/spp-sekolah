@@ -52,8 +52,6 @@ class PaymentController extends Controller
     public function indexKategori2($siswa)
     {
         $category = Student::all();
-        echo '<pre>';
-        var_dump($category[0]->major);die;
         $siswa = Student::where('id', $siswa)->get();
         $siswa = $siswa[0];
         DB::statement(DB::raw('set @row:=0'));
@@ -129,13 +127,6 @@ class PaymentController extends Controller
         $cek = FinancingCategory::findOrFail($id);    
         if($cek->jenis=="Bayar per Bulan")
         {
-            // $datas=Student::selectRaw('students.*, payments.id AS payment_id,payments.jenis_pembayaran, getNominalPembayaranBulanan(payments.financing_category_id) AS akumulasi,getNominalTerbayarBulanan(payments.id) AS terbayar, getBulanTidakTerbayar(payments.id) AS bulan_tidak_terbayar, getCountWaiting(payments.id) as cekWaiting, getCountDetailBulanan(payments.id) as cekCountDetail, payment_periode_details.status')
-            // ->leftJoin('payments','payments.student_id','=','students.id')
-            // ->leftJoin('payment_periode_details','payment_periode_details.payment_id','=','payments.id')
-            // ->where('payments.financing_category_id',$id)
-            // ->groupBy('students.id')
-            // ->get();
-            
             $datas=DB::table('students')
                         ->selectRaw('students.*,getNominalTerbayarBulanan(payments.id) AS terbayar, getCountBulananTidakTerbayar(payments.id) AS bulan_tidak_bayar, getCountNunggak(payments.id) as cekNunggak, getCountWaiting(payments.id) AS cekWaiting, majors.nama AS jurusan, getAkumulasiPerBulan(payments.id) AS akumulasi, financing_categories.`nama` AS financing_nama, financing_categories.id AS financing_id, payments.`id` AS payment_id, payments.`jenis_pembayaran`')
                         ->leftJoin('majors','majors.id','=','students.major_id')
@@ -143,8 +134,6 @@ class PaymentController extends Controller
                         ->leftJoin('financing_categories','financing_categories.id','=','payments.financing_category_id')
                         ->leftJoin('payment_details','payment_details.payment_id','=','payments.id')
                         ->where('financing_categories.id',$cek->id)->get();
-            // echo '<pre>';
-            // var_dump($datas);die;
 
             $financing = $cek;
             
@@ -304,8 +293,7 @@ class PaymentController extends Controller
         $req['date'] = date('Y-m-d', time());
         $req['user_id'] = Auth::user()->id;
         $obj = Student::where('id',$req['student_id'])->first();
-        // echo '<pre>';
-        // var_dump($req);die;
+        
         $desc = "Pembayaran ".$req['financing_category']." dari ".$obj['nama']." kelas ".$obj['kelas']." ( ".$obj->major->nama." )"." diterima oleh ".$req['penerima'];
         if($req['metode_pembayaran']=='Tunai')
         {
@@ -423,8 +411,7 @@ class PaymentController extends Controller
         $siswa=Student::where('id',$request['student_id'])->first();
         $category=FinancingCategory::where('id',$request['financing_category_id'])->first();
         $desc = "Penerimaan pembayaran cicilan {$category['nama']} dari {$siswa['nama']} kelas {$siswa['kelas']} {$siswa->major->nama} diterima oleh {$penerima}";
-        // echo '<pre>';
-        // var_dump($desc);die;
+        
         $date = $this->convertToCorrectDateValue($request['calendar']);
         PaymentDetail::create([
             'id' => null,

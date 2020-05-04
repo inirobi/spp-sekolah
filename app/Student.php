@@ -21,6 +21,7 @@ class Student extends Model
         "kelas",
         "major_id",
         "phone",
+        "alamat",
         "email",
         "tgl_masuk",
     ];

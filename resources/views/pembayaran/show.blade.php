@@ -20,7 +20,7 @@ SPP | Pembayaran
                                     <div class="col-md-6">
                                         <div style="float:right; margin-right:15px">
                                             <div class="row">
-                                                <a href="{{ route('financing.periode',$financing->id)}}" style="float:right"class=" btn btn-success" target="_blank">
+                                                <a href="{{ route('pdf.print.rekap.bulanan',[$financing->nama,$financing->id])}}" style="float:right"class=" btn btn-success" target="_blank">
                                                     <i class="fa fa-print"></i>&nbsp;Cetak
                                                 </a>
                                             </div>
@@ -53,11 +53,7 @@ SPP | Pembayaran
                                         <th data-field="total">Akumulasi Biaya</th>
                                         <th data-field="terbayar">Sudah dibayar</th>
                                         <th data-field="tunggakan">Sisa Pembayaran</th>
-                                        @if($financing->jenis=="Sekali Bayar")
-                                        <th data-field="metode">Metode Pembayaran</th>
-                                        @else
                                         <th data-field="banyak">Tunggakan</th>
-                                        @endif
                                         <th data-field="status">Status</th>
                                         <th data-field="action">Action</th>
                                     </tr>
@@ -90,15 +86,6 @@ SPP | Pembayaran
                                             </div>
                                         </td>
                                         <td>
-                                        @if($financing->jenis=="Sekali Bayar")
-                                            <div style="text-align:center">
-                                            @if($siswa->jenis_pembayaran=="Waiting")
-                                                <span class="badge" style="background-color:yellow;color:black">Waiting</span>
-                                            @else
-                                                {{$siswa->jenis_pembayaran}}
-                                            @endif
-                                            </div>
-                                        @else
                                             <div style="text-align:center">
                                                 @if($siswa->bulan_tidak_bayar!=0)
                                                 <span class="badge" style="background-color:red">{{$siswa->bulan_tidak_bayar}} Bulan</span>
@@ -106,7 +93,6 @@ SPP | Pembayaran
                                                 {{$siswa->bulan_tidak_bayar}} Bulan
                                                 @endif
                                             </div>
-                                        @endif
                                         </td>
                                         <td>
                                             <div style="text-align:center">

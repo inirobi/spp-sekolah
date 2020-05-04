@@ -11,6 +11,7 @@ use App\PaymentPeriodeDetail;
 use App\FinancingCategory;
 use App\PaymentPeriode;
 use App\Payment;
+use App\Major;
 
 use PDF;
 use DB;
@@ -27,25 +28,9 @@ class RekapController extends Controller
      */
     public function index()
     {
-        
-        // $no = 1;
-        // $user= Auth::user()->name;
-        // $siswa = Student::where('id','1')->first();
-        // $datas = PaymentPeriodeDetail::where('payment_id','1')->get();
-        
-        // $data['tanggal'] = $this->getTanggalHariIni();
-        // $data['waktu'] = $this->getWaktuHariIni();
-        // $data['nis'] = $datas[0]->payment->student[0]->nis;
-        // $data['nama'] = $datas[0]->payment->student[0]->nama;
-        // $data['kelas'] = $datas[0]->payment->student[0]->kelas;
-        // $data['jurusan'] = $datas[0]->payment->student[0]->major->nama;
-        
-        // $pdf = PDF::loadView('export.kwitansi_bulanan',compact('user','siswa','data','no','datas'));
-        // $pdf->setPaper('A4', 'landscape');
-        // return $pdf->stream();
-
-        return view('export.index');
-        
+        $categorys = FinancingCategory::all();
+        $majors = Major::all();
+        return view('export.index',compact('categorys','majors'));
     }
 
 
@@ -74,15 +59,15 @@ class RekapController extends Controller
             $rincian = "Pemasukan";
             
             $datas = Pencatatan::where('debit','<>','0')->get();
-            
-            $pdf = PDF::loadView('export.pemasukan',compact('tanggal','user','rincian','datas','no'));
+            $title = "Laporan Pemasukan";
+            $pdf = PDF::loadView('export.pemasukan',compact('tanggal','user','rincian','datas','no','title'));
             return $pdf->stream();
         }elseif($id=="pengeluaran"){
             $rincian = "Pengeluaran";
-            
+            $title = "Laporan Pengeluaran";
             $datas = Pencatatan::where('kredit','<>','0')->get();
             
-            $pdf = PDF::loadView('export.pengeluaran',compact('tanggal','user','rincian','datas','no'));
+            $pdf = PDF::loadView('export.pengeluaran',compact('tanggal','user','rincian','datas','no','title'));
             return $pdf->stream();
         }
     }
@@ -90,6 +75,28 @@ class RekapController extends Controller
     public function kwitansi()
     {
         $pdf = PDF::loadView('export.siswa');
+        return $pdf->stream();
+    }
+
+    public function rekapSiswa(Request $request)
+    {
+        $kls = $request->kls;
+        $jur = $request->id_jur;
+
+        if($kls=='' && $jur!=''){
+            $students = Student::where('major_id',$jur)->get();
+        }elseif ($jur=='' && $kls!='') {
+            $students = Student::where('kelas',$kls)->get();
+        }elseif ($jur=='' && $kls=='') {
+            $students = Student::all();
+        }else{
+            $students = Student::where('kelas',$kls)
+                ->where('major_id',$jur)
+                ->get();
+        }
+        $no = 1;
+        $title = "Data Siswa";
+        $pdf = PDF::loadView('export.siswa',compact('students','no','title','kls','jur'));
         return $pdf->stream();
     }
 
@@ -125,7 +132,7 @@ class RekapController extends Controller
             ])->orderBy('students.kelas')->get();
         }
         $title="Rekapitulasi Pembiayaan {$kategori}";
-        $pdf = PDF::loadView('export.coba',compact('no','title','datas'));
+        $pdf = PDF::loadView('export.rekap_bulanan',compact('no','title','datas'));
         $pdf->setPaper('A4', 'landscape');
         return $pdf->stream();
     }

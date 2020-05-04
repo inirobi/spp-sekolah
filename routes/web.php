@@ -27,6 +27,7 @@ Route::get('/', function () {
 Route::resource('/majors', 'MajorController');
 //student
 Route::resource('students', 'StudentController');
+Route::post('students_filter', 'StudentController@filter')->name('students.filter');
 
 /**
  * Route resource untuk User
@@ -94,6 +95,8 @@ Route::post('/change', 'HomeController@update')->name('password.ubah');
 Route::get('export','RekapController@index')->name('pdf');
 Route::get('export/{id}','RekapController@print')->name('pdf.print');
 Route::get('export_kwitansi','RekapController@listdata')->name('pdf.print.kwitansi');
+Route::get('export/bulanan/{nama}/{id}','RekapController@rekapBulanan')->name('pdf.print.rekap.bulanan');
+Route::post('export/siswa/','RekapController@rekapSiswa')->name('pdf.print.rekap.siswa');
 Route::get('export/bulanan/rekap/{nama}/{id}/{filter?}','RekapController@rekapBulanan')->name('pdf.print.rekap.bulanan');
 Route::get('export/bulanan/onepage/{nama}/{payment}','RekapController@kwitansiBulanan')->name('pdf.print.bulanan');
 Route::get('export/bulanan/detail/{nama}/{payment}','RekapController@kwitansiBulananSatuan')->name('pdf.print.bulanan.detail');

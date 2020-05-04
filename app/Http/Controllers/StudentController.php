@@ -7,6 +7,7 @@ use App\Major;
 use App\Student;
 use App\FinancingCategory;
 use App\Payment;
+use App\PaymentPeriodeDetail;
 use Illuminate\Support\Facades\Session;
 
 use DB;
@@ -26,9 +27,32 @@ class StudentController extends Controller
     {
         $students = Student::all();
         $no=1;
+        $fil = '';
+        $kls = '';
         $jml = Major::count();
         $majors = Major::all();
-        return view('master.student.index', compact('students','no','jml','majors'));
+        return view('master.student.index', compact('students','no','jml','majors','fil','kls'));
+    }
+
+    public function filter(Request $request)
+    {
+        if($request->kelas=='' && $request->jurusan!=''){
+            $students = Student::where('major_id',$request->jurusan)->get();
+        }elseif ($request->jurusan=='' && $request->kelas!='') {
+            $students = Student::where('kelas',$request->kelas)->get();
+        }elseif ($request->jurusan=='' && $request->kelas=='') {
+            $students = Student::all();
+        }else{
+            $students = Student::where('kelas',$request->kelas)
+                ->where('major_id',$request->jurusan)
+                ->get();
+        }
+        $no=1;
+        $kls=$request->kelas;
+        $fil= $request->jurusan;
+        $jml = Major::count();
+        $majors = Major::all();
+        return view('master.student.index', compact('students','no','jml','majors','fil','kls'));
     }
 
     /**
@@ -76,6 +100,7 @@ class StudentController extends Controller
                 'alamat' => $req['alamat'],
                 'tgl_masuk' => $date,
                 ]);
+            $categories = FinancingCategory::all();
             $id = DB::getPdo()->lastInsertId();
             for ($i=0; $i < $categories->count(); $i++) 
             { 
@@ -86,7 +111,6 @@ class StudentController extends Controller
                 ]);
             }
             $status = "Waiting";
-            $categories = FinancingCategory::all();
             $payment = Payment::where('student_id',$id)->get();
             for ($i=0; $i < $categories->count(); $i++) { 
                 if($categories[$i]->jenis=="Bayar per Bulan"){

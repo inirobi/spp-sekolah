@@ -6,7 +6,7 @@
     <style>
 .page_break { page-break-before: always; },
 
-.garis_dua{
+.garis_dua{ 
   border: 0;
   border-top: 5px double #8c8c8c;
 }

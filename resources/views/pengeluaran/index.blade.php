@@ -18,7 +18,10 @@ SPP | Pengeluaran
                                 <div class="col-md-6">
                                 </div>
                                 <div class="col-md-6">
-                                    <a style="float:right" data-toggle="modal" href="#modalAdd" @endphp class="btn btn-success" ><i class="fa fa-plus"></i> Tambah </a>
+                                <div style="float:right;">
+                                      <a href="{{route('pdf.print','pengeluaran')}}" style="color:white; margin-top:0" class=" btn btn-info" target="_blank"><i class="fa fa-print"></i>&nbsp; Cetak</a>
+                                      <a data-toggle="modal" href="#modalAdd" @endphp class="btn btn-success" ><i class="fa fa-plus"></i> Tambah </a>
+                                    </div>
                                 </div>
                             </div>
                         </div>

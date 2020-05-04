@@ -20,6 +20,30 @@ class CreateFinancingCategoriesTable extends Migration
             $table->enum('jenis',['Bayar per Bulan','Sekali Bayar','Per Enam Bulan']);
             $table->timestamps();
         });
+
+        DB::table('financing_categories')->insert(
+            array(
+                'nama' => 'SPP',
+                'besaran' => '0',
+                'jenis' => 'Bayar per Bulan',
+            )
+        );
+        DB::table('financing_categories')->insert(
+            array(
+                'nama' => 'UAS',
+                'besaran' => '0',
+                'jenis' => 'Bayar per Bulan',
+            )
+        );
+        DB::table('financing_categories')->insert(
+            array(
+                'nama' => 'Praktikum',
+                'besaran' => '0',
+                'jenis' => 'Bayar per Bulan',
+            )
+        );
+
+
     }
 
     /**

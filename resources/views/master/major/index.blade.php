@@ -14,24 +14,19 @@ SPP | Jurusan
             <div class="sparkline16-graph">
                 <div class="date-picker-inner">
                     <div class="basic-login-inner">
-                        <form action="{{route('majors.store')}}" method="post" id="form-jurusan">
-                            @csrf
-                            <div class="form-group">
-                                <label>Nama Jurusan</label>
-                                <div class="input-group date">
-                                    <span class="input-group-addon"><i class="fa fa-mortar-board"></i></span>
-                                    <input type="text" class="form-control" name="jurusan"
-                                        placeholder="Masukan Nama Jurusan">
-                                </div>
+                        <div class="form-group">
+                            <label>Nama Jurusan</label>
+                            <div class="input-group date">
+                                <span class="input-group-addon"><i class="fa fa-mortar-board"></i></span>
+                                <input type="text" id="jurusan" class="form-control" name="jurusan"
+                                    placeholder="Masukan Nama Jurusan">
                             </div>
-                            <div class="login-btn-inner">
-                                <div class="inline-remember-me">
-                                    <input type="submit" value="Submit"
-                                        class="btn btn-sm btn-primary pull-right login-submit-cs">
-                                    <label>
-                                </div>
+                        </div>
+                        <div class="login-btn-inner">
+                            <div class="inline-remember-me">
+                                <button onclick="conf()" class="btn btn-sm btn-primary pull-right login-submit-cs">Submit</button>
                             </div>
-                        </form>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -116,6 +111,49 @@ SPP | Jurusan
 </div>
 <!-- Static Table End -->
 
+<div class="modal fade bd-example-modal-lg" id="modalUpdate" tabindex="-1" role="dialog" aria-labelledby="modalUpdateLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalUpdateLabel">Nominal Pembayaran SPP</span></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+         <form role="form" method="post">
+            {{csrf_field()}}
+            
+            <div class="form-group">
+                <label class="control-label col-md-2">Nama Jurusan</label>
+                <input name='id_jur' id='id_jur' type='text' class='form-control' disabled>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-2">Kelas X</label>
+                <input name='x' type='number' class='form-control' required>
+            </div>
+            
+            <div class="form-group">
+                <label class="control-label col-md-2">Kelas XI</label>
+                <input name='xi' type='number' class='form-control' required>
+            </div>
+            
+            <div class="form-group">
+                <label class="control-label col-md-2">Kelas XII</label>
+                <input name='xii' type='number' class='form-control' required>
+            </div>
+            
+            <div class="modal-footer">
+                <button type='submit' class="btn btn-primary"><i class="fa fa-floppy-o"></i> Save</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 <!-- hapus -->
 <form id="destroy-form" method="POST">
     @method('DELETE')
@@ -137,6 +175,12 @@ SPP | Jurusan
 @push('scripts')
 
 <script>
+    function conf()
+    {
+        let nama = document.getElementById('jurusan').value;
+        $('#id_jur').attr('value', nama);
+        $('#modalUpdate').modal();
+    }
     function editConfirm(id, nama) {
         $('input[name=id]').attr('value', id);
         $('input[name=jurusan]').attr('value', nama);

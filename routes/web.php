@@ -107,3 +107,8 @@ Route::get('export/sesekali/detail/{nama}/{payment}','RekapController@kwitansiSe
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+/**
+ * Route resource untuk Pembayaran
+ */
+Route::resource('spp', 'SppController');

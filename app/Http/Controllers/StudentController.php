@@ -27,18 +27,32 @@ class StudentController extends Controller
     {
         $students = Student::all();
         $no=1;
+        $fil = '';
+        $kls = '';
         $jml = Major::count();
         $majors = Major::all();
-        return view('master.student.index', compact('students','no','jml','majors'));
+        return view('master.student.index', compact('students','no','jml','majors','fil','kls'));
     }
 
     public function filter(Request $request)
     {
-        $students = Student::where('major_id',$request->jurusan)->get();
+        if($request->kelas=='' && $request->jurusan!=''){
+            $students = Student::where('major_id',$request->jurusan)->get();
+        }elseif ($request->jurusan=='' && $request->kelas!='') {
+            $students = Student::where('kelas',$request->kelas)->get();
+        }elseif ($request->jurusan=='' && $request->kelas=='') {
+            $students = Student::all();
+        }else{
+            $students = Student::where('kelas',$request->kelas)
+                ->where('major_id',$request->jurusan)
+                ->get();
+        }
         $no=1;
+        $kls=$request->kelas;
+        $fil= $request->jurusan;
         $jml = Major::count();
         $majors = Major::all();
-        return view('master.student.index', compact('students','no','jml','majors'));
+        return view('master.student.index', compact('students','no','jml','majors','fil','kls'));
     }
 
     /**

@@ -19,11 +19,19 @@ SPP | Siswa
                                         <form action="{{route('students.filter')}}" role="form" method="post">
                                         @csrf
                                             <div style="float:left; display:flex; flex-direction:row; max-height:55">
-                                                
-                                                <select class="form-control" name="jurusan"required>
+                                            <select class="form-control" name="kelas">
+                                                <option value="">-- Pilih Kelas -- </option>
+                                                <option value="">Semua</option>
+                                                <option @if("X"==$kls) selected @endif value="X">X</option>
+                                                <option @if("XI"==$kls) selected @endif value="XI">XI</option>
+                                                <option @if("XII"==$kls) selected @endif value="XII">XII</option>
+                                                </select>
+
+                                                <select style="margin-left:5px;" class="form-control" name="jurusan">
+                                                <option value="">-- Pilih Jurusan --</option>
                                                 <option value="">Semua</option>
                                                     @foreach($majors as $d)
-                                                    <option value="{{$d->id}}">{{$d->nama}}</option>
+                                                    <option @if($fil==$d->id) selected @endif value="{{$d->id}}">{{$d->nama}}</option>
                                                     @endforeach
                                                 </select>
                                                 <button type='submit' class="btn btn-info" style="margin-left:5px;">Filter</button>
@@ -32,8 +40,13 @@ SPP | Siswa
                                     </div>
                                     <div class="col-md-6">
                                         <div style="float:right;">
-                                            <a href="# style="color:white; margin-top:0" class=" btn btn-info" target="_blank"><i class="fa fa-print"></i>&nbsp; Cetak</a>
+                                            <form target="_blank" action="{{route('pdf.print.rekap.siswa')}}" role="form" method="post">
+                                                @csrf 
+                                                <input type="hidden" name='id_jur' value="{{$fil}}">
+                                                <input type="hidden" name='kls' value="{{$kls}}">
+                                                <button type='submit' class="btn btn-info" style="color:white; margin-top:0"><i class="fa fa-print"></i>&nbsp; Cetak</button>
                                             <a @php echo $jml < 1 ? 'onclick="peringatan()"':'data-toggle="modal" href="#modalAdd"' @endphp class="btn btn-success" ><i class="fa fa-plus"></i> Tambah </a>
+                                            </form>
                                         </div>
                                     </div>
                             </div>
@@ -303,16 +316,6 @@ SPP | Siswa
                             @method('PUT')
                             {{csrf_field()}}
                             <div class="form-group">
-                                <label class="control-label col-md-2">NIS<kode>*</kode></label>
-                                <input name='nis' id='nis2' disabled placeholder=" Masukan Nama Jurusan" type='text'
-                                    class='form-control' required>
-                            </div>
-                            <div class="form-group">
-                                <label class="control-label col-md-2">Nama Siswa<kode>*</kode></label>
-                                <input name='nama' id='nama2' disabled placeholder=" Masukan Nama Siswa" type='text'
-                                    class='form-control' required>
-                            </div>
-                            <div class="form-group">
                                 <label class="control-label col-md-2">Jenis Kelamin<kode>*</kode></label>
                                 <div class="chosen-select-single mg-b-20">
                                     <select class="chosen-select" disabled name="jenis_kelamin" id="jenis_kelamin_edit">
@@ -324,8 +327,9 @@ SPP | Siswa
                             <div class="form-group">
                                 <label class="control-label col-md-2">Jurusan<kode>*</kode></label>
                                 <div class="chosen-select-single mg-b-20">
-                                    <select class="chosen-select" disabled tabindex="-1" name="major_id"
-                                        id="major_id_edit" required>
+                                    <select class="chosen-select" disabled tabindex="-1" name="major_id" required>
+                                        <option @php value="{{$d->id}}">-- Pilih Jurusan --</option>
+                                        <option @php value="{{$d->id}}">Semua</option>
                                         @foreach($majors as $d)
                                         <option @php value="{{$d->id}}">{{$d->nama}}</option>
                                         @endforeach
@@ -336,34 +340,12 @@ SPP | Siswa
                                 <label class="control-label col-md-2">Kelas<kode>*</kode></label>
                                 <div class="chosen-select-single mg-b-20">
                                     <select class="chosen-select" disabled name="kelas" id="kelas_edit" required>
+                                        <option value="">-- Pilih Kelas --</option>
+                                        <option value="All">Semua</option>
                                         <option value="X">X</option>
                                         <option value="XI">XI</option>
                                         <option value="XII">XII</option>
                                     </select>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="control-label col-md-2">No Telpon<kode>*</kode></label>
-                                <input name='phone' disabled id='phone2' placeholder="Masukan No Telpon" type='number'
-                                    class='form-control' required>
-                            </div>
-                            <div class="form-group">
-                                <label class="control-label col-md-2">Alamat<kode>*</kode></label>
-                                <textarea name='alamat' id="alamat2" placeholder=" Masukan alamat siswa" required></textarea>
-                            </div>
-                            <div class="form-group">
-                                <label class="control-label col-md-2">Email</label>
-                                <input name='email' id='email2' disabled placeholder="contoh siswa@baabulkamil.com" type='text'
-                                    class='form-control'>
-                            </div>
-                            <div class="form-group">
-                                <div class="form-group data-custon-pick" id="data_3">
-                                    <label>Tanggal Masuk<kode>*</kode></label>
-                                    <div class="input-group date">
-                                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                                        <input type="text" name='tgl_masuk' disabled id='tgl_masuk2'
-                                            class="form-control" required>
-                                    </div>
                                 </div>
                             </div>
                     </div>
@@ -415,6 +397,13 @@ SPP | Siswa
         <script>
             function peringatan() {
                 swal('Gagal!', 'Sekolah belum mempunyai jurusan. Silahkan diisi terlebih dahulu', 'error')
+            }
+
+            function show_selected() {
+                var selector = document.getElementById('jurusan');
+                var value = selector[selector.selectedIndex].value;
+
+                document.getElementById('display').innerHTML = value;
             }
 
             function editConfirm(id, nis, nama, jenis_kelamin, kelas, major_id, major, phone, email, tgl_masuk, alamat) {

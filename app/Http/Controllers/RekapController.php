@@ -11,6 +11,7 @@ use App\PaymentPeriodeDetail;
 use App\FinancingCategory;
 use App\PaymentPeriode;
 use App\Payment;
+use App\Major;
 
 use PDF;
 use DB;
@@ -27,31 +28,9 @@ class RekapController extends Controller
      */
     public function index()
     {
-        
-        $no = 1;
-        $user= Auth::user()->name;
-        $siswa = Student::where('id','1')->first();
-        $datas = PaymentPeriodeDetail::where('payment_id','1')->first();
-
-        echo '<pre>';
-        foreach ($datas as $data) {
-            # code...
-        }
-        var_dump($data);die;
-
-        $data['tanggal'] = $this->getTanggalHariIni();
-        $data['waktu'] = $this->getWaktuHariIni();
-        
-        $bulan=$this->convertToBulan($data['periode']->bulan);
-        
-        $d = "Pembayaran {$data['periode']->financingCategory->nama} untuk periode bulan {$bulan} tahun {$data['periode']->tahun} dari {$data['payment']->student[0]->nama} kelas {$data['payment']->student[0]->kelas} - {$data['payment']->student[0]->major->nama}";
-        $data['desc'] = $d;
-
-        // $pdf = PDF::loadView('export.coba',compact('no','title','datas'));
-        $pdf = PDF::loadView('export.kwitansi',compact('user','siswa','data','no'));
-        $pdf->setPaper('A4', 'landscape');
-        return $pdf->stream();
-        // return view('export.index');
+        $categorys = FinancingCategory::all();
+        $majors = Major::all();
+        return view('export.index',compact('categorys','majors'));
     }
 
 
@@ -96,6 +75,28 @@ class RekapController extends Controller
     public function kwitansi()
     {
         $pdf = PDF::loadView('export.siswa');
+        return $pdf->stream();
+    }
+
+    public function rekapSiswa(Request $request)
+    {
+        $kls = $request->kls;
+        $jur = $request->id_jur;
+
+        if($kls=='' && $jur!=''){
+            $students = Student::where('major_id',$jur)->get();
+        }elseif ($jur=='' && $kls!='') {
+            $students = Student::where('kelas',$kls)->get();
+        }elseif ($jur=='' && $kls=='') {
+            $students = Student::all();
+        }else{
+            $students = Student::where('kelas',$kls)
+                ->where('major_id',$jur)
+                ->get();
+        }
+        $no = 1;
+        $title = "Data Siswa";
+        $pdf = PDF::loadView('export.siswa',compact('students','no','title','kls','jur'));
         return $pdf->stream();
     }
 

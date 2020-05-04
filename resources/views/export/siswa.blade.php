@@ -3,7 +3,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Rincian</title>
+    <title>{{$title}}</title>
     <style>
     .page_break { page-break-before: always; },
 
@@ -51,26 +51,42 @@
         <div style="padding-top:10">
           <p> <span style="font-size:14pt;font-style:bold">SMK BAABUL KAMIL</span>
           <br> <span style="font-size:12pt">Terakreditasi 'A' | Program Keahlian : Multimedia, Adm Perkantoran & Perawatan</span>
-          <br> <span style="font-size:10pt">Alamat:Jl. Cikuda No. 08 Jatinanor, Tlp : (022) 7797312 / 085294124866</span>
+          <br> <span style="font-size:10pt">Alamat:Jl. Cikuda No. 08 Jatinangor, Tlp : (022) 7797312 / 085294124866</span>
           <br> <span style="font-size:10pt">Email: <span style="color:blue; font-style: italic;"> smkbaabulkamil_jatinangor@yahoo.com </span></span>
           | <span style="font-size:10pt">Website : <span style="color:blue;font-style: italic;">www.smkbaabulkamil.sch.id</span></span>
           </p>
         </div>
       </div>
         <hr class="garis_dua">
-        <center><h4>DAFTAR SISWA</h4></center>
-        <table>
-          <tr>
-            <td>Kelas</td>
-            <td>:</td>
-            <td>XI</td>
-          </tr>
-          <tr>
-            <td>Jurusan</td>
-            <td>:</td>
-            <td>RPL</td>
-          </tr>
+        <center><h4>{{$title}}</h4></center>
+        @if ($jur!='' || $kls!='')
+          <table >
+          @if($kls=='' && $jur!=''){
+            <tr>
+              <td>Jurusan</td>
+              <td>:</td>
+              <td style='text-align:left'>{{$students[0]->major->nama}}</td>
+            </tr>
+          @elseif ($jur=='' && $kls!='') {
+            <tr>
+              <td>Kelas</td>
+              <td>:</td>
+              <td style='text-align:left'>{{$kls}}</td>
+            </tr>
+          @else
+            <tr>
+              <td>Kelas</td>
+              <td>:</td>
+              <td style='text-align:left'>{{$kls}}</td>
+            </tr>
+            <tr>
+              <td>Jurusan</td>
+              <td>:</td>
+              <td style='text-align:left'>{{$students[0]->major->nama}}</td>
+            </tr>
+          @endif
         </table>
+        @endif
         <table class="table1">
           <tr>
             <th>No</th>
@@ -80,46 +96,16 @@
             <th>No Telp</th>
             <th>Alamat</th>
           </tr>
+          @foreach($students as $data)
           <tr>
-            <td>1</td>
-            <td>1211</td>
-            <td>Andi Saputra</td>
-            <td>Laki - Laki</td>
-            <td>21</td>
-            <td>Magelang</td>
+            <td>{{$no++}}</td>
+            <td>{{$data->nis}}</td>
+            <td>{{$data->nama}}</td>
+            <td>{{$data->jenis_kelamin}}</td>
+            <td>{{$data->phone}}</td>
+            <td>{{$data->alamat}}</td>
           </tr>
-          <tr>
-            <td>2</td>
-            <td>1211</td>
-            <td>Budi Budiman</td>
-            <td>Laki - Laki</td>
-            <td>24</td>
-            <td>Jakarta</td>
-          </tr>
-          <tr>
-            <td>3</td>
-            <td>1211</td>
-            <td>Calvin Sanusi</td>
-            <td>Laki - Laki</td>
-            <td>29</td>
-            <td>Malang</td>
-          </tr>
-          <tr>
-            <td>4</td>
-            <td>1211</td>
-            <td>Diki</td>
-            <td>Laki - Laki</td>
-            <td>24</td>
-            <td>Bandung</td>
-          </tr>
-          <tr>
-            <td>5</td>
-            <td>1211</td>
-            <td>Malas Ngoding</td>
-            <td>Laki - Laki</td>
-            <td>23</td>
-            <td>Medan</td>
-          </tr>
+          @endforeach
         </table>	
   </body>
 </html>

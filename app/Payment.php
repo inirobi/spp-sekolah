@@ -28,6 +28,11 @@ class Payment extends Model
         return $this->hasMany('App\PaymentDetail');
     }
 
+    public function paymentPeriode()
+    {
+        return $this->hasMany('App\PaymentPeriodeDetail');
+    }
+
     /**
      * Relasi Many to Many
      */

@@ -21,7 +21,7 @@ SPP | Pembayaran
                                     <div class="col-md-6">
                                         <div style="float:right; margin-right:15px">
                                             <div class="row">
-                                                <a href="#" style="float:right;color:black"class=" btn btn-success" target="_blank" title="Cetak rekapitulasi {{$financing->nama}}">
+                                                <a href="{{ route('pdf.print.rekap.sesekali',[ $financing->nama,$financing->id]) }}" style="float:right;color:black"class=" btn btn-success" target="_blank" title="Cetak rekapitulasi {{$financing->nama}}">
                                                 <i class="fa fa-print"></i>&nbsp;Cetak</a>
                                             </div>
                                         </div>

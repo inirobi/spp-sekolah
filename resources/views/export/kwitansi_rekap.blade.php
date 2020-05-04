@@ -22,7 +22,7 @@
         <div style="padding-top:10">
           <p> <span style="font-size:14pt;font-style:bold">SMK BAABUL KAMIL</span>
           <br> <span style="font-size:12pt">Terakreditasi 'A' | Program Keahlian : Multimedia, Adm Perkantoran & Perawatan</span>
-          <br> <span style="font-size:10pt">Alamat:Jl. Cikuda No. 08 Jatinanor, Tlp : (022) 7797312 / 085294124866</span>
+          <br> <span style="font-size:10pt">Alamat:Jl. Cikuda No. 08 Jatinangor, Tlp : (022) 7797312 / 085294124866</span>
           <br> <span style="font-size:10pt">Email: <span style="color:blue; font-style: italic;"> smkbaabulkamil_jatinangor@yahoo.com </span></span>
           | <span style="font-size:10pt">Website : <span style="color:blue;font-style: italic;">www.smkbaabulkamil.sch.id</span></span>
           </p>
@@ -173,7 +173,7 @@
               <td>- Disimpan sebagai pembayaran bukti yang SAH</td>
             </tr>
             <tr style='font-size:14px'>
-              <td>- Uang yang dibawar tidak dapat diminta kembali</td>
+              <td>- Uang yang dibayar tidak dapat diminta kembali</td>
             </tr>
           </table>
         </td>

@@ -22,7 +22,7 @@
         <div style="padding-top:10">
           <p> <span style="font-size:14pt;font-style:bold">SMK BAABUL KAMIL</span>
           <br> <span style="font-size:12pt">Terakreditasi 'A' | Program Keahlian : Multimedia, Adm Perkantoran & Perawatan</span>
-          <br> <span style="font-size:10pt">Alamat:Jl. Cikuda No. 08 Jatinanor, Tlp : (022) 7797312 / 085294124866</span>
+          <br> <span style="font-size:10pt">Alamat:Jl. Cikuda No. 08 Jatinangor, Tlp : (022) 7797312 / 085294124866</span>
           <br> <span style="font-size:10pt">Email: <span style="color:blue; font-style: italic;"> smkbaabulkamil_jatinangor@yahoo.com </span></span>
           | <span style="font-size:10pt">Website : <span style="color:blue;font-style: italic;">www.smkbaabulkamil.sch.id</span></span>
           </p>
@@ -40,14 +40,14 @@
                   <td>&nbsp;</td>
                 </tr>  
                 <tr>
-                  <td>TANGGAL</td>
-                  <td>:</td>
-                  <td>{{$data['tanggal']}}</td>
+                  <td>&nbsp;</td>
+                  <td>&nbsp;</td>
+                  <td>&nbsp;</td>
                 </tr>  
                 <tr>
                   <td>WAKTU PENCETAKAN</td>
                   <td>:</td>
-                  <td>{{$data['waktu']}}</td>
+                  <td>{{$data['tanggal']}} - {{$data['waktu']}}</td>
                 </tr>  
               </table>
             </td>
@@ -161,7 +161,7 @@
     <br>
     <table width='100%'>
       <tr>
-        <td width='65%'>
+        <td width='50%'>
           <table width='100%'>
             <tr>
               <td>Catatan</td>
@@ -170,11 +170,11 @@
               <td>- Disimpan sebagai pembayaran bukti yang SAH</td>
             </tr>
             <tr style='font-size:14px'>
-              <td>- Uang yang dibawar tidak dapat diminta kembali</td>
+              <td>- Uang yang dibayar tidak dapat diminta kembali</td>
             </tr>
           </table>
         </td>
-        <td width='35%'>
+        <td width='50%'>
           <table width='100%'>
             <tr><td><br></td></tr>
             <tr><td><br></td></tr>

@@ -7,6 +7,7 @@ use App\Major;
 use App\Student;
 use App\FinancingCategory;
 use App\Payment;
+use App\kelas;
 use App\PaymentPeriodeDetail;
 use Illuminate\Support\Facades\Session;
 
@@ -89,10 +90,15 @@ class StudentController extends Controller
             }
             $date = explode("/",$req['tgl_masuk']);
             $date = $date[2].'-'.$date[0].'-'.$date[1];
+            $kelas = kelas::where('major_id',$req['major_id'])
+                ->where('kelas',$req['kelas'])
+                ->first();
             Student::create([
                 'id' => null,
                 'nis' => $req['nis'],
                 'nama' => $req['nama'],
+                'kelas' => $req['kelas'],
+                'kelas_id' => $kelas->id,
                 'jenis_kelamin' => $req['jenis_kelamin'],
                 'major_id' => $req['major_id'],
                 'phone' => $req['phone'],
@@ -109,25 +115,6 @@ class StudentController extends Controller
                     'student_id' => $id,
                     'jenis_pembayaran' => "Waiting",
                 ]);
-            }
-            $status = "Waiting";
-            $payment = Payment::where('student_id',$id)->get();
-            for ($i=0; $i < $categories->count(); $i++) { 
-                if($categories[$i]->jenis=="Bayar per Bulan"){
-                    for ($j=0; $j < $payment->count(); $j++) { 
-                        if($payment[$j]->financing_category_id==$categories[$i]->id){
-                            $periode = $categories[$i]->periode->count();
-                            for ($k=0; $k < $periode; $k++) {
-                                PaymentPeriodeDetail::create([
-                                    'payment_periode_id' => $categories[$i]->periode[$k]->id,
-                                    'payment_id' => $payment[$j]->id,
-                                    'user_id' => 0,
-                                    'status' => $status,
-                                ]);
-                            }
-                        }
-                    }
-                }
             }
           return redirect()
               ->route('students.index')
@@ -179,12 +166,16 @@ class StudentController extends Controller
                     ->route('students.index')
                     ->with('success', 'Data siswa berhasil disimpan!');
             }
+            $kelas = kelas::where('major_id',$req['major_id'])
+                ->where('kelas',$req['kelas'])
+                ->first();
             $student = Student::findOrFail($id);
             $student->nama = $req['nama'];
             $student->nis = $req['nis'];
             $student->jenis_kelamin = $req['jenis_kelamin'];
             $student->major_id = $req['major_id'];
             $student->kelas = $req['kelas'];
+            $student->kelas_id = $kelas->id;
             $student->phone = $req['phone'];
             $student->email = $req['email'];
             $student->alamat = $req['alamat'];

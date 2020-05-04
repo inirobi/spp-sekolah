@@ -74,6 +74,7 @@ SPP | Siswa
                                         <th data-field="kelas"><div style="text-align:center;">Kelas</div></th>
                                         <th data-field="major"><div style="text-align:center;">Nama Jurusan</div></th>
                                         <th data-field="alamat"><div style="text-align:center;">Alamat</div></th>
+                                        <th data-field="phone"><div style="text-align:center;">No Hp</div></th>
                                         <th data-field="action"><div style="text-align:center;">Action</div></th>
                                     </tr>
                                 </thead>
@@ -88,11 +89,9 @@ SPP | Siswa
                                         <td><div style="text-align:center;">{{$data->kelas}}</div></td>
                                         <td><div style="text-align:center;">{{$data->major->nama}}</div></td>
                                         <td><div style="text-align:center;">{{$data->alamat}}</div></td>
+                                        <td><div style="text-align:center;">{{$data->phone}}</div></td>
                                         <td>
                                         <div style="text-align:center;">
-                                          <a href="#" class="btn btn-info" onclick="detailConfirm( '{{$data->id}}','{{$data->nis}}','{{$data->nama}}','{{$data->jenis_kelamin}}','{{$data->kelas}}','{{$data->major_id}}', '{{$data->major->nama}}','{{$data->phone}}','{{$data->email}}','{{$data->tgl_masuk}}','{{$data->alamat}}')"title="Detail">
-                                            <i class="fa fa-eye"> Detail</i>
-                                          </a>
                                         <a href="#" class="btn btn-warning"
                                             onclick="editConfirm( '{{$data->id}}','{{$data->nis}}','{{$data->nama}}','{{$data->jenis_kelamin}}','{{$data->kelas}}','{{$data->major_id}}', '{{$data->major->nama}}','{{$data->phone}}','{{$data->email}}','{{$data->tgl_masuk}}','{{$data->alamat}}')"
                                             title="Edit"><i class="fa fa-edit"> Edit</i></a>
@@ -427,28 +426,6 @@ SPP | Siswa
                 $('#editSiswa').attr('action', "{{ url('students') }}/" + id)
                 $('#modalUpdate').modal();
             }
-
-            function detailConfirm(id, nis, nama, jenis_kelamin, kelas, major_id, major, phone, email, tgl_masuk, alamat) {
-                $('#nis2').attr('value', nis);
-                $('#nama2').attr('value', nama);
-                $('#tgl_masuk2').attr('value', tgl_masuk);
-                $('#email2').attr('value', email);
-                $('#phone2').attr('value', phone);
-                $('#alamat2').attr('value', alamat);
-
-                $('#jenis_kelamin_edit').val(jenis_kelamin);
-                $('#jenis_kelamin_edit_chosen .chosen-single span').html((jenis_kelamin == 'L')?'Laki - Laki':'Perempuan');
-
-                $('#major_id_edit').val(major_id);
-                $('#major_id_edit_chosen .chosen-single span').html(major);
-
-                $('#kelas_edit').val(kelas);
-                $('#kelas_edit_chosen .chosen-single span').html(kelas);
-
-                $('#modalDetail').modal();
-            }
-
-
 
             function destroy(action) {
                 swal({

@@ -19,6 +19,7 @@ class Student extends Model
         "nama",
         "jenis_kelamin",
         "kelas",
+        "kelas_id",
         "major_id",
         "phone",
         "alamat",

@@ -86,7 +86,7 @@ SPP | Jurusan
                                                 <td>
                                                     <div style="text-align:center;">
                                                         <a href="#" class="btn btn-warning"
-                                                            onclick="editConfirm( '{{$data->id}}', '{{$data->nama}}')"
+                                                            onclick="editConfirm( '{{$data->id}}', '{{$data->nama}}','{{$data->kelas[0]->nominal}}','{{$data->kelas[1]->nominal}}','{{$data->kelas[2]->nominal}}')"
                                                             title="Edit" style="margin-top:0;"><i
                                                                 class="fa fa-edit"></i></a>
                                                         <a href="{{ route('majors.destroy',$data) }}"
@@ -111,22 +111,23 @@ SPP | Jurusan
 </div>
 <!-- Static Table End -->
 
-<div class="modal fade bd-example-modal-lg" id="modalUpdate" tabindex="-1" role="dialog" aria-labelledby="modalUpdateLabel" aria-hidden="true">
+<!-- modal add -->
+<div class="modal fade bd-example-modal-lg" id="modalAdd" tabindex="-1" role="dialog" aria-labelledby="modalAddLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="modalUpdateLabel">Nominal Pembayaran SPP</span></h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
+        <h5 class="modal-title" id="modalAddLabel">Nominal Pembayaran SPP</span></h5>
       </div>
       <div class="modal-body">
-         <form role="form" method="post">
+         <form role="form" method="post" action="{{route('majors.store')}}">
             {{csrf_field()}}
             
             <div class="form-group">
                 <label class="control-label col-md-2">Nama Jurusan</label>
-                <input name='id_jur' id='id_jur' type='text' class='form-control' disabled>
+                <input name='id_jur' id='id_jur' type='text' class='form-control' readonly>
             </div>
             <div class="form-group">
                 <label class="control-label col-md-2">Kelas X</label>
@@ -144,8 +145,8 @@ SPP | Jurusan
             </div>
             
             <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal" tab-index="-1">Close</button>
                 <button type='submit' class="btn btn-primary"><i class="fa fa-floppy-o"></i> Save</button>
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
             </div>
         </form>
       </div>
@@ -153,6 +154,48 @@ SPP | Jurusan
   </div>
 </div>
 
+<!-- modal edit -->
+<div class="modal fade bd-example-modal-lg" id="modalUpdate" tabindex="-1" role="dialog" aria-labelledby="modalUpdateLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h5 class="modal-title" id="modalUpdateLabel">Nominal Pembayaran SPP</span></h5>
+      </div>
+      <div class="modal-body">
+         <form role="form" id='form-jurusan' method="post" >
+            @method('PUT')
+            {{csrf_field()}}
+            <div class="form-group">
+                <label class="control-label col-md-2">Nama Jurusan</label>
+                <input name='id_jur' id='jrs' type='text' class='form-control' required>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-2">Kelas X</label>
+                <input name='x' id='x' type='number' class='form-control' disabled>
+            </div>
+            
+            <div class="form-group">
+                <label class="control-label col-md-2">Kelas XI</label>
+                <input name='xi' id='xi' type='number' class='form-control' disabled>
+            </div>
+            
+            <div class="form-group">
+                <label class="control-label col-md-2">Kelas XII</label>
+                <input name='xii' id='xii' type='number' class='form-control' disabled>
+            </div>
+            
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal" tab-index="-1">Close</button>
+                <button type='submit' class="btn btn-primary"><i class="fa fa-floppy-o"></i> Save</button>
+            </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- hapus -->
 <form id="destroy-form" method="POST">
@@ -179,13 +222,15 @@ SPP | Jurusan
     {
         let nama = document.getElementById('jurusan').value;
         $('#id_jur').attr('value', nama);
-        $('#modalUpdate').modal();
+        $('#modalAdd').modal();
     }
-    function editConfirm(id, nama) {
-        $('input[name=id]').attr('value', id);
-        $('input[name=jurusan]').attr('value', nama);
+    function editConfirm(id, nama,x,xi,xii) {
+        $('#jrs').attr('value', nama);
+        $('#x').attr('value', x);
+        $('#xi').attr('value', xi);
+        $('#xii').attr('value', xii);
         $('#form-jurusan').attr('action', "{{ url('majors') }}/" + id);
-        $('input[name=jurusan]').focus();
+        $('#modalUpdate').modal();
     }
 
     function destroy(action) {

@@ -21,7 +21,7 @@
         <p>Progam Kealian :</p>
         <hr class="garis_dua">
         <p style="font-weight:bold">Multimedia, Adm, perkantoran, & Keperawatan</p>
-        <p>Alamat:Jl. Cikuda No. 08 Jatinanor, Tlp : (022) 7797312 / 085294124866</p>
+        <p>Alamat:Jl. Cikuda No. 08 Jatinangor, Tlp : (022) 7797312 / 085294124866</p>
         <p>Email: <span style="color:blue;"> smkbaabulkamil_jatinangor@yahoo.com </span></p>
         <p> Website : <span style="color:blue;">www.smkbaabulkamil.sch.id</span></p>
       </div>

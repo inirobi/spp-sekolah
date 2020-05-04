@@ -63,11 +63,10 @@ $bulan = ['',"Januari", "Februari", "Maret","April","Mei","Juni","Juli","Agustus
                                 <div class="container-sm">
                                     <div class="row">
                                         <div class="col-md-6">
-                                            
                                         </div>
                                         <div class="col-md-6">
                                             <div style="float:right;">
-                                                <a href="{{ route('financing.periode',$financing->id)}}"
+                                                <a href="{{ route('pdf.print.bulanan',[$datas['id'],$datas->payment_id])}}"
                                                     style="color:white; margin-top:0" class=" btn btn-success" target="_blank"><i
                                                         class="fa fa-print"></i>&nbsp; Cetak</a>
                                             </div>
@@ -176,7 +175,7 @@ $bulan = ['',"Januari", "Februari", "Maret","April","Mei","Juni","Juli","Agustus
                                                 <td>
                                                     <div style="text-align: center">
                                                     @if($data->status=="Lunas")
-                                                    <a href="#" class="btn btn-success" style="color:white;margin-top:0" target="_blank"><i class="fa fa-print"></i></a>
+                                                    <a href="{{ route('pdf.print.bulanan.detail',[$datas['id'],$data->id])}}" class="btn btn-success" style="color:white;margin-top:0" target="_blank"><i class="fa fa-print"></i></a>
                                                     @else
                                                       <button class="btn btn-primary" title="Atur Pembayaran" onclick="addConfirm({{$data}})"><i class="fa fa-credit-card"></i></button>
                                                     @endif

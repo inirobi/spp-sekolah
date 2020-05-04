@@ -3,7 +3,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Rincian</title>
+    <title>Rekapitulasi Pembayaran</title>
     <style>
 .page_break { page-break-before: always; },
 .garis_dua{ 
@@ -29,29 +29,37 @@
         </div>
       </div>
         <hr class="garis_dua">
+        <center><h4 style="margin-bottom:2">REKAPITULASI</h4></center>
         <center><h4>BUKTI PEMBAYARAN SISWA</h4></center><hr>
         <table width='100%'>
           <tr>
-            <td width='50%'>
+            <td width='100%'>
               <table>
                 <tr>
                   <td>&nbsp;</td>
                   <td>&nbsp;</td>
                   <td>&nbsp;</td>
+                </tr>
+                <tr>
+                  <td>&nbsp;</td>
+                  <td>&nbsp;</td>
+                  <td>&nbsp;</td>
                 </tr>  
                 <tr>
-                  <td>TANGGAL</td>
-                  <td>:</td>
-                  <td>{{$data['tanggal']}}</td>
-                </tr>  
-                <tr>
-                  <td>WAKTU PENCETAKAN</td>
-                  <td>:</td>
-                  <td>{{$data['waktu']}}</td>
+                  <td width="100%">
+                  <small style="font-style:italic">dicetak</small>
+                  </td>
+                  <td width="100%">
+                  <small style="font-style:italic">:</small>
+                  </td>
+                  <td width="100%">
+                  <small style="font-size:8pt;font-style:italic">{{ $data['tanggal'] }} - {{ $data['waktu'] }}</small>
+                  </td>
                 </tr>  
               </table>
             </td>
-            <td width='50%'>
+            <td width='100%'>&nbsp;</td>
+            <td width='100%'>
             <table>
                 <tr>
                   <td>NIS</td>
@@ -80,24 +88,42 @@
       <table style="font-size:14px;" width="100%">
         <thead>
           <tr>
-            <th width="15%">NO</th>
-            <th width="65%">DESKRIPSI</th>
+            <th width="6%">NO</th>
+            <th width="30%">TANGGAL PEMBAYARAN</th>
+            <th width="44%">DESKRIPSI</th>
             <th width="20%">JUMLAH</th>
           </tr>
         </thead>
         <tbody>
+        @php
+        $total=0;
+        @endphp
+        @foreach($datas as $data)
+
+        @php
+        $total += intval($data['periode']->nominal);
+        $bulans = ['',"Januari", "Februari", "Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
+        $bulan=$bulans[$data['periode']->bulan];
+        $d = "Pembayaran {$data['periode']->financingCategory->nama} untuk periode bulan {$bulan} tahun {$data['periode']->tahun}";
+        @endphp
+        
         <tr>
-          <td colspan="3"><hr></td>
+          <td colspan="4"><hr></td>
           </tr>
           <tr>
             <td >
             <div style="text-align:center">
-            {{$no}}
+            {{$no++}}
+            </div>
+            </td>
+            <td >
+            <div style="text-align:center">
+            {{$data->created_at}}
             </div>
             </td>
             <td >
               <div style="word-wrap: break-word;">
-              {{$data['desc']}}
+              {{$d}}
               </div>
             <td class="unit">
               <div style="text-align:right">
@@ -105,8 +131,10 @@
               </div>
             </td>
           </tr>
+        @endforeach
           <tr>
-          <td colspan="3"><hr></td>
+        <!-- EOL -->
+          <td colspan="4"><hr></td>
           </tr>
         </tbody>
       </table>
@@ -125,9 +153,9 @@
             <td width='50%'>
             <table width='100%'>
               <tr>
-                <td><strong>Grand Total :</strong></td>
+                <td><strong>Total :</strong></td>
                 <td style="text-align:right"><strong>
-              {{number_format($data['periode']->nominal,0,',','.')}}</strong></td>
+              {{number_format($total,0,',','.')}}</strong></td>
                 </tr> 
                 <tr>
                   <td colspan='2'><hr></td>
@@ -175,7 +203,7 @@
           </table>
         </td>
         <td width='50%'>
-          <table style="text-align:center" width='100%' >
+          <table width='100%'>
             <tr><td><br></td></tr>
             <tr><td><br></td></tr>
             <tr>

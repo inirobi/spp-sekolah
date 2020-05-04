@@ -3,7 +3,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Rincian</title>
+    <title>@yield('title-html')</title>
     <style>
     .page_break { page-break-before: always; },
 
@@ -23,12 +23,20 @@
     
     .table1 tr th{
         background: #35A9DB;
-        color: #fff;
-        font-weight: normal;
+        font-weight: bold;
+        color: black;
+    }
+
+    .table1 tr th .footer-right{
+        background-color: #F0FFFF;
+        font-weight: bold;
+        font-size:12pt;
+        text-align:right;
+        color: black;
     }
     
     .table1, th, td {
-        padding: 8px 20px;
+        padding: 8px 14px;
         text-align: center;
     }
     
@@ -58,68 +66,7 @@
         </div>
       </div>
         <hr class="garis_dua">
-        <center><h3>DAFTAR SISWA</h3></center>
-        <table>
-          <tr>
-            <td>Kelas</td>
-            <td>:</td>
-            <td>XI</td>
-          </tr>
-          <tr>
-            <td>Jurusan</td>
-            <td>:</td>
-            <td>RPL</td>
-          </tr>
-        </table>
-        <table class="table1">
-          <tr>
-            <th>No</th>
-            <th>NIS</th>
-            <th>Nama</th>
-            <th>Jenis Kelamin</th>
-            <th>No Telp</th>
-            <th>Alamat</th>
-          </tr>
-          <tr>
-            <td>1</td>
-            <td>1211</td>
-            <td>Andi Saputra</td>
-            <td>Laki - Laki</td>
-            <td>21</td>
-            <td>Magelang</td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td>1211</td>
-            <td>Budi Budiman</td>
-            <td>Laki - Laki</td>
-            <td>24</td>
-            <td>Jakarta</td>
-          </tr>
-          <tr>
-            <td>3</td>
-            <td>1211</td>
-            <td>Calvin Sanusi</td>
-            <td>Laki - Laki</td>
-            <td>29</td>
-            <td>Malang</td>
-          </tr>
-          <tr>
-            <td>4</td>
-            <td>1211</td>
-            <td>Diki</td>
-            <td>Laki - Laki</td>
-            <td>24</td>
-            <td>Bandung</td>
-          </tr>
-          <tr>
-            <td>5</td>
-            <td>1211</td>
-            <td>Malas Ngoding</td>
-            <td>Laki - Laki</td>
-            <td>23</td>
-            <td>Medan</td>
-          </tr>
-        </table>	
+        <center><h3>@yield('title')</h3></center>
+        @yield('content')	
   </body>
 </html>

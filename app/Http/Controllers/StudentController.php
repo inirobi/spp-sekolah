@@ -57,11 +57,7 @@ class StudentController extends Controller
             $n = strtotime($n[0]);
 
             $l = strtotime($this->convertDateToSQLDate($req['tgl_masuk']));
-            // echo $n."<hr>";
-            // echo $l."<hr>";
-            // // $t = $req[]
-            // var_dump($category);die;
-            
+        
             if (strlen($req['phone'])>14) {
                 return redirect()
                 ->route('students.index')
@@ -77,24 +73,36 @@ class StudentController extends Controller
                 'major_id' => $req['major_id'],
                 'phone' => $req['phone'],
                 'email' => $req['email'],
+                'alamat' => $req['alamat'],
                 'tgl_masuk' => $date,
                 ]);
-            $categories = FinancingCategory::all();
             $id = DB::getPdo()->lastInsertId();
-            for ($i=0; $i < $categories->count(); $i++) { 
+            for ($i=0; $i < $categories->count(); $i++) 
+            { 
                 Payment::create([
                     'financing_category_id' => $categories[$i]->id,
                     'student_id' => $id,
                     'jenis_pembayaran' => "Waiting",
                 ]);
             }
-            
-            $payment = Payment::where('student_id', $id)->get();
-            for ($i=0; $i < $payment->count(); $i++) { 
-                if($payment[$i]->category[0]->jenis=="Bayar per Bulan"){
-                    #code
-                }else{
-                    #code
+            $status = "Waiting";
+            $categories = FinancingCategory::all();
+            $payment = Payment::where('student_id',$id)->get();
+            for ($i=0; $i < $categories->count(); $i++) { 
+                if($categories[$i]->jenis=="Bayar per Bulan"){
+                    for ($j=0; $j < $payment->count(); $j++) { 
+                        if($payment[$j]->financing_category_id==$categories[$i]->id){
+                            $periode = $categories[$i]->periode->count();
+                            for ($k=0; $k < $periode; $k++) {
+                                PaymentPeriodeDetail::create([
+                                    'payment_periode_id' => $categories[$i]->periode[$k]->id,
+                                    'payment_id' => $payment[$j]->id,
+                                    'user_id' => 0,
+                                    'status' => $status,
+                                ]);
+                            }
+                        }
+                    }
                 }
             }
           return redirect()
@@ -155,6 +163,7 @@ class StudentController extends Controller
             $student->kelas = $req['kelas'];
             $student->phone = $req['phone'];
             $student->email = $req['email'];
+            $student->alamat = $req['alamat'];
             $student->tgl_masuk = $req['tgl_masuk'];
             $student->save();
 

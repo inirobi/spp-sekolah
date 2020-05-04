@@ -22,6 +22,7 @@ class CreateStudentsTable extends Migration
             $table->integer('major_id');
             $table->string('phone','14');
             $table->string('email');
+            $table->string('alamat');
             $table->string('tgl_masuk');
             $table->timestamps();
         });

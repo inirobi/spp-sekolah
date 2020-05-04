@@ -16,6 +16,8 @@ class CreatePencatatansTable extends Migration
         Schema::create('pencatatans', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('description');
+            $table->bigInteger('income_id');
+            $table->bigInteger('expense_id');
             $table->bigInteger('debit');
             $table->bigInteger('kredit');
             $table->timestamps();

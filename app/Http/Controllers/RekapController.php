@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use App\Pencatatan;
 use PDF;
+use DB;
 class RekapController extends Controller
 {
     public function __construct()
@@ -19,13 +20,29 @@ class RekapController extends Controller
      */
     public function index()
     {
-        return view('export.index');
+        $no = 1;
+        $kategori = "SPP";
+        $datas=DB::table('students')
+                        ->selectRaw('students.*,getNominalTerbayarBulanan(payments.id) AS terbayar, getCountBulananTidakTerbayar(payments.id) AS bulan_tidak_bayar, getCountNunggak(payments.id) as cekNunggak, getCountWaiting(payments.id) AS cekWaiting, majors.nama AS jurusan, getAkumulasiPerBulan(payments.id) AS akumulasi, financing_categories.`nama` AS financing_nama, financing_categories.id AS financing_id, payments.`id` AS payment_id, payments.`jenis_pembayaran`')
+                        ->leftJoin('majors','majors.id','=','students.major_id')
+                        ->leftJoin('payments','payments.student_id','=','students.id')
+                        ->leftJoin('financing_categories','financing_categories.id','=','payments.financing_category_id')
+                        ->leftJoin('payment_details','payment_details.payment_id','=','payments.id')
+                        ->where('financing_categories.id','1')->get();
+        $title="Rekapitulasi Pembiayaan {$kategori}";
+        $pdf = PDF::loadView('export.coba',compact('no','title','datas'));
+        $pdf->setPaper('A4', 'landscape');
+        return $pdf->stream();
+        // return view('export.index');
+    }
+
+    public function FunctionName(Type $var = null)
+    {
+        # code...
     }
 
     public function print($id) 
     {
-        // echo '<pre>';
-        // var_dump($id);die;
         $t = now();
 
         $t = explode(" ", $t);
@@ -61,6 +78,22 @@ class RekapController extends Controller
     public function listdata()
     {
         $pdf = PDF::loadView('export.kwitansi');
+        $pdf->setPaper('A4', 'landscape');
+        return $pdf->stream();
+    }
+
+    public function rekapBulanan($kategori, $id)
+    {
+        $no = 1;
+        $datas=DB::table('students')
+                        ->selectRaw('students.*,getNominalTerbayarBulanan(payments.id) AS terbayar, getCountBulananTidakTerbayar(payments.id) AS bulan_tidak_bayar, getCountNunggak(payments.id) as cekNunggak, getCountWaiting(payments.id) AS cekWaiting, majors.nama AS jurusan, getAkumulasiPerBulan(payments.id) AS akumulasi, financing_categories.`nama` AS financing_nama, financing_categories.id AS financing_id, payments.`id` AS payment_id, payments.`jenis_pembayaran`')
+                        ->leftJoin('majors','majors.id','=','students.major_id')
+                        ->leftJoin('payments','payments.student_id','=','students.id')
+                        ->leftJoin('financing_categories','financing_categories.id','=','payments.financing_category_id')
+                        ->leftJoin('payment_details','payment_details.payment_id','=','payments.id')
+                        ->where('financing_categories.id',$id)->get();
+        $title="Rekapitulasi Pembiayaan {$kategori}";
+        $pdf = PDF::loadView('export.coba',compact('no','title','datas'));
         $pdf->setPaper('A4', 'landscape');
         return $pdf->stream();
     }

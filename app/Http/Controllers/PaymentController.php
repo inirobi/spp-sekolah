@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth; 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Routing\Redirector;
 use App\FinancingCategory;
 use App\Payment;
@@ -419,7 +419,7 @@ class PaymentController extends Controller
         }elseif($selisih==0){
             $status='Lunas';
         }
-        $penerima=Session::get('nama');
+        $penerima=Auth::user()->nama;
         $siswa=Student::where('id',$request['student_id'])->first();
         $category=FinancingCategory::where('id',$request['financing_category_id'])->first();
         $desc = "Penerimaan pembayaran cicilan {$category['nama']} dari {$siswa['nama']} kelas {$siswa['kelas']} {$siswa->major->nama} diterima oleh {$penerima}";
@@ -437,8 +437,8 @@ class PaymentController extends Controller
         Pencatatan::create([
             'id' => null,
             'expense_id' => 0,
-            'payment_id' => $id,
-            'debit' => $req['nominal'],
+            'payment_id' => $request['payment_id'],
+            'debit' => $request['nominal'],
             'description' => $desc,
             'kredit' => 0,
         ]);

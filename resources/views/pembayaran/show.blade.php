@@ -11,6 +11,25 @@ SPP | Pembayaran
         <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="sparkline13-list">
+                <div class="sparkline13-hd">
+                        <div class="main-sparkline13-hd">
+                            <div class="container-sm">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div style="float:right; margin-right:15px">
+                                            <div class="row">
+                                                <a href="{{ route('financing.periode',$financing->id)}}" style="float:right"class=" btn btn-success" target="_blank">
+                                                    <i class="fa fa-print"></i>&nbsp;Cetak
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="sparkline13-graph">
                         <div class="datatable-dashv1-list custom-datatable-overright">
                             <div id="toolbar">
@@ -81,7 +100,11 @@ SPP | Pembayaran
                                             </div>
                                         @else
                                             <div style="text-align:center">
+                                                @if($siswa->bulan_tidak_bayar!=0)
+                                                <span class="badge" style="background-color:red">{{$siswa->bulan_tidak_bayar}} Bulan</span>
+                                                @else
                                                 {{$siswa->bulan_tidak_bayar}} Bulan
+                                                @endif
                                             </div>
                                         @endif
                                         </td>

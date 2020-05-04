@@ -19,18 +19,12 @@ SPP | Pembayaran
                                         
                                     </div>
                                     <div class="col-md-6">
-                                        @if($financing->jenis=="Bayar per Bulan")
-                                            <div style="float:right; margin-right:15px">
+                                        <div style="float:right; margin-right:15px">
                                             <div class="row">
-                                                <a href="{{ route('financing.periode',$financing->id)}}" style="float:right"class=" btn btn-primary"><i class="fa fa-plus"></i>&nbsp;Periode</a>
+                                                <a href="#" style="float:right;color:black"class=" btn btn-success" target="_blank" title="Cetak rekapitulasi {{$financing->nama}}">
+                                                <i class="fa fa-print"></i>&nbsp;Cetak</a>
                                             </div>
-                                                <div class="row">
-                                                    @if($periode==0)
-                                                    <small style="color: red">Silahkan isi periode terlebih dahulu</small>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                        @endif
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -118,17 +112,19 @@ SPP | Pembayaran
                                             </div>
                                         </td>
                                         <td>
+                                            <div style="text-align:center">
                                             @if($siswa->jenis_pembayaran=="Waiting" || $siswa->jenis_pembayaran=="Nunggak")
                                                 <button class="btn btn-warning" onclick="addConfirm({{$siswa->id}},{{$siswa->payment_id}})" title="Pilih Metode Pembayaran" style="color:black;  ">
                                                     <i class="fa fa-info-circle"> Metode</i>
                                                 </button>
-                                            @elseif($siswa->jenis_pembayaran=="Cicilan" && $sisa!=0)
+                                            @elseif($siswa->jenis_pembayaran=="Cicilan")
                                                 <a href="{{ route('payment.details.cicilan', [$siswa->financing_id, $siswa->id, $siswa->payment_id]) }}" class="btn btn-primary"
                                                 title="Cetak Bukti Pembayaran" style="color:white;"><i class="fa fa-eye"> Rincian</i></a>
                                             @else
-                                                <a href="3" class="btn btn-success"
-                                                title="Cetak Bukti Pembayaran" style="color:white; background-color:green"><i class="fa fa-print"> Invoice</i></a>
+                                            <a href="#"class=" btn btn-success" target="_blank" title="Cetak kwitansi">
+                                                <i class="fa fa-print"></i>&nbsp;Cetak</a>
                                             @endif
+                                            </div>
                                         </td>
                                     </tr>
                                     @endforeach

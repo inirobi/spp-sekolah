@@ -79,8 +79,8 @@ SPP | Cicilan Pembayaran
                                         <div class="col-md-6">
                                             <div style="float:right;">
                                                 <a href="{{ route('financing.periode',$financing->id)}}"
-                                                    style="color:white" class=" btn btn-success"><i
-                                                        class="fa fa-print"></i>&nbsp; Cetak</a>
+                                                    style="color:white" class=" btn btn-success" title="Cetak kwitansi">
+                                                    <i class="fa fa-print"></i>&nbsp; Cetak</a>
 
                                             </div>
                                         </div>
@@ -124,6 +124,11 @@ SPP | Cicilan Pembayaran
                                                     Penerima
                                                     </div>
                                                 </th>
+                                                <th data-field="cetak">
+                                                    <div style="text-align: center">
+                                                    Cetak
+                                                    </div>
+                                                </th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -154,6 +159,12 @@ SPP | Cicilan Pembayaran
                                                 <td>
                                                     <div style="text-align: center">
                                                     {{$data->user->name}}
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div style="text-align: center;">
+                                                    <a href="#" style="color:white;margin-top:0"class=" btn btn-success" target="_blank" title="Cetak bukti pembayaran">
+                                                <i class="fa fa-print"></i></a>
                                                     </div>
                                                 </td>
                                             </tr>

@@ -125,7 +125,7 @@
             <td width='50%'>
             <table width='100%'>
               <tr>
-                <td><strong>Grand Total :</strong></td>
+                <td><strong>Total :</strong></td>
                 <td style="text-align:right"><strong>
               {{number_format($data['periode']->nominal,0,',','.')}}</strong></td>
                 </tr> 
@@ -161,7 +161,7 @@
     <br>
     <table width='100%'>
       <tr>
-        <td width='50%'>
+        <td width='65%'>
           <table width='100%'>
             <tr>
               <td>Catatan</td>
@@ -174,8 +174,8 @@
             </tr>
           </table>
         </td>
-        <td width='50%'>
-          <table style="text-align:center" width='100%' >
+        <td width='35%'>
+          <table width='100%'>
             <tr><td><br></td></tr>
             <tr><td><br></td></tr>
             <tr>

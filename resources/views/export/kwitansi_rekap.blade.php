@@ -42,12 +42,12 @@
                 <tr>
                   <td>TANGGAL</td>
                   <td>:</td>
-                  <td>{{$data['tanggal']}}</td>
+                  <td> </td>
                 </tr>  
                 <tr>
-                  <td>WAKTU PENCETAKAN</td>
+                  <td>WAKTU</td>
                   <td>:</td>
-                  <td>{{$data['waktu']}}</td>
+                  <td></td>
                 </tr>  
               </table>
             </td>
@@ -56,17 +56,17 @@
                 <tr>
                   <td>NIS</td>
                   <td>:</td>
-                  <td>{{$siswa['nis']}}</td>
+                  <td>ULJ879778</td>
                 </tr>  
                 <tr>
                   <td>NAMA</td>
                   <td>:</td>
-                  <td>{{$siswa['nama']}}</td>
+                  <td>ULJ879778</td>
                 </tr>  
                 <tr>
                   <td>KELAS</td>
                   <td>:</td>
-                  <td>{{$siswa['kelas']}} - {{$siswa['major']->nama}}</td>
+                  <td>ULJ879778 - ULJ234092</td>
                 </tr>  
               </table>
             </td>
@@ -81,8 +81,8 @@
         <thead>
           <tr>
             <th width="15%">NO</th>
-            <th width="65%">DESKRIPSI</th>
-            <th width="20%">JUMLAH</th>
+            <th width="50%">DESKRIPSI</th>
+            <th width="35%">JUMLAH</th>
           </tr>
         </thead>
         <tbody>
@@ -92,16 +92,20 @@
           <tr>
             <td >
             <div style="text-align:center">
-            {{$no}}
+            1
             </div>
             </td>
             <td >
               <div style="word-wrap: break-word;">
-              {{$data['desc']}}
+              @php
+              $a = "be";
+              $cek="bu ".$a;
+              @endphp
+              {{ $cek }}
               </div>
             <td class="unit">
               <div style="text-align:right">
-              {{number_format($data['periode']->nominal,0,',','.')}}
+              70000
               </div>
             </td>
           </tr>
@@ -115,10 +119,10 @@
             <td width='50%'>
               <table>
                 <tr>
-                  <td>&nbsp;</td>
+                  <td><strong>Terbilang :</strong></td>
                 </tr> 
                 <tr>
-                <td>&nbsp;</td>
+                  <td><span style='font-style:italic'> Tujuh Puluh Juta Lima Ratus Ribu Rupiah Tujuh Puluh Juta Lima Ratus Ribu Rupiah Tujuh Puluh Juta Lima Ratus Ribu Rupiah</span></td>
                 </tr>
               </table>
             </td>
@@ -126,8 +130,7 @@
             <table width='100%'>
               <tr>
                 <td><strong>Grand Total :</strong></td>
-                <td style="text-align:right"><strong>
-              {{number_format($data['periode']->nominal,0,',','.')}}</strong></td>
+                <td style="text-align:right"><strong>{{number_format(700000,0,',','.')}}</strong></td>
                 </tr> 
                 <tr>
                   <td colspan='2'><hr></td>
@@ -149,7 +152,7 @@
         <td width='50%'>
           <table style="text-align:center" width='100%'>
             <tr>
-              <td>Sumedang, {{$data['tanggal']}}</td>
+              <td>Sumedang, 04/04/2020</td>
             </tr>
             <tr>
             <td>Bendahara Sekolah</td>
@@ -175,11 +178,11 @@
           </table>
         </td>
         <td width='50%'>
-          <table style="text-align:center" width='100%' >
+          <table style="text-align:center" width='100%'>
             <tr><td><br></td></tr>
             <tr><td><br></td></tr>
             <tr>
-              <td style="text-align:center"><span style="text-decoration: underline; font-weight:bold"> {{$user}} </span></td>
+              <td><span style="text-decoration: underline; font-weight:bold"> Dadan Ramdani </span></td>
             </tr>
           </table>
         </td>

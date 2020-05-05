@@ -121,7 +121,7 @@ SPP | Pembayaran
                                                 <a href="{{ route('payment.details.cicilan', [$siswa->financing_id, $siswa->id, $siswa->payment_id]) }}" class="btn btn-primary"
                                                 title="Cetak Bukti Pembayaran" style="color:white;"><i class="fa fa-eye"> Rincian</i></a>
                                             @else
-                                            <a href="#"class=" btn btn-success" target="_blank" title="Cetak kwitansi">
+                                            <a href="{{ route('pdf.print.rekap.sesekali',[ $financing->nama,$financing->id]) }}"class=" btn btn-success" target="_blank" title="Cetak kwitansi">
                                                 <i class="fa fa-print"></i>&nbsp;Cetak</a>
                                             @endif
                                             </div>

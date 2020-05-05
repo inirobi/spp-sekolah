@@ -30,7 +30,7 @@ $total = [0,0,0,0];
     $total[0] += $besaran;
     $total[1] += $terbayar;
     $total[2] += $sisa;
-    $total[3] += intval($data->bulan_tidak_bayar);
+    $total[3] += intval($data->banyak_tunggakan);
 @endphp
     <tr>
         <td>{{$no++}}</td>
@@ -39,7 +39,7 @@ $total = [0,0,0,0];
         <td style="text-align:right">{{number_format($data->akumulasi,0,',','.')}}</td>
         <td style="text-align:right">{{number_format($data->terbayar,0,',','.')}}</td>
         <td style="text-align:right">{{number_format($sisa,0,',','.')}}</td>
-        <td>{{$data->bulan_tidak_bayar}} Bulan</td>
+        <td>{{$data->jenis_pembayaran}}</td>
     </tr>
 @endforeach
     <tr class="footer-section">
@@ -47,7 +47,7 @@ $total = [0,0,0,0];
         <th style="text-align:right;font-size:20px;font-weight:bold;">{{number_format($total[0],0,',','.')}}</th>
         <th style="text-align:right;font-size:20px;font-weight:bold;">{{number_format($total[1],0,',','.')}}</th>
         <th style="text-align:right;font-size:20px;font-weight:bold;">{{number_format($total[2],0,',','.')}}</th>
-        <th class="footer-right">{{$total[3]}} Bulan</th>
+        <th class="footer-right">&nbsp;</th>
     </tr>
 </table>
 @endsection

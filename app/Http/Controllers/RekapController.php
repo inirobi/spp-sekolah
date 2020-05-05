@@ -190,7 +190,7 @@ class RekapController extends Controller
     public function rekapSesekali($kategori, $id, $filter = null)
     {
         $no = 1;
-        if(!$filter){
+        if($filter){
         $datas=DB::table('students')
             ->selectRaw('students.*,getNominalTerbayarBulanan(payments.id) AS terbayar, getCountBulananTidakTerbayar(payments.id) AS bulan_tidak_bayar, getCountNunggak(payments.id) as cekNunggak, getCountWaiting(payments.id) AS cekWaiting, majors.nama AS jurusan, getAkumulasiPerBulan(payments.id) AS akumulasi, financing_categories.`nama` AS financing_nama, financing_categories.id AS financing_id, payments.`id` AS payment_id, payments.`jenis_pembayaran`')
             ->leftJoin('majors','majors.id','=','students.major_id')
@@ -200,20 +200,17 @@ class RekapController extends Controller
             ->where('financing_categories.id',$id)
             ->orderBy('students.kelas')->get();
         }else{
-        $datas=DB::table('students')
-            ->selectRaw('students.*,getNominalTerbayarBulanan(payments.id) AS terbayar, getCountBulananTidakTerbayar(payments.id) AS bulan_tidak_bayar, getCountNunggak(payments.id) as cekNunggak, getCountWaiting(payments.id) AS cekWaiting, majors.nama AS jurusan, getAkumulasiPerBulan(payments.id) AS akumulasi, financing_categories.`nama` AS financing_nama, financing_categories.id AS financing_id, payments.`id` AS payment_id, payments.`jenis_pembayaran`')
-            ->leftJoin('majors','majors.id','=','students.major_id')
-            ->leftJoin('payments','payments.student_id','=','students.id')
-            ->leftJoin('financing_categories','financing_categories.id','=','payments.financing_category_id')
-            ->leftJoin('payment_details','payment_details.payment_id','=','payments.id')
-            ->orderBy('students.kelas')
-            ->where([
-                ['financing_categories.id','=',$id],
-                ['majors.id','=',$filter],
-            ])->get();
+            $datas=DB::table('sesekali_view')
+            ->where('kategori_id',$id)->get();
+            
         }
+        $metode = $datas[0]->jenis_pembayaran;
+        if($datas[0]->jenis_pembayaran=="Waiting"){
+            $metode="Belum di atur";
+        }
+        $d = $no." ".$datas[0]->nama." - ".$datas[0]->kelas." - ".$datas[0]->jurusan." - ".$datas[0]->akumulasi." - ".$metode;
         $title="Rekapitulasi Pembiayaan {$kategori}";
-        $pdf = PDF::loadView('export.coba',compact('no','title','datas'));
+        $pdf = PDF::loadView('export.rekap_sekali',compact('no','title','datas'));
         $pdf->setPaper('A4', 'landscape');
         return $pdf->stream();
     }

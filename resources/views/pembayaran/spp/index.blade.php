@@ -2,7 +2,7 @@
 
 @section('title')
 SPP | Pembayaran
-@endsection
+@endsection 
 
 @section('content')
 <!-- Static Table Start -->

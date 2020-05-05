@@ -145,14 +145,8 @@ class PaymentController extends Controller
             
             return view('pembayaran.show', compact('datas','financing','periode','no'));
         }else{
-            $datas=DB::table('students')
-                        ->selectRaw('students.*, majors.nama as jurusan, financing_categories.`besaran` AS akumulasi, financing_categories.`nama` AS financing_nama, paid_once(payments.id) AS terbayar, financing_categories.id AS financing_id, payments.`id` AS payment_id, payments.`jenis_pembayaran`')
-                        ->leftJoin('majors','majors.id','=','students.major_id')
-                        ->leftJoin('payments','payments.student_id','=','students.id')
-                        ->leftJoin('financing_categories','financing_categories.id','=','payments.financing_category_id')
-                        ->leftJoin('payment_details','payment_details.payment_id','=','payments.id')
-                        ->groupBy('students.id')
-                        ->where('financing_categories.id',$cek->id)->get();
+            $datas=DB::table('sesekali_view')
+                        ->where('kategori_id',$cek->id)->get();
             $financing = $cek;
             
             $periode = PaymentPeriode::where('financing_category_id',$id)->count(); 

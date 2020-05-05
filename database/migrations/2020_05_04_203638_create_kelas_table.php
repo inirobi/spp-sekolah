@@ -20,6 +20,20 @@ class CreateKelasTable extends Migration
             $table->bigInteger('nominal');
             $table->timestamps();
         });
+
+        $m_id = [1,2,3];
+        $k_id = ["X","XI","XII"];
+        foreach ($m_id as $m) {
+            foreach ($k_id as $k) {
+                DB::table('kelas')->insert(
+                array(
+                    'kelas' => $k,
+                    'major_id' => $m,
+                    'nominal' => 0,
+                    )
+                );
+            }
+        }
     }
 
     /**

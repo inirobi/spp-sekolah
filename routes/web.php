@@ -112,3 +112,13 @@ Route::get('/home', 'HomeController@index')->name('home');
  * Route resource untuk Pembayaran
  */
 Route::resource('spp', 'SppController');
+
+/**
+ * Route resource untuk Pembayaran
+ */
+Route::resource('praktikum', 'PraktikumController');
+
+/**
+ * Route resource untuk Pembayaran
+ */
+Route::resource('uas', 'UasController');

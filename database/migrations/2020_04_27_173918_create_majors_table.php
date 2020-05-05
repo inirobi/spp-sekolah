@@ -18,6 +18,21 @@ class CreateMajorsTable extends Migration
             $table->string('nama');
             $table->timestamps();
         });
+        DB::table('majors')->insert(
+            array(
+                'nama' => 'Administrasi Perkantoran',
+            )
+        );
+        DB::table('majors')->insert(
+            array(
+                'nama' => 'Manajemen Multimedia',
+            )
+        );
+        DB::table('majors')->insert(
+            array(
+                'nama' => 'Keperawatan',
+            )
+        );
     }
 
     /**
